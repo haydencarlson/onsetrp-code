@@ -17,8 +17,8 @@ function OnPlayerSteamAuth(player)
 	CreatePlayerData(player)
 	PlayerData[player].steamname = GetPlayerName(player)
     
-    AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerName(player)..' from '..PlayerData[player].locale..' joined the server</>')
-    AddPlayerChatAll('<span color="#eeeeeeaa">There are '..GetPlayerCount()..' players on the server</>')
+    AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerName(player)..' from '..PlayerData[player].locale..' joined</>')
+    AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerCount()..' players online</>')
     
     -- First check if there is an account for this player
 	local query = mariadb_prepare(sql, "SELECT id FROM accounts WHERE steamid = '?' LIMIT 1;",
@@ -65,7 +65,7 @@ function OnAccountCheckBan(player)
 		--There is a ban in the database for this account
 		local result = mariadb_get_assoc(1)
 
-		print("Kicking "..GetPlayerName(player).." because their account was banned")
+		print("Kicking "..GetPlayerName(player).." in the butt! Account banned.")
 
 		KickPlayer(player, _("banned_for", result['reason'], result['FROM_UNIXTIME(bans.ban_time)']))
 	end
@@ -87,11 +87,11 @@ function OnAccountCheckIpBan(player)
 			LoadPlayerAccount(player)
 		end
 	else
-		print("Kicking "..GetPlayerName(player).." because their IP was banned")
+		print("Kicking "..GetPlayerName(player).." in the butt! IP banned.")
 
 		local result = mariadb_get_assoc(1)
         
-        KickPlayer(player, "🚨 You have been banned from the server.")
+        KickPlayer(player, "🚨 You have been banned from this server.")
 	end
 end
 
@@ -111,8 +111,8 @@ function OnAccountCreated(player)
 
 	print("Account ID "..PlayerData[player].accountid.." created for "..player)
 
-	AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="15">SERVER: Welcome to the community, '..GetPlayerName(player)..', have fun and play fair!</>')
-	AddPlayerChatAll('<span color="00ee00ff">We now have'..PlayerData[player].accountid..' accounts registered</>')
+	AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="15">Welcome '..GetPlayerName(player)..'</>')
+	AddPlayerChatAll('<span color="00ee00ff">'..PlayerData[player].accountid..' total players</>')
 end
 
 function LoadPlayerAccount(player)
@@ -126,7 +126,7 @@ end
 function OnAccountLoaded(player)
 	if (mariadb_get_row_count() == 0) then
 		--This case should not happen but still handle it
-		KickPlayer(player, "An error occured while loading your account 😨")
+		KickPlayer(player, "An error occured while loading your account ??")
 	else
 		local result = mariadb_get_assoc(1)
 		PlayerData[player].admin = math.tointeger(result['admin'])
@@ -157,7 +157,7 @@ function OnAccountLoaded(player)
 			CallRemoteEvent(player, "AskSpawnMenu")
 		end
 		
-		AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="17">SERVER: Welcome back '..GetPlayerName(player)..', have fun!</>')
+		AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="17">Welcome back '..GetPlayerName(player)..'</>')
 
 		print("Account ID "..PlayerData[player].accountid.." loaded for "..GetPlayerIP(player))
 	end
@@ -178,8 +178,8 @@ function CreatePlayerData(player)
 	PlayerData[player].steamname = ""
     PlayerData[player].thirst = 100
     PlayerData[player].hunger = 100
-    PlayerData[player].cash = 0
-	PlayerData[player].bank_balance = 1000
+    PlayerData[player].cash = 5000
+	PlayerData[player].bank_balance = 5000
 	PlayerData[player].job_vehicle = nil
 	PlayerData[player].job = ""
 	PlayerData[player].onAction = false

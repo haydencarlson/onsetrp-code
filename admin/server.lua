@@ -5,10 +5,31 @@ local teleportPlace = {
     town = { -182821, -41675, 1160 },
     prison = { -167958, 78089, 1569 },
     diner = { 212405, 94489, 1340 },
-    city = { 211526, 176056, 1250 },
-    desert_town = { -16223, -8033, 2062 },
-    old_town = { 39350, 138061, 1570 }
+    shopp1 = { 128000, 77622, 1576 },
+    shopp2 = { 42600, 137926, 1581 },
+    shopp3 = { -15300, -2773, 2065 },
+    cockinbell = { 194206, 177201, 1307 },
+    bar = { 49100, 133316, 1578 },
+    shopp4 = { -169000, -39441, 1149 },
+    weed_gather_zone = { 186601, -39031, 1451 },
+    weed_process_zone = { 70695, 9566, 1366 },
+    heroin_gather_zone = { 186474, -43277, 1451 },
+    heroin_process_zone = { 73218, 3822, 1367 },
+    meth_gather_zone = { 193607, -46512, 1451 },
+    meth_process_zone = { 72095, 1418, 1367 },
+    wealthbank = { 211925, 191382, 1306 },
+    coke_gather_zone = { 192080, -45155, 1529 },
+    coke_process_zone = { 71981, 106, 1367 },
+    mining_gather_zone = { 32853, 98521, 1849 },
+    mining_process_zone = { 2427, 98041, 1497 },
+    mining_sell_zone = { 21799, 137848, 1555 },
+    drugs_sell_zone = { -177344, 3673, 1992 },
+    home_cardealer = { 161069, 191846, 1322 },
+    train_station = { 134704, 209961, 1292 },
+    old_cardealer = { 127720, 80774, 1567 },
+    delivery_npc_location = { -16925, -29058, 2200 }
 }
+
 
 local weaponList = {
     weapon_2 = 2,
@@ -67,25 +88,21 @@ AddRemoteEvent("ServerAdminMenu", function(player)
         playersNames = {}
         for k,v in pairs(playersIds) do
             if PlayerData[k] == nil then
-                goto continue
+                return
             end
             if PlayerData[k].name == nil then
-                goto continue
+                return
             end
             if PlayerData[k].steamname == nil then
-                goto continue
+                return
             end
             playersNames[tostring(k)] = PlayerData[k].name.." ["..PlayerData[k].steamname.."]" 
-            ::continue::
         end
         CallRemoteEvent(player, "OpenAdminMenu", teleportPlace, playersNames, weaponList, vehicleList)
     end
 end)
 
-
 AddRemoteEvent("AdminTeleportToPlace", function(player, place)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
-            
     for k,v in pairs(teleportPlace) do
         if k == place then
             SetPlayerLocation(player, v[1], v[2], v[3])
@@ -94,25 +111,21 @@ AddRemoteEvent("AdminTeleportToPlace", function(player, place)
 end)
 
 AddRemoteEvent("AdminTeleportToPlayer", function(player, toPlayer)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
     local x, y, z  = GetPlayerLocation(tonumber(toPlayer))
     SetPlayerLocation(player, x, y, z)
 end)
 
 AddRemoteEvent("AdminTeleportPlayer", function(toPlayer, player)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
     local x, y, z  = GetPlayerLocation(tonumber(toPlayer))
     SetPlayerLocation(player, x, y, z)
 end)
 
 AddRemoteEvent("AdminGiveWeapon", function(player, weaponName)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
     weapon = weaponName:gsub("weapon_", "")
     SetPlayerWeapon(player, tonumber(weapon), 1000, true, 1, true)
 end)
 
 AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
     vehicle = vehicleName:gsub("vehicle_", "")
 
     local x, y, z = GetPlayerLocation(player)
@@ -125,7 +138,6 @@ AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
 end)
 
 AddRemoteEvent("AdminGiveMoney", function(player, toPlayer, account, amount)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
     if account == "Cash" then
         PlayerData[tonumber(toPlayer)].cash = PlayerData[tonumber(toPlayer)].cash + tonumber(amount)
     end
@@ -135,7 +147,6 @@ AddRemoteEvent("AdminGiveMoney", function(player, toPlayer, account, amount)
 end)
 
 AddRemoteEvent("AdminKickBan", function(player, toPlayer, type, reason)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
     if type == "Ban" then
         mariadb_query(sql, "INSERT INTO `bans` (`steamid`, `ban_time`, `reason`) VALUES ('"..PlayerData[tonumber(toPlayer)].steamid.."', '"..os.time(os.date('*t')).."', '"..reason.."');")
         
@@ -147,7 +158,6 @@ AddRemoteEvent("AdminKickBan", function(player, toPlayer, type, reason)
 end)
 
 AddCommand("delveh", function(player) 
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
     local vehicle = GetPlayerVehicle(player)
     
     if vehicle ~= nil then

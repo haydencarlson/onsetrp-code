@@ -73,11 +73,11 @@ end)
 AddRemoteEvent("OpenVehicleInventory", function(inventory, vehicleinventory)
     local inventoryitems = {}
 	for k,v in pairs(inventory) do
-		inventoryitems[k] = _(k).."["..v.."]"
+		inventoryitems[k] = _(k).." ("..v..")"
 	end
 	local vehicleItems = {}
 	for k,v in pairs(vehicleinventory) do
-		vehicleItems[k] = _(k).."["..v.."]"
+		vehicleItems[k] = _(k).." ("..v..")"
 	end
 	Dialog.setSelectLabeledOptions(vehicleInventory, 1, 1, inventoryitems)
 	Dialog.setSelectLabeledOptions(vehicleInventory, 2, 1, vehicleItems)

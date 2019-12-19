@@ -1,11 +1,11 @@
 
 sql = false
 
-local SQL_HOST = "localhost"
+local SQL_HOST = "tor2.bulbhost.com"
 local SQL_PORT = 3306
-local SQL_USER = "root"
+local SQL_USER = ""
 local SQL_PASS = ""
-local SQL_DATA = "roleplay"
+local SQL_DATA = ""
 local SQL_CHAR = "utf8mb4"
 local SQL_LOGL = "debug"
 

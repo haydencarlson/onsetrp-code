@@ -1,4 +1,3 @@
-
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
 local HungerFoodHud

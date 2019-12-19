@@ -85,11 +85,11 @@ AddRemoteEvent("openShop", function(inventory, items, shopid)
 
 	local inventoryitems = {}
 	for k,v in pairs(inventory) do
-		inventoryitems[k] = _(k).."["..v.."]"
+		inventoryitems[k] = _(k).." ("..v..")"
 	end
 	local shopitems = {}
 	for k,v in pairs(items) do
-		shopitems[k] = _(k).."["..v.._("currency").."]"
+		shopitems[k] = _(k).." ("..v.._("currency")..")"
 	end
 	Dialog.setSelectLabeledOptions(shop, 1, 1, inventoryitems)
 	Dialog.setSelectLabeledOptions(shop, 2, 1, shopitems)

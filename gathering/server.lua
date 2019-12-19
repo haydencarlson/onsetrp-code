@@ -1,22 +1,40 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
 gatherTable = {
-    --[[ {
+    {
         gather_zone = { 186601, -39031, 1451 },
         gather_item = "unprocessed_weed",
         process_zone = { 70695, 9566, 1366 },
         process_item = "processed_weed"
     },
     {
-        gather_zone = { 186474, -43277, 1451 },
+        gather_zone = { 215372, 170553, 1305 },
+        gather_item = "unprocessed_weed",
+        process_zone = { 216992, 170558, 1305 },
+        process_item = "processed_weed"
+    },
+    {
+        gather_zone = { 179150, 10368, 10370 },
+        gather_item = "unprocessed_weed",
+        process_zone = { 178500, 10368, 10370 },
+        process_item = "processed_weed"
+    },
+    {
+        gather_zone = { 186000, -43277, 1451 },
         gather_item = "unprocessed_heroin",
-        process_zone = { 73218, 3822, 1367 },
+        process_zone = { 186474, -43277, 1451 },
         process_item = "processed_heroin"
     },
     {
-        gather_zone = { 193607, -46512, 1451 },
+        gather_zone = { 192902, -48219, 1443 },
         gather_item = "unprocessed_meth",
-        process_zone = { 72095, 1418, 1367 },
+        process_zone = { 193607, -46512, 1451 },
+        process_item = "processed_meth"
+    },
+	{
+        gather_zone = { 99086, 121850, 6460 },
+        gather_item = "unprocessed_meth",
+        process_zone = { 97196, 117629, 6418 },
         process_item = "processed_meth"
     },
     {
@@ -24,7 +42,34 @@ gatherTable = {
         gather_item = "unprocessed_coke",
         process_zone = { 71981, 106, 1367 },
         process_item = "processed_coke"
-    }, ]]
+    },
+    {
+        gather_zone = { 112048, 166191, 2775 },
+        gather_item = "unprocessed_coke",
+        process_zone = { 114610, 165476, 3028 },
+        process_item = "processed_coke"
+    },
+    {
+        gather_zone = { 211220, 206478, 1297 },
+        gather_item = "unprocessed_rock",
+        gather_tool = "pickaxe",
+        process_zone = { 209483, 207916, 1283 },
+        process_item = "processed_rock"
+    },
+    {
+        gather_zone = { 181257, 222843, 675 },
+        gather_item = "unprocessed_rock",
+        gather_tool = "pickaxe",
+        process_zone = { 182051, 227958, 117 },
+        process_item = "processed_rock"
+    },
+    {
+        gather_zone = { 110192, 131749, 5305 },
+        gather_item = "unprocessed_rock",
+        gather_tool = "pickaxe",
+        process_zone = { 109786, 129557, 5722 },
+        process_item = "processed_rock"
+    },
     {
         gather_zone = { -96766, 88886, 180 },
         gather_item = "unprocessed_rock",

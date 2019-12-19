@@ -1,45 +1,7 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
 GarageDealerObjectsCached = { }
-GarageDealerTable = {
-    {
-		location = { 22083, 146617, 1560, -90 },
-		spawn = { 22120, 145492 , 1560, -90 }
-    },
-    {
-        location = { -184007, -50877, 1146, -90 },
-        spawn = { -183649, -51499, 1146, -90 }
-    },
-    {
-        location = { 207126, 171157, 1330, -90 },
-        spawn = { 207090, 170725, 1306, -90 }
-    },
-    {
-        location = { -25135, -17097, 2062, -150 },
-        spawn = { -25576, -17300, 2062 , -150 }
-    }
- }
-
- GarageStoreTable = { 
-    {
-        modelid = 2,
-        location = { 
-            { 23432, 145697, 1550 },
-            { 20752, 168878, 1306 },
-            { 207516, 168554, 1306 },
-            { 207524, 168216, 1306 },
-            { 207514, 167867, 1306 },
-            { -184587, -51196, 1146 },
-            { -185403, -51170, 1146 },
-            { -185603, -51410, 1146 },
-            { 207520, 168878, 1306 },
-            { 207516, 168554, 1306 },
-            { 207524, 168216, 1306 },
-            { 207514, 167867, 1306 }
-        },
-        object = {}
-    }
-}
+GarageDealerTable = {}
 
 GarageStoreObjectsCached = {}
 
@@ -207,7 +169,7 @@ function sellCarServerLoaded(player)
         local id = math.tointeger(result["id"])
         local modelid = math.tointeger(result["modelid"])
         local name = _("vehicle_"..modelid)
-        local price = math.ceil(result["price"] * 0.25)
+        local price = math.ceil(result["price"] * 0.61)
 
         local query = mariadb_prepare(sql, "DELETE FROM `player_garage` WHERE `id` = ?;",
         tostring(id)

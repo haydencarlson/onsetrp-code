@@ -23,8 +23,19 @@
         "fuel/server.lua",
         "spawn/server.lua",
         "delivery/server.lua",
+	"essentials/animation.lua",
+	"essentials/utility.lua",
+	"essentials/commands.lua",
+	"essentials/inventory.lua",
+	"essentials/tables/shop.lua",
+	"essentials/tables/garage.lua",
+	"essentials/tables/cardealer.lua",
+	"essentials/tables/house.lua",
+	"essentials/tables/admin.lua",
+	"essentials/job.lua",
         "scoreboard/server.lua",
         "whitelist/server.lua"
+
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -47,8 +58,10 @@
         "gps/client.lua",
         "spawn/client.lua",
         "delivery/client.lua",
+	"essentials/cl_animation.lua",
         "scoreboard/client.lua",
         "notification/client.lua"
+
     ],
     "files": [
         "hud/speaking/speaking.png",

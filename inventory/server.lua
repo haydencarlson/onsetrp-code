@@ -28,21 +28,6 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
         if weapon ~= 0 then
             SetPlayerWeapon(player, tonumber(weapon), 1000, true, 1)
         else
-            if item == "donut" then
-                SetPlayerAnimation(player, "DRINKING")
-                RemoveInventory(player, item, amount)
-                addPlayerHunger(player, 10*amount)
-            end
-            if item == "apple" then
-                SetPlayerAnimation(player, "DRINKING")
-                RemoveInventory(player, item, amount)
-                addPlayerHunger(player, 5*amount)
-            end
-            if item == "water_bottle" then
-                SetPlayerAnimation(player, "DRINKING")
-                RemoveInventory(player, item, amount)
-                addPlayerThirst(player, 25*amount)
-            end
             if item == "health_kit" then
                 if GetPlayerHealth(player) == 100 then
                     AddPlayerChat(player, _("already_full_health"))

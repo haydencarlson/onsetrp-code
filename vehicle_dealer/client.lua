@@ -71,7 +71,7 @@ end
 function openCarDealer(lvehicles, lcolors)
 	local cars = {}
 	for k,v in pairs(lvehicles) do
-		cars[k] = _(k).." ["..v.._("currency").."]"
+		cars[k] = _(k).." ("..v.._("currency")..")"
 	end
 	local colors = {}
 	for k,v in pairs(lcolors) do

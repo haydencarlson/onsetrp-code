@@ -71,7 +71,7 @@ end
 function openGarageDealer(lVehicles)
     local cars = {}
     for k,v in pairs(lVehicles) do
-        cars[k] = _(v.name).." ["..v.price.._("currency").."]"
+        cars[k] = _(v.name).." ("..v.price.._("currency")..")"
 	end
     Dialog.setSelectLabeledOptions(garageDealer, 1, 1, cars)
     Dialog.show(garageDealer)

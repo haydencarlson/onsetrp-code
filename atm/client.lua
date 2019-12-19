@@ -6,8 +6,8 @@ local isAtm
 local AtmIds = { }
 
 AddEvent("OnTranslationReady", function()
-    atm = Dialog.create(_("atm"), _("bank_balance").." : {bank_balance} ".._("currency").." | ".._("cash").." : {cash_balance} ".._("currency"), _("transfer"),_("withdraw"), _("deposit"), _("cancel"))
-    Dialog.addTextInput(atm, 1, _("amount").." :")
+    atm = Dialog.create(_("atm"), _("bank_balance").."{bank_balance}".._("currency").." | ".._("cash").."{cash_balance}".._("currency"),_("transfer"),_("withdraw"),_("deposit"),_("cancel"))
+    Dialog.addTextInput(atm, 1, _("amount")..":")
     Dialog.addSelect(atm, 1, _("player"), 3)
     Dialog.setVariable(atm, "bank_balance", 0)
     Dialog.setVariable(atm, "cash_balance", 0) 
@@ -52,12 +52,12 @@ end)
 function GetNearestATM()
 	local x, y, z = GetPlayerLocation()
 
-	for k,v in pairs(GetStreamedPickups()) do
-		local x2, y2, z2 = GetPickupLocation(v)
+	for k,v in pairs(GetStreamedObjects()) do
+		local x2, y2, z2 = GetObjectLocation(v)
 
 		local dist = GetDistance3D(x, y, z, x2, y2, z2)
 
-		if dist < 250.0 then
+		if dist < 180.0 then
             for k,i in pairs(AtmIds) do
 				if v == i then
 					return v

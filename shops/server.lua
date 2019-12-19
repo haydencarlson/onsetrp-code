@@ -1,77 +1,7 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
 ShopObjectsCached = { }
-ShopTable = { 
-	{
-		items = { 
-            water_bottle = 5,
-            apple = 5,
-            donut = 5,
-            repair_kit = 50,
-            health_kit = 50,
-            lockpick = 500,
-            pickaxe = 20,
-            jerican = 50
-		},
-		location = { 
-            { 128748, 77622, 1576, 90 },
-            { 42694, 137926, 1581, 90 },
-            { -15402, -2773, 2065, 90 },
-            { -169093, -39441, 1149, 90 },
-            { 171131, 203562, 1413, -180 }
-        },
-        npc = {},
-    },
-    {
-        items = {
-            weapon_2 = 5000,
-            weapon_3 = 5000,
-            weapon_4 = 5000,
-            weapon_5 = 5000,
-            weapon_6 = 15000,
-            weapon_7 = 15000,
-            weapon_8 = 10000,
-            weapon_9 = 10000,
-            weapon_10 = 20000,
-            weapon_11 = 20000,
-            weapon_12 = 30000,
-            weapon_13 = 20000,
-            weapon_14 = 20000,
-            weapon_15 = 20000,
-            weapon_16 = 20000,
-            weapon_17 = 20000,
-            weapon_18 = 20000,
-            weapon_19 = 20000,
-            weapon_20 = 30000
-        },
-        location = {
-            { -181943, -40882, 1163, 90 },
-            { 206071, 193057, 1357, 180 }
-        },
-        npc = {},
-    },
-   --[[  {
-        items = {
-            processed_weed = 4000,
-            processed_meth = 4000,
-            processed_coke = 4000,
-            processed_heroin = 4000
-        },
-        location = {
-            { -177344, 3673, 1992, 0 }
-        },
-        npc = {},
-    }, ]]
-    {
-        items = {
-            processed_rock = 160,
-        },
-        location = {
-            { 67862, 184741, 535, 90 }
-        },
-        npc = {},
-    }
-}
+ShopTable = { }
 AddEvent("OnPackageStart", function()
     for k,v in pairs(ShopTable) do
         for i,j in pairs(v.location) do
@@ -142,7 +72,7 @@ AddRemoteEvent("ShopBuy", function(player, shopid, item, amount)
 end)
 
 AddRemoteEvent("ShopSell", function(player, shopid, item, amount) 
-    local price = getPrice(shopid, item) * amount * 0.25
+    local price = getPrice(shopid, item) * amount * 0.42
 
     if price == 0 then
         return

@@ -4,7 +4,7 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 local personalMenu
 
 AddEvent("OnTranslationReady", function()
-    personalMenu = Dialog.create(_("personal_menu"), _("bank_balance").." : {bank} ".._("currency").." | ".._("cash").." : {cash} ".._("currency"), _("transfer") ,_("use"), _("cancel"))
+    personalMenu = Dialog.create(_("personal_menu"), _("bank_balance").." {bank}".._("currency").." | ".._("cash").." {cash}".._("currency"),_("transfer"),_("use"),_("cancel"))
     Dialog.addSelect(personalMenu, 1, _("inventory"), 5)
     Dialog.addTextInput(personalMenu, 1, _("quantity"))
     Dialog.addSelect(personalMenu, 1, _("player"), 3)
@@ -16,7 +16,7 @@ AddRemoteEvent("OpenPersonalMenu", function(cash, bank, inventory, playerList)
     Dialog.setVariable(personalMenu, "bank", bank)
     local items = {}
 	for k,v in pairs(inventory) do
-		items[k] = _(k).."["..v.."]"
+		items[k] = _(k).." ("..v..")"
     end
     Dialog.setSelectLabeledOptions(personalMenu, 1, 1, items)
     Dialog.setSelectLabeledOptions(personalMenu, 1, 3, playerList)
@@ -49,6 +49,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 				else
                     CallRemoteEvent("UseInventory", args[1], math.floor(args[2]))
+			CallRemoteEvent("UseInventory2", args[1], math.floor(args[2]))
 				end
 			end
 		end
