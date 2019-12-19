@@ -17,6 +17,7 @@
     "select_car_to_spawn": "Please select a car to spawn",
     "select_car_to_sell": "Please select a car to sell",
     "garage": "Garage",
+    "job_menu": "Jobs",
     "vehicle_stored": "Vehicle stored",
     "spawn_vehicle_success": "You spawned your {1}",
     "cannot_spawn_vehicle": "Cannot spawn your vehicle",
