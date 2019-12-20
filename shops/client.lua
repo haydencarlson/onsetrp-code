@@ -1,5 +1,5 @@
 local Dialog = ImportPackage("dialogui")
-Dialog.setGlobalTheme("default-dark")
+Dialog.setGlobalTheme("flat")
 
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 

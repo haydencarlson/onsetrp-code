@@ -40,12 +40,7 @@ function OnPackageStart()
                 end
             end
             if not hasOwner then
-                local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=1 WHERE `id` = ?;",
-                tostring(VehicleData[v].garageid)
-                )
-                mariadb_async_query(sql, query)
-                DestroyVehicleData(v)
-                DestroyVehicle(v)
+                table.insert(vehicleToDelete, v)
             end
         end
         print("All vehicle have been cleaned up !")
@@ -64,7 +59,7 @@ mariadb_query(sql, query)
 end
 
 function DestroyVehicleData(vehicle)
-	if (VehicleData[vehicle] ~= nil) then
+	if (VehicleData[vehicle] == nil) then
 		return
     end
 
