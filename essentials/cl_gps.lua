@@ -6,26 +6,22 @@ local gpsmain
 
 
 AddEvent("OnKeyPress", function( key )
-
     if key == "G" then
-	if not IsPlayerInVehicle() then
-        Dialog.show(gpsmain)
-		return 
-	end
-
+		if not IsPlayerInVehicle() then
+			Dialog.show(gpsmain)
+			return 
+		end
     end
-	end)
+end)
 
 AddEvent("OnKeyPress", function( key )
-
     if key == "G" then
-	if IsCtrlPressed() and key == 'G' then
-        Dialog.show(gpsmain)
-		return 
-	end
-
+		if IsCtrlPressed() and key == 'G' then
+			Dialog.show(gpsmain)
+			return 
+		end
     end
-	end)
+end)
 
 
 AddEvent("OnTranslationReady", function()

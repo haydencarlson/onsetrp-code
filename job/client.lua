@@ -3,7 +3,7 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 local jobMenu
 
 function SelectingJob(key)
-    if key == "F5" and not onSpawn and not onCharacterCreation then
+    if key == "F5" and not onCharacterCreation then
         CallRemoteEvent("ServerJobDialog")
     end
 end
