@@ -1,20 +1,20 @@
 
-local jobs = { 
+jobs_table = { 
     medic = 'Providing services to the injured',
     delivery = 'Deliver packages to earn your pay'
 }
 
 function JobSelected(player, selection)
-    if selection == 'medic' then
-        print('selected medic')
-    end
+    CallRemoteEvent(player, "KUI:Close", "job_selection", true)
+    CallRemoteEvent(player, "SelectedJob", selection)
+    CallRemoteEvent(player, "MakeNotification", "Your new job: " .. selection, "linear-gradient(to right, #00b09b, #96c93d)")
+    PlayerData[player].job = selection
 end
 
 function ShowSelectJob(player) 
-
     CallRemoteEvent(player, "KUI:Create", "job_menu", "Jobs")
     local i = 1;
-    for k, v in pairs(jobs) do
+    for k, v in pairs(jobs_table) do
         i = i + 1;
         CallRemoteEvent(player, "KUI:AddOption", k, k, v, "Select")
     end
