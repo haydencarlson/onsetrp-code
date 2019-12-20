@@ -16,15 +16,5 @@ function SelectedJob(selection)
     action[selection]()       
 end
 
-function OnTranslationReady()
-    jobMenu = Dialog.create(_("job_menu"), "Select your job", "Create", "Cancel")
-end
-
-function OpenJobSelectDialog()
-    Dialog.show(jobMenu)
-end
-
 AddRemoteEvent("SelectedJob", SelectedJob)
-AddEvent("OnTranslationReady", OnTranslationReady)
-AddRemoteEvent("OpenJobSelectDialog", OpenJobSelectDialog)
 AddEvent("OnKeyPress", SelectingJob)
