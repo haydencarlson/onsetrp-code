@@ -35,7 +35,8 @@
         "essentials/tables/admin.lua",
         "scoreboard/server.lua",
         "whitelist/server.lua",
-        "animation/server.lua"
+        "animation/server.lua",
+        "police/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -61,8 +62,8 @@
         "scoreboard/client.lua",
         "notification/client.lua",
         "animation/client.lua",
-        "essentials/cl_gps.lua"
-
+        "essentials/cl_gps.lua",
+        "police/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
