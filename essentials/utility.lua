@@ -65,16 +65,16 @@ AddEvent("OnPlayerDeath", OnPlayerDeath)
     end
 
 
-local tips = {  '<span color="#e8e6be"> Checkout our Community forums @ bulbhost.com</>', '<span color="#e8e6be">Thanks for playing on our server!</>' }
+local tips = { '<span color="#e8e6be">Thanks for playing on our server!</>' }
 for i in pairs(tips) do
  CreateTimer(function() AddPlayerChatAll(tips[i])
-end, 900000)
+end, 300000)
 end
  
 AddRemoteEvent("EngineOff", function(player)
-local vehicle = GetPlayerVehicle(player)
+	local vehicle = GetPlayerVehicle(player)
 	StopVehicleEngine(vehicle)
-            AddPlayerChat(player, "You turn off your vehicle.")
+	AddPlayerChat(player, "You turn off your vehicle.")
 end)	
 
 

@@ -170,7 +170,6 @@ function OnAccountLoaded(player)
 			CallRemoteEvent(player, "ClientChangeClothing", player, 5, PlayerData[player].clothing[5], 0, 0, 0, 0)
 			CallRemoteEvent(player, "AskSpawnMenu")
 		end
-		
 		LoadPlayerPhoneContacts(player)
 		AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="17">SERVER: Welcome back '..GetPlayerName(player)..', have fun!</>')
 
