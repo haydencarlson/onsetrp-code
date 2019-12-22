@@ -6,7 +6,7 @@ local web = CreateWebUI(0, 0, 0, 0, 2, 16)
 SetWebVisibility(web, WEB_HIDDEN)
 SetWebAlignment(web, 0, 0)
 SetWebAnchors(web, 0, 0, 1, 1)
-SetWebURL(web, "http://asset/onsetrp/onset-phone/ui/dist/index.html")
+SetWebURL(web, "http://asset/onsetrp/phone/ui/dist/index.html")
 
 local phoneOpened = false
 local phoneHome
