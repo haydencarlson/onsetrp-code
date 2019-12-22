@@ -171,7 +171,6 @@ function OnAccountLoaded(player)
 			CallRemoteEvent(player, "AskSpawnMenu")
 		end
 		LoadPlayerPhoneContacts(player)
-		AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="17">SERVER: Welcome back '..GetPlayerName(player)..', have fun!</>')
 
 		print("Account ID "..PlayerData[player].accountid.." loaded for "..GetPlayerIP(player))
 	end
@@ -234,6 +233,7 @@ function CreatePlayerData(player)
 	PlayerData[player].job_vehicle = nil
 	PlayerData[player].job = ""
 	PlayerData[player].onAction = false
+	PlayerData[player].isActioned = false
 	PlayerData[player].phone_contacts = {}
 	PlayerData[player].phone_number = {}
 
