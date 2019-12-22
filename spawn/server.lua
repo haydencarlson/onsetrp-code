@@ -1,56 +1,28 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
-spawnLocation = {
-    -- The three last value are temporary until RandomFloat is fixed
-    --town = { 170402, 38013, 1170, "-", "-", "" },
-    cityhall = { 211526, 176056, 1260, "", "", "" },
-    citycenter = { 203355, 179884, 1307, "", "", "" },
-	cockinbell = { 194096, 177186, 1307, "", "", "" },
-    hobospot = { 200172, 193896, 1305, "", "", "" },
-	parkinglot = { 202991, 198127, 1307, "", "", "" },
-	delivery_job = { 202323, 172419, 1310, "", "", "" },
-	city = { 212263, 201276, 1302, "", "", "" },
-    --desert_town = { 16223, 8033, 2070, "-", "-", "" },
-    --old_town = { 39350, 138061, 1580, "", "", "" }
-    --motel = { 49147, 139261, 1574, "", "", "" },
-    --skatepark = { -183784, -45246, 1146, "", "", "" }
+local server_info = {
+    [0] = 212462, 
+    [1] = 175600
 }
+local rules = {
+    [0] = 212462,
+    [1] = 176016
+}
+function SetupSpawn() 
+    -- Server info section
+    CreateText3D("Server Information", 17, server_info[0], server_info[1], 1700, 0, 0, 0)
+    gps = "Push G to use the GPS to find new locations."
+    CreateText3D(gps, 9, server_info[0], server_info[1], 1650, 0, 0, 0)
+    job = "You can get a job by hitting F5 and selecting a job from the menu"
+    CreateText3D(job, 9, server_info[0], server_info[1], 1600, 0, 0, 0)
+    house = "Near a house door push F1 to make a purchase"
+    CreateText3D(house, 9, server_info[0], server_info[1], 1550, 0, 0, 0)
 
-AddRemoteEvent("ServerSpawnMenu", function(player)
-    local house = getHouseOwner(player)
-
-    local hasHouse = false
-    if house ~= 0 then
-        if houses[house].spawnable == 1 then
-            hasHouse = true
-        end
-    end
-
-    CallRemoteEvent(player, "OpenSpawnMenu", spawnLocation, hasHouse)
-end)
-
-AddRemoteEvent("PlayerSpawn", function(player, spawn)
-    if spawn == "house" then
-        local house = getHouseOwner(player)
-
-        if house ~= 0 then
-            if houses[house].spawnable == 1 then
-                SetPlayerLocation(player, houses[house].spawn[1], houses[house].spawn[2], houses[house].spawn[3] + 100)
-                SetPlayerHeading( player, houses[house].spawn[4] )
-            end
-        end
-    else
-        spawnSelect = GetSpawnLocation(spawn)
-        spawnx = RandomFloat(spawnSelect[1] - 500, spawnSelect[1] + 500)
-        spawny = RandomFloat(spawnSelect[2] - 500, spawnSelect[2] + 500)
-        SetPlayerLocation(player, spawnSelect[4]..spawnx, spawnSelect[5]..spawny, spawnSelect[6]..spawnSelect[3] + 50)
-    end
-end)
-
-function GetSpawnLocation(spawn)
-    for k,v in pairs(spawnLocation) do
-        if k == spawn then
-            return v
-        end
-    end
+    -- Rules section
+    CreateText3D("Rules", 17, rules[0], rules[1], 1700, 0, 0, 0)
+    CreateText3D("No Random Killing", 9, rules[0], rules[1], 1650, 0, 0, 0)
+    CreateText3D("No Advertising", 9, rules[0], rules[1], 1600, 0, 0, 0)
+    CreateText3D("No Real Threats to anyone", 9, rules[0], rules[1], 1550, 0, 0, 0)
 end
+
+AddEvent("OnPackageStart", SetupSpawn)

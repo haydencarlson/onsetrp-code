@@ -29,7 +29,7 @@ end
 AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
 AddEvent("OnPlayerJoin", function(player)
-	SetPlayerSpawnLocation(player, 227603, -65590, 237, 0 )
+	SetPlayerSpawnLocation(player, 211168, 175766, 1307, 0 )
 end)
 
 function OnPlayerQuit(player)
@@ -96,7 +96,7 @@ function OnAccountCheckIpBan(player)
 end
 
 function CreatePlayerAccount(player)
-	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, inventory) VALUES (NULL, '?', '[]' , '[]');",
+	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, inventory) VALUES (NULL, '?', '[]' , '[]' , '[]');",
 		tostring(GetPlayerSteamId(player)))
 
 	mariadb_query(sql, query, OnAccountCreated, player)
@@ -107,7 +107,8 @@ function OnAccountCreated(player)
 
 	CallRemoteEvent(player, "askClientCreation")
 
-    SetPlayerLoggedIn(player)
+	SetPlayerLoggedIn(player)
+	SetAvailablePhoneNumber(player)
 
 	print("Account ID "..PlayerData[player].accountid.." created for "..player)
 
@@ -122,6 +123,11 @@ function LoadPlayerAccount(player)
 	mariadb_async_query(sql, query, OnAccountLoaded, player)
 end
 
+function LoadPlayerPhoneContacts(player)
+	local query = mariadb_prepare(sql, "SELECT * FROM phone_contacts WHERE phone_contacts.owner_id = ? ORDER BY phone_contacts.name;", PlayerData[player].accountid)
+
+	mariadb_async_query(sql, query, OnPhoneContactsLoaded, player)
+end
 
 function OnAccountLoaded(player)
 	if (mariadb_get_row_count() == 0) then
@@ -134,13 +140,21 @@ function OnAccountLoaded(player)
 		PlayerData[player].bank_balance = math.tointeger(result['bank_balance'])
 		PlayerData[player].name = tostring(result['name'])
 		PlayerData[player].clothing = json_decode(result['clothing'])
+		PlayerData[player].clothing_police = json_decode(result['clothing_police'])
+		PlayerData[player].police = math.tointeger(result['police'])
 		PlayerData[player].inventory = json_decode(result['inventory'])
 		PlayerData[player].created = math.tointeger(result['created'])
 
+		if result['phone_number'] and result['phone_number'] ~= "" then
+			PlayerData[player].phone_number = tostring(result['phone_number'])
+		else
+			SetAvailablePhoneNumber(player)
+		end
+
 		SetPlayerHealth(player, tonumber(result['health']))
 		SetPlayerArmor(player, tonumber(result['armor']))
-        setPlayerThirst(player, tonumber(result['thirst']))
-        setPlayerHunger(player, tonumber(result['hunger']))
+		setPlayerThirst(player, tonumber(result['thirst']))
+		setPlayerHunger(player, tonumber(result['hunger']))
 
 		SetPlayerLoggedIn(player)
 
@@ -156,11 +170,46 @@ function OnAccountLoaded(player)
 			CallRemoteEvent(player, "ClientChangeClothing", player, 5, PlayerData[player].clothing[5], 0, 0, 0, 0)
 			CallRemoteEvent(player, "AskSpawnMenu")
 		end
-		
-		AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="17">Welcome back '..GetPlayerName(player)..'</>')
+		LoadPlayerPhoneContacts(player)
+		AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="17">SERVER: Welcome back '..GetPlayerName(player)..', have fun!</>')
 
 		print("Account ID "..PlayerData[player].accountid.." loaded for "..GetPlayerIP(player))
 	end
+end
+
+function SetAvailablePhoneNumber(player)
+	-- Generate a random phone number
+	local phone_number = "555"..tostring(math.random(100000, 999999))
+
+	local query = mariadb_prepare(sql, "SELECT id FROM accounts WHERE phone_number = ?;",
+		phone_number)
+
+	mariadb_async_query(sql, query, OnPhoneNumberChecked, player, phone_number)
+end
+
+function OnPhoneNumberChecked(player, phone_number)
+	if (mariadb_get_row_count() == 0) then
+		-- If phone number is available
+		local query = mariadb_prepare(sql, "UPDATE accounts SET phone_number = ? WHERE id = ?", phone_number, PlayerData[player].accountid)
+
+		PlayerData[player].phone_number = phone_number
+
+		mariadb_async_query(sql, query)
+	else
+		-- Retry with a new phone number if the generated one is already allowed to another account
+		GetAvailablePhoneNumber(player)
+	end
+end
+
+function OnPhoneContactsLoaded(player)
+	for i = 1, mariadb_get_row_count() do
+		local contact = mariadb_get_assoc(i)
+		if contact['id'] then
+			PlayerData[player].phone_contacts[i] = { id = tostring(contact['id']),  name = contact['name'], phone = contact['phone'] }
+		end
+	end
+
+	print("Phone contacts loaded for "..PlayerData[player].accountid)
 end
 
 function CreatePlayerData(player)
@@ -169,20 +218,24 @@ function CreatePlayerData(player)
 	PlayerData[player].accountid = 0
 	PlayerData[player].name = ""
 	PlayerData[player].clothing = {}
+	PlayerData[player].clothing_police = {}
+	PlayerData[player].police = 0
 	PlayerData[player].inventory = {}
-    PlayerData[player].logged_in = false
+	PlayerData[player].logged_in = false
 	PlayerData[player].admin = 0
 	PlayerData[player].created = 0
 	PlayerData[player].locale = GetPlayerLocale(player)
 	PlayerData[player].steamid = GetPlayerSteamId(player)
 	PlayerData[player].steamname = ""
-    PlayerData[player].thirst = 100
-    PlayerData[player].hunger = 100
-    PlayerData[player].cash = 5000
-	PlayerData[player].bank_balance = 5000
+	PlayerData[player].thirst = 100
+	PlayerData[player].hunger = 100
+	PlayerData[player].cash = 0
+	PlayerData[player].bank_balance = 1000
 	PlayerData[player].job_vehicle = nil
 	PlayerData[player].job = ""
 	PlayerData[player].onAction = false
+	PlayerData[player].phone_contacts = {}
+	PlayerData[player].phone_number = {}
 
     print("Data created for : "..player)
 end
@@ -211,7 +264,7 @@ function SavePlayerAccount(player)
 		return
 	end
 
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, cash = ?, bank_balance = ?, health = ?, armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', inventory = '?', created = '?' WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, cash = ?, bank_balance = ?, health = ?, armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?' WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
 		PlayerData[player].cash,
 		PlayerData[player].bank_balance,
@@ -221,6 +274,7 @@ function SavePlayerAccount(player)
 		PlayerData[player].thirst,
 		PlayerData[player].name,
 		json_encode(PlayerData[player].clothing),
+		json_encode(PlayerData[player].clothing_police),
 		json_encode(PlayerData[player].inventory),
 		PlayerData[player].created,
 		PlayerData[player].accountid

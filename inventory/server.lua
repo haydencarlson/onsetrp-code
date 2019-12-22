@@ -52,6 +52,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                                 SetVehicleDamage(nearestCar, i, 0)
                             end
                             CallRemoteEvent(player, "LockControlMove", false)
+                            SetPlayerAnimation(player, "STOP")
                         end)
                     end
                 end
@@ -70,6 +71,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                             VehicleData[nearestCar].fuel = 100
                             AddPlayerChat(player, _("car_refuelled"))
                             CallRemoteEvent(player, "LockControlMove", false)
+                            SetPlayerAnimation(player, "STOP")
                         end)
                     end
                 end
@@ -93,6 +95,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                                 AddPlayerChat(player, _("car_unlocked"))
                                 RemoveInventory(player, item, amount)
                                 CallRemoteEvent(player, "LockControlMove", false)
+                                SetPlayerAnimation(player, "STOP")
                             end)       
                         else
                             AddPlayerChat(player, _("vehicle_already_unlocked"))
@@ -116,6 +119,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                                 AddPlayerChat(player, _("unlock_house"))
                                 RemoveInventory(player, item, amount)
                                 CallRemoteEvent(player, "LockControlMove", false)
+                                SetPlayerAnimation(player, "STOP")
                             end)   
                         else
                             AddPlayerChat(player, _("house_already_unlock"))

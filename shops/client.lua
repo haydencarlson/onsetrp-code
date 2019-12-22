@@ -1,5 +1,5 @@
 local Dialog = ImportPackage("dialogui")
-Dialog.setGlobalTheme("default-dark")
+Dialog.setGlobalTheme("flat")
 
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
@@ -23,7 +23,7 @@ AddRemoteEvent("shopSetup", function(ShopObject)
 end)
 
 function OnKeyPress(key)
-    if key == "E" and not onSpawn and not onCharacterCreation then
+    if key == "E" and not onCharacterCreation then
         local NearestShop = GetNearestShop()
         if NearestShop ~= 0 then
             CallRemoteEvent("shopInteract", NearestShop)

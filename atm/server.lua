@@ -27,6 +27,9 @@ AtmTable = {
 			table.insert(AtmObjectsCached, v.object[i])
 		end
 	end
+	-- ATM in the gas station of the town
+	CreateObject(494, -168797, -39550, 1050)
+	
 end)
 
 AddEvent("OnPlayerJoin", function(player)
