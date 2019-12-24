@@ -39,29 +39,29 @@ AddRemoteEvent("StartStopPolice", function(player)
             PlayerData[player].job_vehicle = nil
             CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
         else
-	    local jobCount = 0
-	    for k,v in pairs(PlayerData) do
-		if v.job == "police" then
-		    jobCount = jobCount + 1
-		end
-	    end
-	    if jobCount == 10 then
-		return CallRemoteEvent(player, "MakeNotification", _("job_full"), "linear-gradient(to right, #ff5f6d, #ffc371)")
-	    end
-	PlayerData[player].job = "police"
-	GetUniformServer(player)
-	CallRemoteEvent(player, "MakeNotification", _("join_police"), "linear-gradient(to right, #00b09b, #96c93d)")
-	return
-    end 
+	    	local jobCount = 0
+	    	for k,v in pairs(PlayerData) do
+				if v.job == "police" then
+					jobCount = jobCount + 1
+				end
+	    	end
+			if jobCount == 10 then
+				return CallRemoteEvent(player, "MakeNotification", _("job_full"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+			end
+			PlayerData[player].job = "police"
+			GetUniformServer(player)
+			CallRemoteEvent(player, "MakeNotification", _("join_police"), "linear-gradient(to right, #00b09b, #96c93d)")
+			return
+    	end 
     elseif PlayerData[player].job == "police" then
         if PlayerData[player].job_vehicle ~= nil then
             DestroyVehicle(PlayerData[player].job_vehicle)
-            DestroyVehicleData(PlayerData[player].job_vehicle)
+			DestroyVehicleData(PlayerData[player].job_vehicle)
             PlayerData[player].job_vehicle = nil
         end
-	CallRemoteEvent(player, "MakeNotification", _("quit_police"), "linear-gradient(to right, #00b09b, #96c93d)")
+		CallRemoteEvent(player, "MakeNotification", _("quit_police"), "linear-gradient(to right, #00b09b, #96c93d)")
         PlayerData[player].job = ""
-	RemoveUniformServer(player)
+		RemoveUniformServer(player)
     end
 end)
 
@@ -115,7 +115,7 @@ function GetUniformServer(player)
     SetPlayerWeapon(player, 4, 200, false, 1, true)
     
     for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
-	ChangeUniformOtherPlayerServer(k, player)
+		ChangeUniformOtherPlayerServer(k, player)
     end
 end
 AddRemoteEvent("GetUniformServer", GetUniformServer)
@@ -123,14 +123,14 @@ AddRemoteEvent("GetUniformServer", GetUniformServer)
 function ChangeUniformOtherPlayerServer(player, otherplayer)
 
     if PlayerData[otherplayer] == nil then
-	return
+		return
     end
     if(PlayerData[otherplayer].job ~= "police") then
-	return
+		return
     end
 
     if PlayerData[otherplayer].clothing_police == nil then
-	return
+		return
     end
     CallRemoteEvent(player, "ChangeUniformClient", otherplayer, PlayerData[otherplayer].clothing_police[1], 0)
     CallRemoteEvent(player, "ChangeUniformClient", otherplayer, PlayerData[otherplayer].clothing_police[3], 1)
@@ -143,17 +143,17 @@ function RemoveUniformServer(player)
     CallRemoteEvent(player, "ChangeUniformClient", player, PlayerData[player].clothing[1], 0)
     CallRemoteEvent(player, "ChangeUniformClient", player, PlayerData[player].clothing[3], 1)
     CallRemoteEvent(player, "ChangeUniformClient", player, PlayerData[player].clothing[4], 4)
-    CallRemoteEvent(player, "ChangeUniformClient", player, PlayerData[player].clothing[5], 5)
+	CallRemoteEvent(player, "ChangeUniformClient", player, PlayerData[player].clothing[5], 5)
     SetPlayerWeapon(player, 1, 0, true, 1)
     
     for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
-	RemoveUniformOtherPlayerServer(k, player)
+		RemoveUniformOtherPlayerServer(k, player)
     end
 end
 
 function RemoveUniformOtherPlayerServer(player, otherplayer)
     if PlayerData[otherplayer] == nil then
-	return
+		return
     end
     CallRemoteEvent(player, "ChangeUniformClient", otherplayer, PlayerData[otherplayer].clothing[1], 0)
     CallRemoteEvent(player, "ChangeUniformClient", otherplayer, PlayerData[otherplayer].clothing[3], 1)
@@ -175,9 +175,9 @@ function GetPatrolCar(player)
 	    local x, y, z = GetVehicleLocation(v)
 	    local dist2 = GetDistance3D(policeNpc[nearestPolice].spawn[1], policeNpc[nearestPolice].spawn[2], policeNpc[nearestPolice].spawn[3], x, y, z)
 	    if dist2 < 500.0 then
-		CallRemoteEvent(player, "MakeNotification", _("cannot_spawn_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
-		isSpawnable = false
-		break
+			CallRemoteEvent(player, "MakeNotification", _("cannot_spawn_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+			isSpawnable = false
+			break
 	    end
 	end
 	if isSpawnable then

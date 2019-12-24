@@ -4,7 +4,8 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 local gpsmenu
 local gpsmain
 local teleportPlace = {
-    gas_station = { 125773, 80246, 1645 },
+	gas_station = { 125773, 80246, 1645 },
+	police_station = { 169277, 193489, 1307 },
     town = { -182821, -41675, 1160 },
     prison = { -167958, 78089, 1569 },
     diner = { 212405, 94489, 1340 },
@@ -27,10 +28,10 @@ local teleportPlace = {
     mining_process_zone = { 2427, 98041, 1497 },
     mining_sell_zone = { 21799, 137848, 1555 },
     drugs_sell_zone = { -177344, 3673, 1992 },
-    home_cardealer = { 161069, 191846, 1322 },
+    home_cardealer = { 207113, 171199, 1330 },
     train_station = { 134704, 209961, 1292 },
-    old_cardealer = { 127720, 80774, 1567 },
-    delivery_npc_location = { -16925, -29058, 2200 }
+	delivery_npc_location = { 136696, 210225, 1688 },
+	city_hall = {211882, 175167, 1307}
 }
 
 AddEvent("OnKeyPress", function( key )
@@ -51,6 +52,17 @@ AddEvent("OnKeyPress", function( key )
     end
 end)
 
+AddRemoteEvent("ClientCreateWaypoint", function(name, x, y, z)
+    if currentWaypoint ~= nil then
+        DestroyWaypoint(currentWaypoint)
+    end
+    
+    currentWaypoint = CreateWaypoint(tonumber(x), tonumber(y), tonumber(z), tostring(name))    
+end)
+
+AddRemoteEvent("ClientDestroyCurrentWaypoint", function()
+    DestroyWaypoint(currentWaypoint)
+end)
 
 AddEvent("OnTranslationReady", function()
 	gpsmain = Dialog.create(_("gps_menu"), nil,"Create waypoint", "Delete waypoint", "Locations", _("cancel"))

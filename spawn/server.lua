@@ -13,7 +13,7 @@ function SetupSpawn()
     CreateText3D("Server Information", 17, server_info[0], server_info[1], 1700, 0, 0, 0)
     gps = "Push G to use the GPS to find new locations."
     CreateText3D(gps, 9, server_info[0], server_info[1], 1650, 0, 0, 0)
-    job = "You can get a job by hitting F5 and selecting a job from the menu"
+    job = "You can get a job by going to the job manager beside here"
     CreateText3D(job, 9, server_info[0], server_info[1], 1600, 0, 0, 0)
     house = "Near a house door push F1 to make a purchase"
     CreateText3D(house, 9, server_info[0], server_info[1], 1550, 0, 0, 0)

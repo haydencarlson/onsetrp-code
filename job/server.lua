@@ -18,7 +18,11 @@ text = {
     },
     delivery = {
         short_desc = 'Deliver packages to earn your pay',
-        long_desc = 'As a delivery driver you will be driving the work vehichle and completing deliveries. See your GPS for the location.'
+        long_desc = 'Travel to the delivery job, you can find it on your GPS. As a delivery driver you will be driving the work vehicle and completing deliveries. See your GPS for the location.'
+    },
+    police = {
+        short_desc = "Become a police officer",
+        long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car. As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
     }
 }
 
@@ -60,12 +64,13 @@ end
 
 function JobSelected(player, selection)
     CallRemoteEvent(player, "CUI:Close", "job_selection", true)
-    CallRemoteEvent(player, "SelectedJob", selection)
-    CallRemoteEvent(player, "MakeNotification", "Your new job: " .. selection, "linear-gradient(to right, #00b09b, #96c93d)")
+    CallRemoteEvent(player, "SelectedJob", selection, PlayerData[player].job)
+    if selection ~= "police" then
+        CallRemoteEvent(player, "MakeNotification", "Your new job: " .. selection, "linear-gradient(to right, #00b09b, #96c93d)")
+    end
     CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
     CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
     CallRemoteEvent(player, "CUI:Show", "job_information", true)
-    PlayerData[player].job = selection
 end
 
 function ShowSelectJob(player) 
