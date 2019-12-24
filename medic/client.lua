@@ -49,7 +49,6 @@ end)
 
 function GetNearestMedic()
 	local x, y, z = GetPlayerLocation()
-	
 	for k,v in pairs(GetStreamedNPC()) do
         local x2, y2, z2 = GetNPCLocation(v)
 		local dist = GetDistance3D(x, y, z, x2, y2, z2)
@@ -62,7 +61,6 @@ function GetNearestMedic()
 			end
 		end
 	end
-
 	return 0
 end
 

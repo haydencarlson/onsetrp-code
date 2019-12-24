@@ -6,7 +6,6 @@ AddEvent("OnPackageStart", function()
 	for k,v in pairs(CarDealerTable) do
 		v.npc = CreateNPC(v.location[1], v.location[2], v.location[3], v.location[4])
 		CreateText3D(_("car_dealer").."\n".._("press_e"), 18, v.location[1], v.location[2], v.location[3] + 120, 0, 0, 0)
-
 		table.insert(CarDealerObjectsCached, v.npc)
 	end
 end)
