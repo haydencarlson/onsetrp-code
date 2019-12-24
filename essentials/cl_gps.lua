@@ -30,7 +30,7 @@ local teleportPlace = {
     drugs_sell_zone = { -177344, 3673, 1992 },
     home_cardealer = { 207113, 171199, 1330 },
     train_station = { 134704, 209961, 1292 },
-	delivery_npc_location = { 136696, 210225, 1688 },
+	delivery_npc_location = { 202284, 170229, 1306 },
 	city_hall = {211882, 175167, 1307}
 }
 

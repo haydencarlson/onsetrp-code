@@ -17,6 +17,8 @@ function SetupSpawn()
     CreateText3D(job, 9, server_info[0], server_info[1], 1600, 0, 0, 0)
     house = "Near a house door push F1 to make a purchase"
     CreateText3D(house, 9, server_info[0], server_info[1], 1550, 0, 0, 0)
+    stocks = "Visit the bank to buy and trade stocks"
+    CreateText3D(house, 9, server_info[0], server_info[1], 1500, 0, 0, 0)
 
     -- Rules section
     CreateText3D("Rules", 17, rules[0], rules[1], 1700, 0, 0, 0)
