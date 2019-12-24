@@ -320,3 +320,27 @@ ALTER TABLE `whitelist`
 ALTER TABLE `player_garage`
   ADD CONSTRAINT `player_garage_ibfk_1` FOREIGN KEY (`ownerid`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+CREATE TABLE `roleplay`.`stocks` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `price` DECIMAL(20,10) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `roleplay`.`player_stocks` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `player_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `amount` DECIMAL(20,10) NOT NULL,
+  PRIMARY KEY (`id`));
+
+
+INSERT INTO `roleplay`.`stocks`
+  (`name`, `price`)
+VALUES
+  ("Bitcoin", 400);
+
+INSERT INTO `roleplay`.`stocks`
+  (`name`,`price`)
+VALUES
+  ("Gold", 15000);
