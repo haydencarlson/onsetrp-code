@@ -37,7 +37,8 @@
         "whitelist/server.lua",
         "animation/server.lua",
         "police/server.lua",
-        "phone/server.lua"
+        "phone/server.lua",
+        "stocks/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -59,13 +60,14 @@
         "fuel/client.lua",
         "job/client.lua",
         "delivery/client.lua",
-	"essentials/cl_animation.lua",
+	    "essentials/cl_animation.lua",
         "scoreboard/client.lua",
         "notification/client.lua",
         "animation/client.lua",
         "essentials/cl_gps.lua",
         "police/client.lua",
-        "phone/client.lua"
+        "phone/client.lua",
+        "stocks/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
