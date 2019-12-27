@@ -288,3 +288,7 @@ function SetPlayerLoggedIn(player)
 
     CallEvent("OnPlayerJoin", player)
 end
+
+AddCommand("test", function()
+  --
+end)
