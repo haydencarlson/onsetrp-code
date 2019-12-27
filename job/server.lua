@@ -23,6 +23,10 @@ text = {
     police = {
         short_desc = "Become a police officer",
         long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car. As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
+    },
+    thief = {
+        short_desc = "Mug and Rob to make your living",
+        long_desc = "Push F3 to open your thief menu. Use the tools of your trade to rob and collect cash. Get caught, go to jail. High risk, high reward."
     }
 }
 

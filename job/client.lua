@@ -22,7 +22,11 @@ function SelectedJob(selection, playerjob)
             end,
             delivery = function()
                 CallRemoteEvent("StartStopDelivery")
+            end,
+            thief = function()
+                CallRemoteEvent("StopThiefJob")
             end
+                
         }
         stopaction[playerjob]()
     end
@@ -31,7 +35,10 @@ function SelectedJob(selection, playerjob)
         medic = function() SetPlayerClothingPreset(GetPlayerId(), 17) end,
         delivery = function() SetPlayerClothingPreset(GetPlayerId(), 5) end,
         police = function() 
-            CallRemoteEvent('StartStopPolice')
+            CallRemoteEvent("StartStopPolice")
+        end,
+        thief = function()
+            CallRemoteEvent("StartThiefJob")
         end
     }   
     action[selection]()       

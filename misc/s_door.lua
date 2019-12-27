@@ -1,3 +1,11 @@
+globaldoors = {}
+
+
+function AddNewGlobalDoor(location, door, locked)
+	globaldoors[door] = {
+		locked = locked
+	}
+end
 AddEvent("OnPackageStart", function()
 	-- City houses 2
 	CreateDoor(23, 162870.000000, 211647.000000, 1313.000000, -90.0, true)
@@ -137,9 +145,9 @@ AddEvent("OnPackageStart", function()
 	CreateDoor(65, 214176.000000, 192436.000000, 1242.000000, 180.0, true) --
 	
 	-- IWB Bank Underground
-	CreateDoor(73, 185069.000000, 203285.000000, 295.000000, -90.0, true) -- safe
+	AddNewGlobalDoor('bankvault', CreateDoor(73, 185069.000000, 203285.000000, 295.000000, -90.0, true), true) -- safe
 	CreateDoor(74, 185034.000000, 201752.000000, 263.000000, -90.0, true) -- safe 2
-	CreateDoor(75, 186334.000000, 203004.000000, 68.000000, -90.0, true) --
+	CreateDoor(75, 186334.000000, 203004.000000, 68.000000, -90.0, true)
 
 	-- City Hospital Interior Part 1
 	CreateDoor(61, 215443.000000, 159292.000000, 2857.000000, 0.0, true) --

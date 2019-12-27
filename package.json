@@ -38,7 +38,8 @@
         "animation/server.lua",
         "police/server.lua",
         "phone/server.lua",
-        "stocks/server.lua"
+        "stocks/server.lua",
+        "thief/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -55,6 +56,7 @@
         "inventory/client.lua",
         "shops/client.lua",
         "misc/c_weapons.lua",
+        "essentials/cl_object.lua",
         "gathering/client.lua",
         "admin/client.lua",
         "fuel/client.lua",
@@ -67,7 +69,8 @@
         "essentials/cl_gps.lua",
         "police/client.lua",
         "phone/client.lua",
-        "stocks/client.lua"
+        "stocks/client.lua",
+        "thief/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
