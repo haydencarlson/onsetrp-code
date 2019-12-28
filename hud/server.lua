@@ -5,8 +5,8 @@ function getHudData(player)
     thirst = math.ceil(PlayerData[player].thirst)
     healthlife = GetPlayerHealth(player)
     health = math.ceil(GetPlayerHealth(player))
-    cash = math.ceil(PlayerData[player].cash)
-    bank = math.ceil(PlayerData[player].bank_balance)
+    cash = PlayerData[player].cash
+    bank = PlayerData[player].bank_balance
     job = PlayerData[player].job
 
     if GetPlayerVehicle(player) ~= 0 then
