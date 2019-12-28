@@ -18,13 +18,20 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 6*amount)
             end
-            if item == "cigarette" then
-                SetPlayerAnimation(player, "SMOKING")
-                RemoveInventory(player, item, amount)
-                addPlayerHunger(player, 1*amount)
-				removePlayerThirst(player, 2*amount)
-                --removePlayerHealth(player, 5*amount)
-            end
+			-- Needs to remove some health
+            --if item == "cigarette" then
+                --SetPlayerAnimation(player, "SMOKING")
+                --RemoveInventory(player, item, amount)
+                --addPlayerHunger(player, 1*amount)
+				--removePlayerThirst(player, 2*amount)
+if item == "cigarette" then
+        SetPlayerAnimation(player, "SMOKING")
+        RemoveInventory(player, item, amount)
+        addPlayerHunger(player, 1*amount)
+        removePlayerThirst(player, 2*amount)
+        SetPlayerHealth(player, 11-amount)
+    end
+            --end
             if item == "apple" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
@@ -36,11 +43,13 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 removePlayerHunger(player, 66*amount)
                 removePlayerThirst(player, 33*amount)
             end
+		
             if item == "rohypnol_tablet" then
                 SetPlayerAnimation(player, "DRUNK")
                 RemoveInventory(player, item, amount)
                 removePlayerHunger(player, 36*amount)
                 removePlayerThirst(player, 12*amount)
+                SetPlayerHealth(player, 6*amount)
             end
             if item == "salad" then
                 SetPlayerAnimation(player, "DRINKING")
@@ -86,6 +95,11 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 15*amount)
+            end
+            if item == "club_sandwich" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerHunger(player, 35*amount)
             end
             if item == "fried_chicken_rice" then
                 SetPlayerAnimation(player, "DRINKING")
@@ -134,10 +148,49 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 25*amount)
             end
+
+            if item == "scratch_ticket" then
+                RemoveInventory(player, item, 1)
+			    local number = Random(1, 100)
+    			local win = 4
+    			local lost = 'You scratched and lost'
+    			winmsg = 'You scratched and won $'..win
+       			if number < 25 then
+			    SetPlayerAnimation(player, "DABSAREGAY")
+           		AddPlayerChat(player, winmsg)
+			    PlayerData[player].cash = PlayerData[player].cash + win
+        		else  
+           		AddPlayerChat(player, lost)
+			    SetPlayerAnimation(player, "FACEPALM")
+   		     end
+             end
+		
+	      if item == "scratch_ticket_random" then
+                RemoveInventory(player, item, 1)
+			local number = Random(1, 100)
+    			local win = Random(500, 1500)
+    			local lost = 'You scratched and lost'
+    			winmsg = 'You won scratched and won $'..win
+
+       			 if number < 25 then
+			SetPlayerAnimation(player, "DABSAREGAY")
+           		 AddPlayerChat(player, winmsg)
+			PlayerData[player].cash = PlayerData[player].cash + win
+        		else  
+           		 AddPlayerChat(player, lost)
+			SetPlayerAnimation(player, "FACEPALM")
+   		  end
+            end
+
             if item == "beer" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 47*amount)
+            end
+            if item == "popsicle" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerThirst(player, 14*amount)
             end
             if item == "gin" then
                 SetPlayerAnimation(player, "DRINKING")
@@ -153,6 +206,21 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 26*amount)
+            end
+            if item == "bag_chips" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerHunger(player, 12*amount)
+            end
+            if item == "pepperoni_sausage" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerHunger(player, 8*amount)
+            end
+            if item == "instant_noodles" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerHunger(player, 29*amount)
             end
             if item == "bbq_hamburger" then
                 SetPlayerAnimation(player, "DRINKING")

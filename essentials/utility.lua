@@ -65,7 +65,9 @@ AddEvent("OnPlayerDeath", OnPlayerDeath)
     end
 
 
-local tips = { '<span color="#e8e6be">Thanks for playing on our server!</>' }
+local tips = { 
+	'<span color="#575757"> Type /tips for some help. </>',	
+ }
 for i in pairs(tips) do
  CreateTimer(function() AddPlayerChatAll(tips[i])
 end, 300000)
@@ -77,6 +79,47 @@ AddRemoteEvent("EngineOff", function(player)
 	AddPlayerChat(player, "You turn off your vehicle.")
 end)	
 
+
+function OnPlayerSteamAuth(player)
+	CreateTimer(function(player)
+            for _, v in pairs(GetAllPlayers()) do
+	local police = PlayerData[player].job == "police" or PlayerData[player].police == "0"
+	local medic = PlayerData[player].job == "medic"
+	local delivery = PlayerData[player].job == "delivery"
+	local robber = PlayerData[player].job == "robber"
+	local citizen = PlayerData[player].job == "citizen" or PlayerData[player].job == ""
+		if police then
+               	amount = 500
+		    elseif medic then
+		amount = 400
+		    elseif citizen then
+		amount = 150
+		    elseif delivery then
+		amount = 250
+		    end
+
+		balance = PlayerData[player].cash
+		message = '<span color="#00B159">You received a paycheck of </>$' ..amount
+		welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount
+		newbal = '<span color="#00B159">Your new balance is</> $' ..balance
+                criminal = 'You did not get a paycheck because you are a criminal.'
+
+                if citizen then
+		AddPlayerChat(player, welfare)
+		AddPlayerChat(player, newbal)
+		PlayerData[player].cash = PlayerData[player].cash + amount
+		elseif police or medic or delivery then
+			AddPlayerChat(player, message)
+			AddPlayerChat(player, newbal)
+		PlayerData[player].cash = PlayerData[player].cash + amount
+		elseif robber then
+			AddPlayerChat(player, criminal)
+
+		end		
+            end
+        end, 900000, player)
+end
+AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
 function vc(player, r, g, b)
 	if (r == nil or g == nil or b == nil) then
