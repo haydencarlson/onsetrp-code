@@ -214,7 +214,7 @@ function sellCarServerLoaded(player)
         tostring(id)
         )
         mariadb_async_query(sql, query)
-        PlayerData[player].cash = PlayerData[player].cash + tonumber(price)
+        AddBalanceToAccount(player, "cash", tonumber(price))
         return CallRemoteEvent(player, "MakeNotification", _("sell_vehicle_success", tostring(name), price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
 	end
 end

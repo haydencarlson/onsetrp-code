@@ -7,6 +7,7 @@ function CreateVehicleData(player, vehicle, modelid)
 
     VehicleData[vehicle].garageid = 0
     VehicleData[vehicle].owner = PlayerData[player].accountid
+    VehicleData[vehicle].player = player
     VehicleData[vehicle].modelid = modelid
     VehicleData[vehicle].inventory = {}
     VehicleData[vehicle].keys = {}

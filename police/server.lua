@@ -325,18 +325,17 @@ end)
 
 AddRemoteEvent("PayFine", function(player)
     local fine = tonumber(GetPlayerPropertyValue(player, "fine"))
-    if(PlayerData[player].cash >= fine) then
-	PlayerData[player].cash = PlayerData[player].cash - fine
-    elseif(PlayerData[player].bank_balance >= fine) then
-	PlayerData[player].bank_balance = PlayerData[player].bank_balance - fine
-
+	if(PlayerData[player].cash >= fine) then
+		RemoveBalanceFromAccount(player, "cash", fine)
+	elseif(PlayerData[player].bank_balance >= fine) then
+		RemoveBalanceFromAccount(player, "bank", fine)
     elseif((PlayerData[player].bank_balance + PlayerData[player].cash) > fine) then
-	local amount = PlayerData[player].cash
-	PlayerData[player].cash = 0
-	PlayerData[player].bank_balance = PlayerData[player].bank_balance - (fine - amount)
+		local amount = PlayerData[player].cash
+		PlayerData[player].cash = 0
+		RemoveBalanceFromAccount(player, "bank", (fine - amount))
     else
-	PlayerData[player].cash = 0
-	PlayerData[player].bank_balance = 0
+		PlayerData[player].cash = 0
+		PlayerData[player].bank_balance = 0
     end
 
     SetPlayerPropertyValue(player, "fine", 0, true)

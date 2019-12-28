@@ -129,6 +129,41 @@ function LoadPlayerPhoneContacts(player)
 	mariadb_async_query(sql, query, OnPhoneContactsLoaded, player)
 end
 
+
+function AddBalanceToAccount(player, account, amount)
+	local cash_bal = math.tointeger(PlayerData[player].cash)
+	local bank_bal = math.tointeger(PlayerData[player].bank_balance)
+	local amount_to_add = amount
+	local action = {
+		cash = function(amount_to_add, cash_bal, bank_bal) 
+			PlayerData[player].cash = cash_bal + amount_to_add
+			CallRemoteEvent(player, "RPNotify:HUDEvent", "cash", PlayerData[player].cash)
+		end,
+		bank = function(amount_to_add, cash_bal, bank_bal)
+			PlayerData[player].bank_balance = bank_bal + amount_to_add
+			CallRemoteEvent(player, "RPNotify:HUDEvent", "bank", PlayerData[player].bank_balance)
+		end
+	}
+	action[account](amount_to_add, cash_bal, bank_bal)
+end
+
+function RemoveBalanceFromAccount(player, account, amount)
+	local cash_bal = PlayerData[player].cash
+	local bank_bal = PlayerData[player].bank_balance
+	local amount_to_add = amount
+	local action = {
+		cash = function(player, amount_to_add, cash_bal, bank_bal) 
+			PlayerData[player].cash = cash_bal - amount_to_add
+			CallRemoteEvent(player, "RPNotify:HUDEvent", "cash", PlayerData[player].cash)
+		end,
+		bank = function(player, amount_to_add, cash_bal, bank_bal)
+			PlayerData[player].bank_balance = bank_bal - amount_to_add
+			CallRemoteEvent(player, "RPNotify:HUDEvent", "bank", PlayerData[player].bank_balance)
+		end
+	}
+	action[account](player, amount_to_add, cash_bal, bank_bal)
+end
+
 function OnAccountLoaded(player)
 	if (mariadb_get_row_count() == 0) then
 		--This case should not happen but still handle it

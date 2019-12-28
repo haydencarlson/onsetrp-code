@@ -138,7 +138,7 @@ AddRemoteEvent("ShopBuy", function(player, shopid, item, amount)
     if PlayerData[player].cash < price then
         CallRemoteEvent(player, "MakeNotification", _("not_enought_cash"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     else
-        PlayerData[player].cash = PlayerData[player].cash - price
+        RemoveBalanceFromAccount(player, "cash", price)
         CallRemoteEvent(player, "MakeNotification", _("shop_success_buy", _(item), price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
         AddInventory(player, item, amount)
     end
@@ -154,7 +154,7 @@ AddRemoteEvent("ShopSell", function(player, shopid, item, amount)
     if tonumber(PlayerData[player].inventory[item]) < tonumber(amount) then
         CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     else
-        PlayerData[player].cash = PlayerData[player].cash + math.ceil(price)
+        AddBalanceToAccount(player, "cash", math.ceil(price))
         CallRemoteEvent(player, "MakeNotification", _("shop_success_sell", _(item), price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
         RemoveInventory(player, item, amount)
     end
