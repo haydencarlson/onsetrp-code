@@ -112,7 +112,9 @@ end)
 
 function OnKeyPress(k)
 	if k == "L" then
-		DestroyWaypoint(waypointId)
+		if waypointId ~= nil then
+			DestroyWaypoint(waypointId)
+		end
 	end
 end
 AddEvent("OnKeyPress", OnKeyPress)

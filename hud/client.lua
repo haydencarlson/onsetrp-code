@@ -6,7 +6,6 @@ local HealthHud
 local VehicleSpeedHud
 local VehicleFuelHud
 local VehicleHealthHud
-local SpeakingHud
 local minimap
 function OnPackageStart()
     HungerFoodHud = CreateWebUI(0, 0, 0, 0, 0, 28)
@@ -38,12 +37,6 @@ function OnPackageStart()
     VehicleFuelHud = CreateTextBox(-15, 300, "Fuel", "right" )
     SetTextBoxAnchors(VehicleFuelHud, 1.0, 0.0, 1.0, 0.0)
 	SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
-
-    SpeakingHud = CreateWebUI( 0, 0, 0, 0, 0, 48 )
-    LoadWebFile( SpeakingHud, "http://asset/onsetrp/hud/speaking/hud.html" )
-    SetWebAlignment( SpeakingHud, 0, 0 )
-    SetWebAnchors( SpeakingHud, 0, 0, 1, 1 )
-    SetWebVisibility( SpeakingHud, WEB_HITINVISIBLE )
 
     minimap = CreateWebUI(0, 0, 0, 0, 0, 32)
     SetWebVisibility(minimap, WEB_HITINVISIBLE)
@@ -78,11 +71,6 @@ AddRemoteEvent("updateHud", updateHud)
 AddEvent( "OnGameTick", function()
     --Speaking icon check
     local player = GetPlayerId()
-    if IsPlayerTalking(player) then
-        SetWebVisibility(SpeakingHud, WEB_HITINVISIBLE)
-    else
-        SetWebVisibility(SpeakingHud, WEB_HIDDEN)
-    end
     --Minimap refresh
     local x, y, z = GetCameraRotation()
     local px,py,pz = GetPlayerLocation()
