@@ -9,6 +9,10 @@ AddEvent("OnPackageStart", function()
     bankleaveobject = CreateObject(340, 189914, 201541, 813)
     SetObjectPropertyValue(bankleaveobject, "action", "bankleave", true)
     CreateText3D(_("leave_bank").."\n".._("press_e"), 18, 189914, 201541, 813 + 120, 0, 0, 0)
+
+    bankbars = CreateObject(1487, 183977, 202876, 50)
+    CreateText3D(_("press_e"), 20, 183977, 202950, 250, 0, 0, 0)
+    SetObjectPropertyValue(bankbars, "action", "stealbars", true)
 end)
 
 AddEvent("OnPlayerInteractDoor", function( player, door, bWantsOpen )
@@ -31,8 +35,8 @@ AddRemoteEvent("PickOpenDoor", function(player)
             CallRemoteEvent(player, "MakeNotification", _("picking_door"), "linear-gradient(to right, #00b09b, #96c93d)")
             Delay(10000, function() 
                 DestroyTimer(pickanimationtimer)
-                globaldoors[nearestdoor].locked = false
                 SetPlayerAnimation(player, "STOP")
+                globaldoors[nearestdoor].locked = false
                 CallRemoteEvent(player, "MakeNotification", _("door_picklocked"), "linear-gradient(to right, #00b09b, #96c93d)")
             end)
         else
@@ -72,5 +76,5 @@ function GetNearestDoor(player)
 end
 
 AddCommand('obank', function(player) 
-    SetPlayerLocation(player, 185483, 203319, 160)
+    SetPlayerLocation(player, 184520, 202885, 158)
 end)
