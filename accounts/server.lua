@@ -29,7 +29,7 @@ end
 AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
 AddEvent("OnPlayerJoin", function(player)
-	SetPlayerSpawnLocation(player, 211168, 175766, 1307, 0 )
+	SetPlayerSpawnLocation(player,  211755.015625, 175760.046875, 1337, 0 )
 end)
 
 function OnPlayerQuit(player)

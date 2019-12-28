@@ -104,20 +104,22 @@ function OnPlayerSteamAuth(player)
 		newbal = '<span color="#00B159">Your new balance is</> $' ..balance
                 criminal = 'You did not get a paycheck because you are a criminal.'
 
-                if citizen then
+				if citizen then
+		PlayerData[player].cash = PlayerData[player].cash + amount
 		AddPlayerChat(player, welfare)
 		AddPlayerChat(player, newbal)
-		PlayerData[player].cash = PlayerData[player].cash + amount
+
 		elseif police or medic or delivery then
+			PlayerData[player].cash = PlayerData[player].cash + amount
 			AddPlayerChat(player, message)
 			AddPlayerChat(player, newbal)
-		PlayerData[player].cash = PlayerData[player].cash + amount
+			
 		elseif robber then
 			AddPlayerChat(player, criminal)
 
 		end		
             end
-        end, 900000, player)
+        end, 30000, player)
 end
 AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
