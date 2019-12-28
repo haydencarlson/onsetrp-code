@@ -65,12 +65,14 @@ AddEvent("OnPlayerDeath", OnPlayerDeath)
     end
 
 
-local tips = { 
-	'<span color="#575757"> Type /tips for some help. </>',	
- }
-for i in pairs(tips) do
- CreateTimer(function() AddPlayerChatAll(tips[i])
-end, 300000)
+	local tips = { 
+		'<span color="#575757"> Type /tips for some help. </>',	
+	}
+	
+	for i in pairs(tips) do
+		CreateTimer(function() 
+			AddPlayerChatAll(tips[i])
+	end, 300000)
 end
  
 AddRemoteEvent("EngineOff", function(player)
@@ -98,8 +100,7 @@ function OnPlayerSteamAuth(player)
 				amount = 250
 			end
 
-			
-			PlayerData[player].cash = PlayerData[player].cash + amount
+			AddBalanceToAccount(player, "cash", amount) 
 			balance = PlayerData[player].cash
 			message = '<span color="#00B159">You received a paycheck of </>$' ..amount
 			welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount

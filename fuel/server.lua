@@ -53,6 +53,7 @@ AddEvent("OnPackageStart", function()
                     return
                 end
                 VehicleData[k].fuel = VehicleData[k].fuel - 1
+                CallRemoteEvent(VehicleData[k].player, "updateHud", VehicleData[k].fuel)
                 if VehicleData[k].fuel == 0 then
                     StopVehicleEngine(k)
                     VehicleData[k].fuel = 0
@@ -100,7 +101,7 @@ AddRemoteEvent("StartRefuel", function(player, vehicle)
                 SetPlayerAnimation(player,"COMBINE")
                 CallRemoteEvent(player, "MakeNotification", _("car_refuelled_for", price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
                 VehicleData[vehicle].fuel = 100
-                PlayerData[player].cash = PlayerData[player].cash - price
+                RemoveBalanceFromAccount(player, "cash", price)
             end
         end
     end
