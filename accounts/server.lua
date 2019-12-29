@@ -129,7 +129,6 @@ function LoadPlayerPhoneContacts(player)
 	mariadb_async_query(sql, query, OnPhoneContactsLoaded, player)
 end
 
-
 function AddBalanceToAccount(player, account, amount)
 	local cash_bal = math.tointeger(PlayerData[player].cash)
 	local bank_bal = math.tointeger(PlayerData[player].bank_balance)
