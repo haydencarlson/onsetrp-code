@@ -14,7 +14,3 @@ AddRemoteEvent("GetInitialHud", function(player)
 end)
 
 
-AddEvent("OnScriptError", function(message)
-    AddPlayerChat(message)
-end)
-
