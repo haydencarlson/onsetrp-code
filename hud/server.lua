@@ -12,13 +12,3 @@ AddRemoteEvent("GetInitialHud", function(player)
     job = PlayerData[player].job
     CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job)
 end)
-
-AddRemoteEvent("makeWanted", function(player)
-    SetPlayerPropertyValue(player, "isWanted", 1, true)
-    AddPlayerChat(player, "You are wanted!")
-    Delay(80000, function()
-        SetPlayerPropertyValue(player, "isWanted", 0, true)
-        AddPlayerChat(player, "You escaped the law.")
-    end)
-end)
-

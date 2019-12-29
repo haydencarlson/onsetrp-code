@@ -1,33 +1,5 @@
-function OnPlayerDeath(player, instigator)
-
- 	message = '<span color="#9B0700">You were killed by '..GetPlayerName(instigator)..'('..player..')</> '
- 	death = '<span color="#9B0700">You played yourself!</> '
-    
-    if player == instigator then return
-
-       AddPlayerChat(player,  death)
-
-	else
-
-      AddPlayerChat(player,  message)
-
-     end
-end
-
 AddEvent("OnPlayerDeath", OnPlayerDeath)
 
-AddCommand("wanted", function(player)
-	wanted = GetPlayerPropertyValue(player, "isWanted")
-	AddPlayerChat(player, wanted)
-end)
-AddCommand("unwanted", function(player)
-	unwanted = SetPlayerPropertyValue(player, "isWanted", 0, true)
-	print(unwanted)
-end)
-AddCommand("want", function(player)
-	unwanted = SetPlayerPropertyValue(player, "isWanted", 1, true)
-	print(unwanted)
-end)
     function OnPackageStart()
 
 	local message1 = '<span color="#575757"> Press F3 during delivery job to start/stop </>'

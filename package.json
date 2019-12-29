@@ -40,7 +40,8 @@
         "phone/server.lua",
         "stocks/server.lua",
         "thief/server.lua",
-        "idcard/server.lua"
+        "idcard/server.lua",
+	"essentials/wanted/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -72,7 +73,8 @@
         "phone/client.lua",
         "stocks/client.lua",
         "thief/client.lua",
-        "idcard/client.lua"
+        "idcard/client.lua",
+	"essentials/wanted/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
