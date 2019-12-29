@@ -16,6 +16,18 @@ end
 
 AddEvent("OnPlayerDeath", OnPlayerDeath)
 
+AddCommand("wanted", function(player)
+	wanted = GetPlayerPropertyValue(player, "isWanted")
+	AddPlayerChat(player, wanted)
+end)
+AddCommand("unwanted", function(player)
+	unwanted = SetPlayerPropertyValue(player, "isWanted", 0, true)
+	print(unwanted)
+end)
+AddCommand("want", function(player)
+	unwanted = SetPlayerPropertyValue(player, "isWanted", 1, true)
+	print(unwanted)
+end)
     function OnPackageStart()
 
 	local message1 = '<span color="#575757"> Press F3 during delivery job to start/stop </>'
@@ -66,7 +78,7 @@ AddEvent("OnPlayerDeath", OnPlayerDeath)
 
 
 	local tips = { 
-		'<span color="#575757"> Type /tips for some help. </>',	
+		'<span color="#ccc"> Type /tips for some help. </>',	
 	}
 	
 	for i in pairs(tips) do
@@ -80,7 +92,6 @@ AddRemoteEvent("EngineOff", function(player)
 	StopVehicleEngine(vehicle)
 	AddPlayerChat(player, "You turn off your vehicle.")
 end)	
-
 
 function OnPlayerSteamAuth(player)
 	CreateTimer(function(player)

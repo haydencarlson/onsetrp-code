@@ -6,6 +6,7 @@ local HealthHud
 local VehicleSpeedHud
 local VehicleFuelHud
 local VehicleHealthHud
+local WantedHud
 local minimap
 
 function OnPackageStart()
@@ -25,7 +26,11 @@ function OnPackageStart()
 
     VehicleFuelHud = CreateTextBox(-15, 300, "Fuel", "right" )
     SetTextBoxAnchors(VehicleFuelHud, 1.0, 0.0, 1.0, 0.0)
-	SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
+    SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
+
+    WantedHud = CreateTextBox(-15, 320, "", "right" )
+    SetTextBoxAnchors(WantedHud, 1.0, 0.0, 1.0, 0.0)
+    SetTextBoxAlignment(WantedHud, 1.0, 0.0)
 
     minimap = CreateWebUI(0, 0, 0, 0, 0, 32)
     SetWebVisibility(minimap, WEB_HITINVISIBLE)
@@ -43,10 +48,9 @@ function updateHud(vehiclefuel)
         SetTextBoxText(VehicleFuelHud, _("fuel")..vehiclefuel)
     else
         SetTextBoxText(VehicleFuelHud, "")
-    end
+    end 
 end
 AddRemoteEvent("updateHud", updateHud)
-
 
 AddEvent("OnGameTick", function()
     if GetPlayerVehicle() ~= 0 then
@@ -57,11 +61,17 @@ AddEvent("OnGameTick", function()
     end
     -- Speaking icon check
     local player = GetPlayerId()
+    local wanted = GetPlayerPropertyValue(player, "isWanted")
     --Minimap refresh
     local x, y, z = GetCameraRotation()
     local px,py,pz = GetPlayerLocation()
     ExecuteWebJS(minimap, "SetHUDHeading("..(360-y)..");")
     ExecuteWebJS(minimap, "SetMap("..px..","..py..","..y..");")
+    if wanted == 1 then
+        SetTextBoxText(WantedHud, '<span color="#800000">You are wanted!</>')
+    elseif wanted == 0 or nil then
+         SetTextBoxText(WantedHud, "")
+    end
 end)
 
 function SetHUDMarker(name, h, r, g, b)

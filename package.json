@@ -63,7 +63,7 @@
         "fuel/client.lua",
         "job/client.lua",
         "delivery/client.lua",
-	    "essentials/cl_animation.lua",
+	"essentials/cl_animation.lua",
         "scoreboard/client.lua",
         "notification/client.lua",
         "animation/client.lua",
