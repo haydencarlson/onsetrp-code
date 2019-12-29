@@ -22,7 +22,3 @@ AddRemoteEvent("makeWanted", function(player)
     end)
 end)
 
-AddEvent("OnScriptError", function(message)
-    AddPlayerChat(message)
-end)
-
