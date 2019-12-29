@@ -154,7 +154,7 @@ AddRemoteEvent("FinishDelivery", function(player)
 
         CallRemoteEvent(player, "MakeNotification", _("finished_delivery", reward, _("currency")), "linear-gradient(to right, #ff5f6d, #ffc371)")
         
-        PlayerData[player].cash = PlayerData[player].cash + reward
+        AddBalanceToAccount(player, "cash", reward)
         playerDelivery[player] = nil
         CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
     else

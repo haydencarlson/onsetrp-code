@@ -29,13 +29,13 @@ function UpdateOrCreatePlayerStock(existingstock, player, stockid, price, quanti
         local insertquery = mariadb_prepare(sql, "INSERT INTO player_stocks (player_id, stock_id, amount) VALUES (?, ?, ?);", player, stockid, quantity)
         mariadb_async_query(sql, insertquery)
     end
-    PlayerData[player].cash = PlayerData[player].cash - tonumber(price) * tonumber(quantity)
+    RemoveBalanceFromAccount(player, "cash", tonumber(price) * tonumber(quantity))
     CallRemoteEvent(player, "MakeNotification", _("bought_stock") .. quantity .. " " .. name, "linear-gradient(to right, #00b09b, #96c93d)")
 end
 
 function UpdateStockAmountLoaded(player, quantity, stock)
     local balance = PlayerData[player].cash
-    PlayerData[player].cash = balance + (quantity * stock['price'])
+    AddBalanceToAccount(player, "cash", (quantity * stock['price']))
     CallRemoteEvent(player, "MakeNotification", _("sold_stock") .. quantity .. " " .. stock['name'], "linear-gradient(to right, #00b09b, #96c93d)")
 end
 

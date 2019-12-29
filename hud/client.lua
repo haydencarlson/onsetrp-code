@@ -7,19 +7,8 @@ local VehicleSpeedHud
 local VehicleFuelHud
 local VehicleHealthHud
 local minimap
+
 function OnPackageStart()
-    HungerFoodHud = CreateWebUI(0, 0, 0, 0, 0, 28)
-    SetWebAlignment(HungerFoodHud, 1.0, 0.0)
-    SetWebAnchors(HungerFoodHud, 0.0, 0.0, 1.0, 1.0)
-    LoadWebFile(HungerFoodHud, "http://asset/onsetrp/hud/hunger/hunger.html")
-    SetWebVisibility(HungerFoodHud, WEB_HIDDEN)
-
-    ThirstHud = CreateWebUI(0, 0, 0, 0, 0, 28)
-    SetWebAlignment(ThirstHud, 1.0, 0.0)
-    SetWebAnchors(ThirstHud, 0.0, 0.0, 1.0, 1.0)
-    LoadWebFile(ThirstHud, "http://asset/onsetrp/hud/thirst/thirst.html")
-    SetWebVisibility(ThirstHud, WEB_HIDDEN)
-
     HealthHud = CreateWebUI(0, 0, 0, 0, 0, 28)
 	SetWebAlignment(HealthHud, 1.0, 0.0)
 	SetWebAnchors(HealthHud, 0.0, 0.0, 1.0, 1.0) 
@@ -44,41 +33,36 @@ function OnPackageStart()
     SetWebAlignment(minimap, 0, 0)
     SetWebURL(minimap, "http://asset/onsetrp/hud/minimap/minimap.html")
     
-	ShowHealthHUD(false)
+	ShowHealthHUD(true)
     ShowWeaponHUD(true)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
-function updateHud(hunger, thirst, cash, bank, healthlife, vehiclefuel)
-    ExecuteWebJS(HealthHud, "SetHealth("..healthlife..");")
-    ExecuteWebJS(ThirstHud, "SetThirst("..thirst..");")
-    ExecuteWebJS(HungerFoodHud, "SetHunger("..hunger..");")
+function updateHud(vehiclefuel)
+    if GetPlayerVehicle() ~= 0 then
+        SetTextBoxText(VehicleFuelHud, _("fuel")..vehiclefuel)
+    else
+        SetTextBoxText(VehicleFuelHud, "")
+    end
+end
+AddRemoteEvent("updateHud", updateHud)
 
+
+AddEvent("OnGameTick", function()
     if GetPlayerVehicle() ~= 0 then
         vehiclespeed = math.floor(GetVehicleForwardSpeed(GetPlayerVehicle()))
         vehiclehealth = math.floor(GetVehicleHealth(GetPlayerVehicle()))
         SetTextBoxText(VehicleSpeedHud, _("speed")..vehiclespeed.."KM/H")
         SetTextBoxText(VehicleHealthHud, _("vehicle_health")..vehiclehealth)
-        SetTextBoxText(VehicleFuelHud, _("fuel")..vehiclefuel)
-    else
-        SetTextBoxText(VehicleSpeedHud, "")
-        SetTextBoxText(VehicleFuelHud, "")
-        SetTextBoxText(VehicleHealthHud, "")
     end
-end
-AddRemoteEvent("updateHud", updateHud)
-
-AddEvent( "OnGameTick", function()
-    --Speaking icon check
+    -- Speaking icon check
     local player = GetPlayerId()
     --Minimap refresh
     local x, y, z = GetCameraRotation()
     local px,py,pz = GetPlayerLocation()
     ExecuteWebJS(minimap, "SetHUDHeading("..(360-y)..");")
     ExecuteWebJS(minimap, "SetMap("..px..","..py..","..y..");")
-    -- Hud refresh
-    CallRemoteEvent("getHudData")
-end )
+end)
 
 function SetHUDMarker(name, h, r, g, b)
     if h == nil then

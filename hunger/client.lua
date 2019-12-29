@@ -9,14 +9,14 @@ function OnPlayerSpawn(player)
         hungerTimer = true
         CreateTimer(function()
             CallRemoteEvent("removePlayerHunger", 1)
-        end, 60000)
+        end, 120000)
     end
     -- Thirst
     if not thirstTimer then
         thirstTimer = true
         CreateTimer(function()
             CallRemoteEvent("removePlayerThirst", 1)
-        end, 120000)
+        end, 240000)
     end
 end
 AddEvent("OnPlayerSpawn", OnPlayerSpawn)

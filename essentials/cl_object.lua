@@ -8,7 +8,7 @@ AddEvent("OnKeyPress", function(key)
             if action ~= nil then
                 local px,py,pz = GetObjectLocation(object)
                 if GetDistance3D(x, y, z, px, py, pz) <= 250 then
-                    CallRemoteEvent("RPNotify:ObjectInteract_" .. action)
+                    CallRemoteEvent("RPNotify:ObjectInteract_" .. action, object)
                 end
             end
         end

@@ -46,6 +46,7 @@ function removePlayerHunger(player, hunger)
         health = GetPlayerHealth(player) - 5
         SetPlayerHealth(player, health)
     end
+    CallRemoteEvent(player, "RPNotify:HUDEvent", "hunger", PlayerData[player].hunger)
 end
 AddRemoteEvent("removePlayerHunger", removePlayerHunger)
 
@@ -101,6 +102,7 @@ function removePlayerThirst(player, thirst)
     if  PlayerData[player].thirst == 0 then
         SetPlayerHealth(player, 0)
     end
+    CallRemoteEvent(player, "RPNotify:HUDEvent", "thirst", PlayerData[player].thirst)
 end
 AddRemoteEvent("removePlayerThirst", removePlayerThirst)
 

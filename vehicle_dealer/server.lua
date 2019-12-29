@@ -87,7 +87,7 @@ function buyCarServer(player, modelid, color, cardealerobject)
                     SetVehiclePropertyValue(vehicle, "locked", true, true)
                     CreateVehicleData(player, vehicle, modelid)
                     CreateVehicleDatabase(player, vehicle, modelid, color, price)
-                    PlayerData[player].cash = PlayerData[player].cash - tonumber(price)
+                    RemoveBalanceFromAccount(player, "cash", tonumber(price))
                     CallRemoteEvent(player, "closeCarDealer")
                     return CallRemoteEvent(player, "MakeNotification", _("car_buy_sucess", name, price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
                 else

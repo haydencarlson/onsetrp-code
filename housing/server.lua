@@ -116,7 +116,7 @@ AddRemoteEvent("BuyHouse", function(player, house)
     if getHouseOwner(player) ~= 0 then
         CallRemoteEvent(player, "MakeNotification", _("already_house_owner"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     else
-        PlayerData[player].cash = PlayerData[player].cash - houses[house].price
+        RemoveBalanceFromAccount(player, "cash", houses[house].price)
         houses[house].owner = tonumber(PlayerData[player].accountid)
         DestroyText3D(houses[house].txtentities[2])
         houses[house].txtentities[2] = CreateText3D( _("owner").." "..GetPlayerName(player), 10, houses[house].text[1] , houses[house].text[2], houses[house].text[3], 0, 0, 0 )        
@@ -138,7 +138,7 @@ end)
 AddRemoteEvent("SellHouse", function(player, house) 
     if houses[house].owner == tonumber(PlayerData[player].accountid) then
         price = math.ceil(houses[house].price * 0.25)
-        PlayerData[player].cash = PlayerData[player].cash + price
+        AddBalanceToAccount(player, "cash", price)
         houses[house].owner = 0
         CallRemoteEvent(player, "MakeNotification", _("house_sell", price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
         DestroyText3D(houses[house].txtentities[2])

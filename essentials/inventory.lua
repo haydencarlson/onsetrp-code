@@ -156,31 +156,31 @@ if item == "cigarette" then
     			local lost = 'You scratched and lost'
     			winmsg = 'You scratched and won $'..win
        			if number < 25 then
-			    SetPlayerAnimation(player, "DABSAREGAY")
-           		AddPlayerChat(player, winmsg)
-			    PlayerData[player].cash = PlayerData[player].cash + win
+                    SetPlayerAnimation(player, "DABSAREGAY")
+                    AddPlayerChat(player, winmsg)
+                    AddBalanceToAccount(player, "cash", win)   
         		else  
-           		AddPlayerChat(player, lost)
-			    SetPlayerAnimation(player, "FACEPALM")
-   		     end
+                    AddPlayerChat(player, lost)
+                    SetPlayerAnimation(player, "FACEPALM")
+   		         end
              end
 		
 	      if item == "scratch_ticket_random" then
-                RemoveInventory(player, item, 1)
+            RemoveInventory(player, item, 1)
 			local number = Random(1, 100)
-    			local win = Random(500, 1500)
-    			local lost = 'You scratched and lost'
-    			winmsg = 'You won scratched and won $'..win
+            local win = Random(500, 1500)
+            local lost = 'You scratched and lost'
+            winmsg = 'You won scratched and won $'..win
 
-       			 if number < 25 then
-			SetPlayerAnimation(player, "DABSAREGAY")
-           		 AddPlayerChat(player, winmsg)
-			PlayerData[player].cash = PlayerData[player].cash + win
-        		else  
-           		 AddPlayerChat(player, lost)
-			SetPlayerAnimation(player, "FACEPALM")
-   		  end
-            end
+            if number < 25 then
+			    SetPlayerAnimation(player, "DABSAREGAY")
+                AddPlayerChat(player, winmsg)
+                AddBalanceToAccount(player, "cash", win) 
+            else  
+                AddPlayerChat(player, lost)
+			    SetPlayerAnimation(player, "FACEPALM")
+   		    end
+        end
 
             if item == "beer" then
                 SetPlayerAnimation(player, "DRINKING")
