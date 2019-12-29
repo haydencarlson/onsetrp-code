@@ -14,8 +14,26 @@ function OnPlayerDeath(player, instigator)
      end
 end
 
-AddEvent("OnPlayerDeath", OnPlayerDeath)
+AddCommand("tips", function(player)
+	local tips = {
+		'<span color="#575757"> Press F3 when you have a job to access your job menu </>',
+		'<span color="#CBD800"> Press F4 to view your inventory </>',
+		'<span color="#00E307"> Press F1 near your vehicle for options </>',
+		'<span color="#00DCE3"> Press G for GPS </>',
+		'<span color="#D100FF"> Respect each others gameplay. </>',
+		'<span color="#FF6800"> Type /g [message] to enter global chat</>',
+		'<span color="#FF00F0"> You can use animations, type /dance etc. </>',
+		'<span color="#7B061B"> Press U to unlock your vehicle </>',
+		'<span color="#B94F00"> Visit restaurants to quench your hunger/thirst </>',
+		'<span color="#00B99A"> If you find stuff to harvest, you can sell it! </>',
+		'<span color="#3D4EF3"> We are open to suggestions. </>'
+	}
+	for key, tip in pairs(tips) do
+		AddPlayerChat(player, tip)
+	end
+end)
 
+AddEvent("OnPlayerDeath", OnPlayerDeath)
     function OnPackageStart()
 
 	local message1 = '<span color="#575757"> Press F3 during delivery job to start/stop </>'
