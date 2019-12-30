@@ -65,14 +65,14 @@ AddRemoteEvent("EngineOff", function(player)
 	AddPlayerChat(player, "You turn off your vehicle.")
 end)	
 
-function OnPlayerSteamAuth(player)
+function OnPackageStart(player)
 	CreateTimer(function(player)
 		for _, v in pairs(GetAllPlayers()) do
-			local police = PlayerData[player].job == "police" or PlayerData[player].police == "0"
-			local medic = PlayerData[player].job == "medic"
-			local delivery = PlayerData[player].job == "delivery"
-			local robber = PlayerData[player].job == "robber"
-			local citizen = PlayerData[player].job == "citizen" or PlayerData[player].job == ""
+			local police = PlayerData[v].job == "police" or PlayerData[v].police == "0"
+			local medic = PlayerData[v].job == "medic"
+			local delivery = PlayerData[v].job == "delivery"
+			local robber = PlayerData[v].job == "thief"
+			local citizen = PlayerData[v].job == "citizen" or PlayerData[v].job == ""
 			if police then
 				amount = 500
 			elseif medic then
@@ -83,27 +83,26 @@ function OnPlayerSteamAuth(player)
 				amount = 250
 			end
 
-			AddBalanceToAccount(player, "cash", amount) 
-			balance = PlayerData[player].cash
+			AddBalanceToAccount(v, "cash", amount) 
+			balance = PlayerData[v].cash
 			message = '<span color="#00B159">You received a paycheck of </>$' ..amount
 			welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount
 			newbal = '<span color="#00B159">Your new balance is</> $' ..balance
 			criminal = 'You did not get a paycheck because you are a criminal.'
 
 			if citizen then
-				AddPlayerChat(player, welfare)
-				AddPlayerChat(player, newbal)
+				AddPlayerChat(v, welfare)
+				AddPlayerChat(v, newbal)
 			elseif police or medic or delivery then
-				AddPlayerChat(player, message)
-				AddPlayerChat(player, newbal)
+				AddPlayerChat(v, message)
+				AddPlayerChat(v, newbal)
 			elseif thief then
-				AddPlayerChat(player, criminal)
-
+				AddPlayerChat(v, criminal)
 			end		
 		end
-	end, 600000, player)
+	end, 6000, v)
 end
-AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
+AddEvent("OnPackageStart", OnPackageStart)
 
 function vc(player, r, g, b)
 	if (r == nil or g == nil or b == nil) then
