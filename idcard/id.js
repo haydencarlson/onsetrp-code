@@ -24,7 +24,7 @@ let translations = {
 // ----------------
 
 // CONFIGS : 
-let language = 'fr'
+let language = 'en'
 let backgroundBlurredWhenReadingIdCard = true
 
 // ----------------
