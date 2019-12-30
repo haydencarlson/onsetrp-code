@@ -41,9 +41,10 @@
         "stocks/server.lua",
         "thief/server.lua",
         "idcard/server.lua",
-	"essentials/wanted/server.lua",
-	"essentials/interactions/server.lua"
-
+	    "essentials/wanted/server.lua",
+	    "essentials/interactions/server.lua",
+        "noclip/server.lua",
+        "stylist/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -66,7 +67,7 @@
         "fuel/client.lua",
         "job/client.lua",
         "delivery/client.lua",
-	"essentials/cl_animation.lua",
+	    "essentials/cl_animation.lua",
         "scoreboard/client.lua",
         "notification/client.lua",
         "animation/client.lua",
@@ -76,9 +77,10 @@
         "stocks/client.lua",
         "thief/client.lua",
         "idcard/client.lua",
-	"essentials/wanted/client.lua",
-	"essentials/interactions/effects.lua"
-
+	    "essentials/wanted/client.lua",
+	    "essentials/interactions/effects.lua",
+        "noclip/client.lua",
+        "stylist/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",

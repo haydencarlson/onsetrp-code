@@ -67,6 +67,7 @@ function GetJobGuyByObject(jobguyobject)
 end
 
 function JobSelected(player, selection)
+    PlayerData[player].job = ""
     CallRemoteEvent(player, "CUI:Close", "job_selection", true)
     CallRemoteEvent(player, "SelectedJob", selection, PlayerData[player].job)
     if selection ~= "police" then
