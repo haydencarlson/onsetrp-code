@@ -1,55 +1,24 @@
-AddEvent("OnPlayerDeath", OnPlayerDeath)
 
-    function OnPackageStart()
+AddCommand("tips", function(player)
+	local tips = {
+		'<span color="#575757"> Press F3 when you have a job to access your job menu </>',
+		'<span color="#CBD800"> Press F4 to view your inventory </>',
+		'<span color="#00E307"> Press F1 near your vehicle for options </>',
+		'<span color="#00DCE3"> Press G for GPS </>',
+		'<span color="#D100FF"> Respect each others gameplay. </>',
+		'<span color="#FF6800"> Type /g [message] to enter global chat</>',
+		'<span color="#FF00F0"> You can use animations, type /dance etc. </>',
+		'<span color="#7B061B"> Press U to unlock your vehicle </>',
+		'<span color="#B94F00"> Visit restaurants to quench your hunger/thirst </>',
+		'<span color="#00B99A"> If you find stuff to harvest, you can sell it! </>',
+		'<span color="#3D4EF3"> We are open to suggestions. </>'
+	}
+	for key, tip in pairs(tips) do
+		AddPlayerChat(player, tip)
+	end	
+end)
 
-	local message1 = '<span color="#575757"> Press F3 during delivery job to start/stop </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message1) end, 100000)
-
-	local message2 = '<span color="#CBD800"> Press F4 to view your inventory </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message2) end, 500000)
-
-	local message3 = '<span color="#00E307"> Press F1 near your vehicle for options </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message3) end, 1000000)
-
-	local message4 = '<span color="#00DCE3"> Press G for GPS </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message4) end, 5000000)
-
-	local message5 = '<span color="#D100FF"> Respect each others gameplay. </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message5) end, 100000)
-
-	local message6 = '<span color="#FF6800"> Type /g [message] to enter global chat</>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message6) end, 500000)
-
-	local message7 = '<span color="#FF00F0"> You can use animations, type /dance etc. </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message7) end, 1400000)
-
-	local message8 = '<span color="#7B061B"> Press U to unlock your vehicle </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message8) end, 1700000)
-
-	local message9 = '<span color="#FFCB0B"> You are playing Sunrise Roleplay </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message9) end, 2000000)
-
-	local message10 = '<span color="#B94F00"> Visit restaurants to quench your hunger/thirst </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message10) end, 2300000)
-
-	local message11 = '<span color="#00B99A"> If you find stuff to harvest, you can sell it! </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message11) end, 2600000)
-
-	local message12 = '<span color="#B92200"> Press U to lock your vehicle </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message12) end, 2900000)
-
-	local message13 = '<span color="#F33DCF"> More updates coming soon. </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message13) end, 3200000)
-
-	local message14 = '<span color="#3D4EF3"> We are open to suggestions. </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message14) end, 3500000)
-
-	local message15 = '<span color="#00FF2A"> Your progress is saved. </>'
-	   CreateTimer(function(playerid) AddPlayerChatAll(message15) end, 3800000)
-    end
-
-
-	local tips = { 
+local tips = { 
 		'<span color="#ccc"> Type /tips for some help. </>',	
 	}
 	

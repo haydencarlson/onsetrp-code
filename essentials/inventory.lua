@@ -2,7 +2,7 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 
 AddRemoteEvent("UseInventory2", function(player, item, amount) 
     weapon = getWeaponID(item)
-    if tonumber(PlayerData[player].inventory[item]) < tonumber(amount) then
+    if PlayerData[player].inventory[item] ~= nil and tonumber(PlayerData[player].inventory[item]) < tonumber(amount) then
         AddPlayerChat(player, _("not_enough_item"))
     else
         if weapon ~= 0 then
