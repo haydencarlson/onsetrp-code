@@ -1,4 +1,3 @@
-
 AddCommand("tips", function(player)
 	local tips = {
 		'<span color="#575757"> Press F3 when you have a job to access your job menu </>',

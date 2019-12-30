@@ -23,19 +23,30 @@ AddEvent("bankRob", function(player)
 end)
 
 function OnPlayerDeath(player, instigator)
-local x, y, z = GetPlayerLocation(player)
+    local playersinrange = GetPlayersInRange3D(x, y, z, 250)
+    local cops_in_range = false
     message = '<span color="#9B0700">You were killed by '..GetPlayerName(instigator)..'('..player..')</> '
     death = '<span color="#9B0700">You played yourself!</> '
-   
-   if player == instigator then 
-      AddPlayerChat(player,  death)  
+    
+    if player == instigator then 
+        AddPlayerChat(player,  death)  
+    else if IsCopInRange(x,y,z) then
+        CallEvent(instigator, "makeWanted")
+    else
+        AddPlayerChat(player,  message)
+    end
+end
+end
+AddRemoteEvent("OnPlayerDeath", OnPlayerDeath)
 
-   else if GetPlayersInRange3D(x, y, z, 250) and PlayerData[player].job == "police" then
-      CallEvent(instigator, "makeWanted")
 
-   else
-     AddPlayerChat(player,  message)
+
+function IsCopInRange(x, y, z)
+    local playersinrange = GetPlayersInRange3D(x, y, z, 250)
+    for key, p in pairs(playersinrange) do
+        if PlayerData[p].job == 'police' then
+            return true
         end
     end
-
+    return false
 end
