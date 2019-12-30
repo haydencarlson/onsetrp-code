@@ -43,13 +43,6 @@ AddEvent("OnKeyPress", function( key )
     end
 end)
 
-AddEvent("OnKeyPress", function( key )
-		if IsCtrlPressed() and key == 'G' and not onSpawn and not onCharacterCreation then
-			Dialog.show(gpsmain)
-			return 
-		end
-end)
-
 AddRemoteEvent("ClientCreateWaypoint", function(name, x, y, z)
     if currentWaypoint ~= nil then
         DestroyWaypoint(currentWaypoint)
