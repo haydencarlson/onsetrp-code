@@ -1,10 +1,12 @@
+local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
+
 AddEvent("makeWanted", function(player)
     SetPlayerPropertyValue(player, "isWanted", 1, true)
-    AddPlayerChat(player, "You are wanted by the police!")
+    CallRemoteEvent(player, "MakeNotification", _("make_wanted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 
     Delay(80000, function()
         SetPlayerPropertyValue(player, "isWanted", 0, true)
-        AddPlayerChat(player, "You escaped the law.")
+        CallRemoteEvent(player, "MakeNotification", _("bank_rob"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     end)
 
 end)

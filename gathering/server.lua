@@ -139,7 +139,12 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
     else
         animation = "PICKUP_LOWER"
     end
+    if gatherTable[gather].process_item == "processed_meth" or gatherTable[gather].process_item == "processed_coke" or gatherTable[gather].process_item == "processed_heroin" or gatherTable[gather].process_item == "processed_weed" then
+        CallEvent("makeWanted", player)
+    end 
     PlayerData[player].onAction = true
+
+
     
     function DoGathering(player, animation, gather, attached_item)
         if PlayerData[player].onAction and not PlayerData[player].isActioned then

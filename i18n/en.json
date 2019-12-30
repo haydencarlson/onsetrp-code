@@ -346,5 +346,7 @@
     "phone": "Phone",
     "fishing_rod": "Fishing Rod",
     "fish": "Fish",
-    "hiv": "HIV Pill"
+    "hiv": "HIV Pill",
+    "make_wanted": "You are wanted by the police!",
+    "bank_rob": "You escaped the law."
 }
