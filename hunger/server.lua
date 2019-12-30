@@ -3,6 +3,9 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 function OnPlayerDeath(player, instigator)
     setPlayerHunger(player, 100)
     setPlayerThirst(player, 100)
+
+    CallRemoteEvent(player, "RPNotify:HUDEvent", "hunger", 100)
+    CallRemoteEvent(player, "RPNotify:HUDEvent", "thirst", 100)
 end
 AddEvent("OnPlayerDeath", OnPlayerDeath)
 
