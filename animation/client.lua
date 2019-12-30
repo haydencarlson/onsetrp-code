@@ -13,7 +13,7 @@ end
 AddEvent("OnPackageStart", OnPackageStart)
 
 function OnKeyPress(key)
-	if key == "F2" then
+	if key == "F2" and not onSpawn and not onCharacterCreation then
 		if(GetWebVisibility(web) == 0) then
 			SetWebVisibility(web, WEB_VISIBLE)
 			ShowMouseCursor(true)

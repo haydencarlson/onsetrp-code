@@ -12,7 +12,7 @@ SetWebURL(webIdCard, "http://asset/onsetrp/idcard/id.html")
 local idCardMenu
 
 AddEvent("OnKeyPress", function(key)
-    if key == "F1" then
+    if key == "F1" and not onSpawn and not onCharacterCreation then
         Dialog.show(idCardMenu)
     end
 end)

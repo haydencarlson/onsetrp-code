@@ -100,7 +100,7 @@ function OnPackageStart(player)
 				AddPlayerChat(v, criminal)
 			end		
 		end
-	end, 6000, v)
+	end, 600000, v)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
