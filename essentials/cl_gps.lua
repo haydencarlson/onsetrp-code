@@ -35,7 +35,7 @@ local teleportPlace = {
 }
 
 AddEvent("OnKeyPress", function( key )
-    if key == "G" then
+    if key == "G" and not onSpawn and not onCharacterCreation then
 		if not IsPlayerInVehicle() then
 			Dialog.show(gpsmain)
 			return 
@@ -44,12 +44,10 @@ AddEvent("OnKeyPress", function( key )
 end)
 
 AddEvent("OnKeyPress", function( key )
-    if key == "G" then
-		if IsCtrlPressed() and key == 'G' then
+		if IsCtrlPressed() and key == 'G' and not onSpawn and not onCharacterCreation then
 			Dialog.show(gpsmain)
 			return 
 		end
-    end
 end)
 
 AddRemoteEvent("ClientCreateWaypoint", function(name, x, y, z)

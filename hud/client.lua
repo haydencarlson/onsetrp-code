@@ -6,6 +6,7 @@ local HealthHud
 local VehicleSpeedHud
 local VehicleFuelHud
 local VehicleHealthHud
+local WantedHud
 local minimap
 
 function OnPackageStart()
@@ -25,7 +26,7 @@ function OnPackageStart()
 
     VehicleFuelHud = CreateTextBox(-15, 300, "Fuel", "right" )
     SetTextBoxAnchors(VehicleFuelHud, 1.0, 0.0, 1.0, 0.0)
-	SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
+    SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
 
     minimap = CreateWebUI(0, 0, 0, 0, 0, 32)
     SetWebVisibility(minimap, WEB_HITINVISIBLE)
@@ -43,10 +44,9 @@ function updateHud(vehiclefuel)
         SetTextBoxText(VehicleFuelHud, _("fuel")..vehiclefuel)
     else
         SetTextBoxText(VehicleFuelHud, "")
-    end
+    end 
 end
 AddRemoteEvent("updateHud", updateHud)
-
 
 AddEvent("OnGameTick", function()
     if GetPlayerVehicle() ~= 0 then

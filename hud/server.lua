@@ -12,5 +12,3 @@ AddRemoteEvent("GetInitialHud", function(player)
     job = PlayerData[player].job
     CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job)
 end)
-
-

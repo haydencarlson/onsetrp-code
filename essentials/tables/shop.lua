@@ -44,7 +44,8 @@ ShopTable = {
             lockpick = 99,
             pickaxe = 125,
             jerican = 75,
-			cigarette = 1
+            cigarette = 1,
+            hiv = 5
 		},
 		location = { 
             { 128748, 77622, 1576, 90 },

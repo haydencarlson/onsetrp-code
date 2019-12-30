@@ -345,5 +345,8 @@
     "id_card_shown": "You've shown your ID card to {1}",
     "phone": "Phone",
     "fishing_rod": "Fishing Rod",
-    "fish": "Fish"
+    "fish": "Fish",
+    "hiv": "HIV Pill",
+    "make_wanted": "You are wanted by the police!",
+    "bank_rob": "You escaped the law."
 }

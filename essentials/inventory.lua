@@ -24,14 +24,18 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 --RemoveInventory(player, item, amount)
                 --addPlayerHunger(player, 1*amount)
 				--removePlayerThirst(player, 2*amount)
-if item == "cigarette" then
-        SetPlayerAnimation(player, "SMOKING")
-        RemoveInventory(player, item, amount)
-        addPlayerHunger(player, 1*amount)
-        removePlayerThirst(player, 2*amount)
-        SetPlayerHealth(player, 11-amount)
-    end
-            --end
+            if item == "cigarette" then
+                    SetPlayerAnimation(player, "SMOKING")
+                    RemoveInventory(player, item, amount)
+                    addPlayerHunger(player, 1*amount)
+                    removePlayerThirst(player, 2*amount)
+                    SetPlayerHealth(player, 11-amount)
+                end
+
+             if item == "hiv" then
+                CallRemoteEvent(player, "AidsOff")
+             end
+
             if item == "apple" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
