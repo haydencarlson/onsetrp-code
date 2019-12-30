@@ -18,7 +18,7 @@
     "silver_bars_sold": "You have sold your silver bars",
     "no_bars_to_trade": "You have no dirty silver bars",
     "picking_door": "Attempting to pick open door",
-    "cant_picklock_door": "You cant picklock this door",
+    "cant_picklock_here": "You cant picklock here",
     "thief_menu": "Thief Menu",
     "picklock": "Picklock",
     "cant_steal_bars_now": "Bars cant be stolen for now.",

@@ -51,7 +51,7 @@ AddRemoteEvent("PickOpenDoor", function(player)
                 end)
             end)
         else
-            CallRemoteEvent(player, "MakeNotification", _("cant_picklock_door"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallRemoteEvent(player, "MakeNotification", _("cant_picklock_here"), "linear-gradient(to right, #ff5f6d, #ffc371)")
         end
     end
 end)
