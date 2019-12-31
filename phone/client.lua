@@ -29,7 +29,6 @@ AddRemoteEvent("OnPhoneLoaded", function(player, phoneNumber, messages, contacts
     SetIgnoreLookInput(true)
     SetIgnoreMoveInput(true)
     ShowMouseCursor(true)
-    SetInputMode(INPUT_GAMEANDUI)
     SetWebVisibility(web, WEB_VISIBLE)
 end)
 
@@ -82,5 +81,6 @@ function ClosePhone()
 end
 
 function OpenPhone()
+    SetInputMode(INPUT_GAMEANDUI)
     CallRemoteEvent("LoadPhone")
 end

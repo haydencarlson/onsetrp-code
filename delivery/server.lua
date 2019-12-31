@@ -146,7 +146,7 @@ AddRemoteEvent("FinishDelivery", function(player)
     end
 
     local x, y, z = GetPlayerLocation(player)
-    
+
     local dist = GetDistance3D(x, y, z, deliveryPoint[delivery][1], deliveryPoint[delivery][2], deliveryPoint[delivery][3])
 
     if dist < 150.0 then
@@ -164,7 +164,7 @@ end)
 
 function GetNearestDelivery(player)
 	local x, y, z = GetPlayerLocation(player)
-	
+
 	for k,v in pairs(GetAllNPC()) do
         local x2, y2, z2 = GetNPCLocation(v)
 		local dist = GetDistance3D(x, y, z, x2, y2, z2)

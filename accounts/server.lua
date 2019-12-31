@@ -28,10 +28,6 @@ function OnPlayerSteamAuth(player)
 end
 AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
-AddEvent("OnPlayerJoin", function(player)
-	SetPlayerSpawnLocation(player,  211755.015625, 175760.046875, 1337, 0 )
-end)
-
 function OnPlayerQuit(player)
     SavePlayerAccount(player)
 
@@ -96,8 +92,10 @@ function OnAccountCheckIpBan(player)
 end
 
 function CreatePlayerAccount(player)
-	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, inventory) VALUES (NULL, '?', '[]' , '[]' , '[]');",
+	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, inventory, position) VALUES (NULL, '?', '[]' , '[]' , '[]' , '[]');",
 		tostring(GetPlayerSteamId(player)))
+		print('here')
+	print(query)
 
 	mariadb_query(sql, query, OnAccountCreated, player)
 end
@@ -109,6 +107,7 @@ function OnAccountCreated(player)
 
 	SetPlayerLoggedIn(player)
 	SetAvailablePhoneNumber(player)
+	setPositionAndSpawn(player, nil)
 
 	print("Account ID "..PlayerData[player].accountid.." created for "..player)
 
@@ -130,37 +129,39 @@ function LoadPlayerPhoneContacts(player)
 end
 
 function AddBalanceToAccount(player, account, amount)
-	local cash_bal = math.tointeger(PlayerData[player].cash)
 	local bank_bal = math.tointeger(PlayerData[player].bank_balance)
 	local amount_to_add = amount
 	local action = {
-		cash = function(amount_to_add, cash_bal, bank_bal) 
-			PlayerData[player].cash = cash_bal + amount_to_add
-			CallRemoteEvent(player, "RPNotify:HUDEvent", "cash", PlayerData[player].cash)
+		cash = function(amount_to_add, bank_bal) 
+			AddPlayerCash(player, amount_to_add)
+			CallRemoteEvent(player, "RPNotify:HUDEvent", "cash", GetPlayerCash(player))
 		end,
-		bank = function(amount_to_add, cash_bal, bank_bal)
+		bank = function(amount_to_add, bank_bal)
 			PlayerData[player].bank_balance = bank_bal + amount_to_add
 			CallRemoteEvent(player, "RPNotify:HUDEvent", "bank", PlayerData[player].bank_balance)
 		end
 	}
-	action[account](amount_to_add, cash_bal, bank_bal)
+	action[account](amount_to_add, bank_bal)
 end
 
 function RemoveBalanceFromAccount(player, account, amount)
-	local cash_bal = PlayerData[player].cash
+	print(player)
+	print(account)
+	print(amount)
 	local bank_bal = PlayerData[player].bank_balance
-	local amount_to_add = amount
+	local amount_to_remove = amount
 	local action = {
-		cash = function(player, amount_to_add, cash_bal, bank_bal) 
-			PlayerData[player].cash = cash_bal - amount_to_add
-			CallRemoteEvent(player, "RPNotify:HUDEvent", "cash", PlayerData[player].cash)
+		cash = function(player, amount_to_remove, bank_bal) 
+			print('removing cash')
+			RemovePlayerCash(player, amount_to_remove)
+			CallRemoteEvent(player, "RPNotify:HUDEvent", "cash", GetPlayerCash(player))
 		end,
-		bank = function(player, amount_to_add, cash_bal, bank_bal)
-			PlayerData[player].bank_balance = bank_bal - amount_to_add
+		bank = function(player, amount_to_remove, bank_bal)
+			PlayerData[player].bank_balance = bank_bal - amount_to_remove
 			CallRemoteEvent(player, "RPNotify:HUDEvent", "bank", PlayerData[player].bank_balance)
 		end
 	}
-	action[account](player, amount_to_add, cash_bal, bank_bal)
+	action[account](player, amount_to_remove, bank_bal)
 end
 
 function OnAccountLoaded(player)
@@ -170,15 +171,18 @@ function OnAccountLoaded(player)
 	else
 		local result = mariadb_get_assoc(1)
 		PlayerData[player].admin = math.tointeger(result['admin'])
-		PlayerData[player].cash = math.tointeger(result['cash'])
 		PlayerData[player].bank_balance = math.tointeger(result['bank_balance'])
 		PlayerData[player].name = tostring(result['name'])
 		PlayerData[player].clothing = json_decode(result['clothing'])
 		PlayerData[player].clothing_police = json_decode(result['clothing_police'])
 		PlayerData[player].police = math.tointeger(result['police'])
+		PlayerData[player].driver_license = math.tointeger(result['driver_license'])
+		PlayerData[player].gun_license = math.tointeger(result['gun_license'])
+		PlayerData[player].helicopter_license = math.tointeger(result['helicopter_license'])
 		PlayerData[player].inventory = json_decode(result['inventory'])
 		PlayerData[player].created = math.tointeger(result['created'])
-
+		PlayerData[player].position = json_decode(result['position'])
+		print('here')
 		if result['phone_number'] and result['phone_number'] ~= "" then
 			PlayerData[player].phone_number = tostring(result['phone_number'])
 		else
@@ -189,7 +193,9 @@ function OnAccountLoaded(player)
 		SetPlayerArmor(player, tonumber(result['armor']))
 		setPlayerThirst(player, tonumber(result['thirst']))
 		setPlayerHunger(player, tonumber(result['hunger']))
-
+		print('here before pos')
+		setPositionAndSpawn(player, PlayerData[player].position)
+		print('her afte rpos')
 		SetPlayerLoggedIn(player)
 
 		if PlayerData[player].created == 0 then
@@ -207,6 +213,15 @@ function OnAccountLoaded(player)
 		LoadPlayerPhoneContacts(player)
 
 		print("Account ID "..PlayerData[player].accountid.." loaded for "..GetPlayerIP(player))
+	end
+end
+
+function setPositionAndSpawn(player, position) 
+	SetPlayerSpawnLocation(player, 211755.015625, 175760.046875, 1337, 0 )
+	if position ~= nil and position.x ~= nil and position.y ~= nil and position.z ~= nil then
+		SetPlayerLocation(player, PlayerData[player].position.x, PlayerData[player].position.y, PlayerData[player].position.z + 150) -- Pour empêcher de se retrouver sous la map
+	else
+		SetPlayerLocation(player, 211755.015625, 175760.046875, 1337)
 	end
 end
 
@@ -253,7 +268,10 @@ function CreatePlayerData(player)
 	PlayerData[player].clothing = {}
 	PlayerData[player].clothing_police = {}
 	PlayerData[player].police = 0
-	PlayerData[player].inventory = {}
+	PlayerData[player].inventory = { cash = 100 }
+	PlayerData[player].driver_license = 0
+	PlayerData[player].gun_license = 0
+	PlayerData[player].helicopter_license = 0
 	PlayerData[player].logged_in = false
 	PlayerData[player].admin = 0
 	PlayerData[player].created = 0
@@ -262,14 +280,14 @@ function CreatePlayerData(player)
 	PlayerData[player].steamname = ""
 	PlayerData[player].thirst = 100
 	PlayerData[player].hunger = 100
-	PlayerData[player].cash = 0
-	PlayerData[player].bank_balance = 1000
+	PlayerData[player].bank_balance = 900
 	PlayerData[player].job_vehicle = nil
 	PlayerData[player].job = ""
 	PlayerData[player].onAction = false
 	PlayerData[player].isActioned = false
 	PlayerData[player].phone_contacts = {}
 	PlayerData[player].phone_number = {}
+	PlayerData[player].position = {}
 
     print("Data created for : "..player)
 end
@@ -293,14 +311,13 @@ function SavePlayerAccount(player)
 	if (PlayerData[player] == nil) then
 		return
 	end
-
 	if (PlayerData[player].accountid == 0 or PlayerData[player].logged_in == false) then
 		return
 	end
-
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, cash = ?, bank_balance = ?, health = ?, armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?' WHERE id = ? LIMIT 1;",
+	local x, y, z = GetPlayerLocation(player)
+	PlayerData[player].position = {x= x, y= y, z= z}
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, bank_balance = ?, health = ?, armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
-		PlayerData[player].cash,
 		PlayerData[player].bank_balance,
 		GetPlayerHealth(player),
         GetPlayerArmor(player),
@@ -311,14 +328,22 @@ function SavePlayerAccount(player)
 		json_encode(PlayerData[player].clothing_police),
 		json_encode(PlayerData[player].inventory),
 		PlayerData[player].created,
+		json_encode(PlayerData[player].position),
+		PlayerData[player].driver_license,
+		PlayerData[player].gun_license,
+		PlayerData[player].helicopter_license,
 		PlayerData[player].accountid
-		)
+	)
         
 	mariadb_query(sql, query)
 end
 
 function SetPlayerLoggedIn(player)
     PlayerData[player].logged_in = true
-
-    CallEvent("OnPlayerJoin", player)
 end
+
+function IsAdmin(player)
+	return PlayerData[player].admin
+end
+
+AddFunctionExport("isAdmin", IsAdmin)
