@@ -187,7 +187,7 @@ function OnAccountLoaded(player)
 		else
 			SetAvailablePhoneNumber(player)
 		end
-
+		SetPlayerPropertyValue(player, "actionInProgress", 'false', true)
 		SetPlayerHealth(player, tonumber(result['health']))
 		SetPlayerArmor(player, tonumber(result['armor']))
 		setPlayerThirst(player, tonumber(result['thirst']))
@@ -266,7 +266,7 @@ function CreatePlayerData(player)
 	PlayerData[player].name = ""
 	PlayerData[player].clothing = {}
 	PlayerData[player].clothing_police = {}
-	PlayerData[player].police = 0
+	PlayerData[player].police = 1
 	PlayerData[player].inventory = { cash = 100 }
 	PlayerData[player].driver_license = 0
 	PlayerData[player].gun_license = 0
