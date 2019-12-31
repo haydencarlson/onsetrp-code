@@ -29,12 +29,12 @@ function UpdateOrCreatePlayerStock(existingstock, player, stockid, price, quanti
         local insertquery = mariadb_prepare(sql, "INSERT INTO player_stocks (player_id, stock_id, amount) VALUES (?, ?, ?);", player, stockid, quantity)
         mariadb_async_query(sql, insertquery)
     end
-    RemoveBalanceFromAccount(player, "cash", tonumber(price) * tonumber(quantity))
+    RemoveBalanceFromAccount(player, "cash", price * quantity)
     CallRemoteEvent(player, "MakeNotification", _("bought_stock") .. quantity .. " " .. name, "linear-gradient(to right, #00b09b, #96c93d)")
 end
 
 function UpdateStockAmountLoaded(player, quantity, stock)
-    local balance = PlayerData[player].cash
+    local balance = GetPlayerCash(player)
     AddBalanceToAccount(player, "cash", (quantity * stock['price']))
     CallRemoteEvent(player, "MakeNotification", _("sold_stock") .. quantity .. " " .. stock['name'], "linear-gradient(to right, #00b09b, #96c93d)")
 end
@@ -49,7 +49,7 @@ function SingleStockDataLoaded(player, quantity, side)
     if side == "buy" then
         local price = stock['price']
         local stockid = stock['id']
-        if PlayerData[player].cash >= tonumber(price) * tonumber(quantity) then
+        if GetPlayerCash(player) >= tonumber(price) * tonumber(quantity) then
             local existingstock = mariadb_prepare(sql, "SELECT * FROM player_stocks WHERE stock_id = '?' AND player_id = '?';", stockid, player)
             mariadb_async_query(sql, existingstock, LookForExistingStockLoaded, player, stockid, price, quantity, stock['name'])
         else

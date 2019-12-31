@@ -44,7 +44,9 @@
 	    "essentials/wanted/server.lua",
 	    "essentials/interactions/server.lua",
         "noclip/server.lua",
-        "stylist/server.lua"
+        "stylist/server.lua",
+        "licenses/server.lua",
+        "transport/s_busstop.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -80,7 +82,9 @@
 	    "essentials/wanted/client.lua",
 	    "essentials/interactions/effects.lua",
         "noclip/client.lua",
-        "stylist/client.lua"
+        "stylist/client.lua",
+        "licenses/client.lua",
+        "transport/c_busstop.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",

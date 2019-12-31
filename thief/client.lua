@@ -3,7 +3,7 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 
 local thiefMenu
 AddEvent("OnTranslationReady", function()
-    thiefMenu = Dialog.create(_("thief_menu"), nil, _("picklock"), _("exchange_bars"),_("cancel"))
+    thiefMenu = Dialog.create(_("thief_menu"), nil, _("picklock"), _("rob_iwb"), _("exchange_bars"),_("cancel"))
 end)
 
 AddRemoteEvent("ShowThiefMenu", function()
@@ -17,8 +17,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
             CallRemoteEvent("PickOpenDoor")
             return
         end
-
         if button == 2 then
+            CreateWaypoint(191911, 198230, 1309, "Rob the IWB")
+        end
+        if button == 3 then
             CreateWaypoint(151589, 203814, 363, "Exchange Silver Bars")
         end
     end

@@ -7,7 +7,7 @@ AddRemoteEvent("GetInitialHud", function(player)
     playername = GetPlayerName(player)
     hunger = math.ceil(PlayerData[player].hunger)
     thirst = math.ceil(PlayerData[player].thirst)
-    cash = PlayerData[player].cash
+    cash = GetPlayerCash(player)
     bank = PlayerData[player].bank_balance
     job = PlayerData[player].job
     CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job)
