@@ -62,7 +62,7 @@ function OnPackageStart(player)
 			end
 
 			AddBalanceToAccount(v, "cash", amount) 
-			balance = PlayerData[v].cash
+			balance = GetPlayerCash(v)
 			message = '<span color="#00B159">You received a paycheck of </>$' ..amount
 			welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount
 			newbal = '<span color="#00B159">Your new balance is</> $' ..balance

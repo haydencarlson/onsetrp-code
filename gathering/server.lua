@@ -108,12 +108,6 @@ AddEvent("OnPlayerJoin", function(player)
     CallRemoteEvent(player, "gatheringSetup", gatherZoneCached, processZoneCached)
 end)
 
-AddEvent("OnPlayerDeath", function(player)
-    PlayerData[player].onAction = false
-    PlayerData[player].isActioned = false
-end)
-
-
 AddRemoteEvent("StartGathering", function(player, gatherzone) 
     local gather = GetGatherByGatherzone(gatherzone)
     local animation = ""
@@ -122,10 +116,6 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
         if PlayerData[player].inventory[gatherTable[gather].gather_tool] == nil then
             return CallRemoteEvent(player, "MakeNotification", _("need_tool"), "linear-gradient(to right, #ff5f6d, #ffc371)")
         end
-    end
-    if PlayerData[player].onAction then
-        PlayerData[player].onAction = false
-        return 
     end
     if GetPlayerVehicle(player) ~= 0 then
         return
@@ -139,15 +129,12 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
     else
         animation = "PICKUP_LOWER"
     end
-    if gatherTable[gather].process_item == "processed_meth" or gatherTable[gather].process_item == "processed_coke" or gatherTable[gather].process_item == "processed_heroin" or gatherTable[gather].process_item == "processed_weed" then
-        CallEvent("makeWanted", player)
-    end 
-    PlayerData[player].onAction = true
-
-
-    
     function DoGathering(player, animation, gather, attached_item)
-        if PlayerData[player].onAction and not PlayerData[player].isActioned then
+        if GetPlayerPropertyValue(player, 'actionInProgress') == 'false' then
+            SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
+            if gatherTable[gather].process_item == "processed_meth" or gatherTable[gather].process_item == "processed_coke" or gatherTable[gather].process_item == "processed_heroin" or gatherTable[gather].process_item == "processed_weed" then
+                CallEvent("makeWanted", player)
+            end 
             CallRemoteEvent(player, "LockControlMove", true)
             PlayerData[player].isActioned = true
             SetPlayerAnimation(player, animation)
@@ -156,13 +143,12 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
                 SetPlayerAnimation(player, animation)
             end)
             Delay(8000, function()
-                PlayerData[player].isActioned = false
+                SetPlayerPropertyValue(player, "actionInProgress", 'false', true)
                 AddInventory(player, gatherTable[gather].gather_item, 1)
                 CallRemoteEvent(player, "MakeNotification", _("gather_success", _(gatherTable[gather].gather_item)), "linear-gradient(to right, #00b09b, #96c93d)")
                 SetPlayerAnimation(player, "STOP")
                 CallRemoteEvent(player, "LockControlMove", false)
                 SetAttachedItem(player, "hand_r", 0)
-                return DoGathering(player, animation, gather, attached_item)
             end)
         end
     end  
@@ -173,38 +159,30 @@ AddRemoteEvent("StartProcessing", function(player, processzone)
     gather = GetGatherByProcesszone(processzone)
     unprocessed_item = gatherTable[gather].gather_item
 
-    if PlayerData[player].onAction then
-        PlayerData[player].onAction = false
-        return
-    end
     if GetPlayerVehicle(player) ~= 0 then
         return
     end
-    PlayerData[player].onAction = true
     function DoProcessing(player, gather, unprocessed_item)
-        if PlayerData[player].onAction and not PlayerData[player].isActioned then
+        if GetPlayerPropertyValue(player, 'actionInProgress') == 'false' then
+            SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
             if PlayerData[player].inventory[unprocessed_item] == nil then
-                PlayerData[player].onAction = false
                 return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
             end
             if tonumber(PlayerData[player].inventory[unprocessed_item]) < 1 then
-                PlayerData[player].onAction = false
                 return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
             else
                 CallRemoteEvent(player, "LockControlMove", true)
                 RemoveInventory(player, unprocessed_item, 1)
                 SetPlayerAnimation(player, "COMBINE")
-                PlayerData[player].isActioned = true
                 Delay(4000, function() 
                     SetPlayerAnimation(player, "COMBINE")
                 end)
                 Delay(8000, function()
-                    PlayerData[player].isActioned = false
+                    SetPlayerPropertyValue(player, "actionInProgress", 'false', true)
                     AddInventory(player, gatherTable[gather].process_item, 1)
                     CallRemoteEvent(player, "MakeNotification", _("process_success", _(gatherTable[gather].process_item)), "linear-gradient(to right, #00b09b, #96c93d)")
                     CallRemoteEvent(player, "LockControlMove", false)
                     SetPlayerAnimation(player, "STOP")
-                    return DoProcessing(player, gather, unprocessed_item)
                 end)
             end 
         end

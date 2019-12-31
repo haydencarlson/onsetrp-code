@@ -94,6 +94,8 @@
     "shirts": "Shirts",
     "pants": "Pants",
     "shoes": "Shoes",
+    "make_wanted": "You are now wanted. Be careful",
+    "bank_rob": "You are now unwanted",
     "enter_valid_name": "Please enter a valid name",
     "please_choose_hairs": "Do your hairstyle",
     "please_choose_shirt": "Put on a shirt",

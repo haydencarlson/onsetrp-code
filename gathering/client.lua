@@ -13,7 +13,7 @@ function OnKeyPress(key)
     if key == "E" and not onCharacterCreation then
         local NearestGatherZone = GetNearestGatherZone()
         local NearestProcessZone = GetNearestProcessZone()
-
+		
         if NearestGatherZone ~= 0 then
             CallRemoteEvent( "StartGathering", NearestGatherZone)   
         end
