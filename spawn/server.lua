@@ -11,16 +11,10 @@ local rules = {
 function SetupSpawn() 
     -- Server info section
     CreateText3D("Server Information", 17, server_info[0], server_info[1], 1700, 0, 0, 0)
-    gps = "Push G to use the GPS to find new locations."
-    CreateText3D(gps, 9, server_info[0], server_info[1], 1650, 0, 0, 0)
-    job = "You can get a job by going to the job manager beside here"
-    CreateText3D(job, 9, server_info[0], server_info[1], 1600, 0, 0, 0)
-    house = "Near a house door push F1 to make a purchase"
-    CreateText3D(house, 9, server_info[0], server_info[1], 1550, 0, 0, 0)
-    stocks = "Visit the bank to buy and trade stocks"
-    CreateText3D(stocks, 9, server_info[0], server_info[1], 1500, 0, 0, 0)
-    tips = "Type /tips to view helpful tips and keybinds"
-    CreateText3D(tips, 9, server_info[0], server_info[1], 1450, 0, 0, 0)
+    tips = "Type /tips to see some quick tips"
+    CreateText3D(tips, 9, server_info[0], server_info[1], 1650, 0, 0, 0)
+    tips = "Type /info to view server information and for help"
+    CreateText3D(tips, 9, server_info[0], server_info[1], 1600, 0, 0, 0)
 
     -- Rules section
     CreateText3D("Rules", 17, rules[0], rules[1], 1700, 0, 0, 0)

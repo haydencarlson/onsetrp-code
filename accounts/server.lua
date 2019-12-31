@@ -18,7 +18,8 @@ function OnPlayerSteamAuth(player)
 	PlayerData[player].steamname = GetPlayerName(player)
     
     AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerName(player)..' from '..PlayerData[player].locale..' joined</>')
-    AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerCount()..' players online</>')
+	AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerCount()..' players online</>')
+	AddPlayerChat(player, '<span color="#eeeeeeaa">/info in the chat to view server information. Go check it out!</>')
     
     -- First check if there is an account for this player
 	local query = mariadb_prepare(sql, "SELECT id FROM accounts WHERE steamid = '?' LIMIT 1;",
