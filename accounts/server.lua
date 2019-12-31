@@ -94,7 +94,6 @@ end
 function CreatePlayerAccount(player)
 	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, inventory, position) VALUES (NULL, '?', '[]' , '[]' , '[]' , '[]');",
 		tostring(GetPlayerSteamId(player)))
-		print('here')
 	print(query)
 
 	mariadb_query(sql, query, OnAccountCreated, player)
@@ -182,7 +181,6 @@ function OnAccountLoaded(player)
 		PlayerData[player].inventory = json_decode(result['inventory'])
 		PlayerData[player].created = math.tointeger(result['created'])
 		PlayerData[player].position = json_decode(result['position'])
-		print('here')
 		if result['phone_number'] and result['phone_number'] ~= "" then
 			PlayerData[player].phone_number = tostring(result['phone_number'])
 		else
