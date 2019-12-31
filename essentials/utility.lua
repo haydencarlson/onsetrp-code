@@ -18,12 +18,22 @@ AddCommand("tips", function(player)
 end)
 
 local tips = { 
-		'<span color="#ccc"> Type /tips for some help. </>',	
+		'<span color="#ccc"> Type /tips for some quick tips. </>',	
 	}
 	
 	for i in pairs(tips) do
 		CreateTimer(function() 
 			AddPlayerChatAll(tips[i])
+	end, 300000)
+end
+
+local serverinfo = { 
+	'<span color="#ccc"> Type /info to view server information and maybe find some answers. </>',	
+}
+
+for i in pairs(serverinfo) do
+	CreateTimer(function() 
+		AddPlayerChatAll(serverinfo[i])
 	end, 300000)
 end
  
