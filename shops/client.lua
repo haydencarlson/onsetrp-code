@@ -88,6 +88,7 @@ AddRemoteEvent("openShop", function(inventory, items, shopid)
 		-- Check if this NPC can buy this item (NPCs can only buy items they're selling)
 		for key, item in pairs(items) do
 			if inventoryItem == item.name then
+				
 				inventoryItems[key] = inventoryCount.." x ".._(inventoryItem)
 			end
 		end
