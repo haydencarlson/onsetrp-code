@@ -137,7 +137,6 @@ AddRemoteEvent("TransferInventory", function(player, item, amount, toplayer)
     else
         AddInventory(tonumber(toplayer), item, tonumber(amount))
         RemoveInventory(tonumber(player ), item, tonumber(amount))
-        
         CallRemoteEvent(player, "MakeNotification", _("successful_transfer", amount, item, GetPlayerName(tonumber(toplayer))), "linear-gradient(to right, #00b09b, #96c93d)")
         CallRemoteEvent(tonumber(toplayer), "MakeNotification", _("received_transfer", amount, item, GetPlayerName(player)), "linear-gradient(to right, #00b09b, #96c93d)")
     end
