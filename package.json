@@ -84,7 +84,8 @@
         "noclip/client.lua",
         "stylist/client.lua",
         "licenses/client.lua",
-        "transport/c_busstop.lua"
+        "transport/c_busstop.lua",
+	"essentials/models/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -131,6 +132,7 @@
         "idcard/id.html",
         "idcard/id.js",
         "idcard/id.css",
-        "idcard/Cedarville-Cursive.ttf"
+        "idcard/Cedarville-Cursive.ttf",
+	"essentials/models/lamboav/content/lamboav.pak"
     ]
 }
