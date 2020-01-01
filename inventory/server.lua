@@ -9,7 +9,7 @@ AddRemoteEvent("ServerPersonalMenu", function(player)
             playerList[tostring(k)] = GetPlayerName(k)
         end
     end
-    CallRemoteEvent(player, "OpenPersonalMenu", PlayerData[player].cash, PlayerData[player].bank_balance, PlayerData[player].inventory, playerList)
+    CallRemoteEvent(player, "OpenPersonalMenu", GetPlayerCash(player), PlayerData[player].bank_balance, PlayerData[player].inventory, playerList)
 end)
 
 
@@ -20,7 +20,7 @@ function getWeaponID(modelid)
     return 0
 end
 
-AddRemoteEvent("UseInventory", function(player, item, amount) 
+AddRemoteEvent("UseInventory", function(player, item, amount)
     weapon = getWeaponID(item)
     if tonumber(PlayerData[player].inventory[item]) < tonumber(amount) then
         AddPlayerChat(player, _("not_enough_item"))
@@ -45,7 +45,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                     else
                         CallRemoteEvent(player, "LockControlMove", true)
                         SetPlayerAnimation(player, "COMBINE")
-                        Delay(4000, function() 
+                        Delay(4000, function()
                             RemoveInventory(player, item, amount)
                             SetVehicleHealth(nearestCar, 5000)
                             for i=1,8 do
@@ -66,7 +66,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                     else
                         CallRemoteEvent(player, "LockControlMove", true)
                         SetPlayerAnimation(player, "COMBINE")
-                        Delay(4000, function() 
+                        Delay(4000, function()
                             RemoveInventory(player, item, amount)
                             VehicleData[nearestCar].fuel = 100
                             AddPlayerChat(player, _("car_refuelled"))
@@ -86,7 +86,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                             SetPlayerAnimation(player, "LOCKDOOR")
                             Delay(3000, function()
                                 SetPlayerAnimation(player, "LOCKDOOR")
-                            end) 
+                            end)
                             Delay(6000, function()
                                 SetPlayerAnimation(player, "LOCKDOOR")
                             end)
@@ -96,7 +96,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                                 RemoveInventory(player, item, amount)
                                 CallRemoteEvent(player, "LockControlMove", false)
                                 SetPlayerAnimation(player, "STOP")
-                            end)       
+                            end)
                         else
                             AddPlayerChat(player, _("vehicle_already_unlocked"))
                         end
@@ -110,7 +110,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                             SetPlayerAnimation(player, "LOCKDOOR")
                             Delay(3000, function()
                                 SetPlayerAnimation(player, "LOCKDOOR")
-                            end) 
+                            end)
                             Delay(6000, function()
                                 SetPlayerAnimation(player, "LOCKDOOR")
                             end)
@@ -120,7 +120,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                                 RemoveInventory(player, item, amount)
                                 CallRemoteEvent(player, "LockControlMove", false)
                                 SetPlayerAnimation(player, "STOP")
-                            end)   
+                            end)
                         else
                             AddPlayerChat(player, _("house_already_unlock"))
                         end
@@ -133,12 +133,13 @@ end)
 
 AddRemoteEvent("TransferInventory", function(player, item, amount, toplayer)
     if PlayerData[player].inventory[item] < tonumber(amount) then
-        AddPlayerChat(player, _("not_enough_item"))
+        CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     else
         AddInventory(tonumber(toplayer), item, tonumber(amount))
         RemoveInventory(tonumber(player ), item, tonumber(amount))
-        AddPlayerChat(player, _("successful_transfer", amount, item, GetPlayerName(tonumber(toplayer))))
-        AddPlayerChat(tonumber(toplayer), _("received_transfer", amount, item, GetPlayerName(player)))
+        
+        CallRemoteEvent(player, "MakeNotification", _("successful_transfer", amount, item, GetPlayerName(tonumber(toplayer))), "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(tonumber(toplayer), "MakeNotification", _("received_transfer", amount, item, GetPlayerName(player)), "linear-gradient(to right, #00b09b, #96c93d)")
     end
 end)
 
@@ -163,6 +164,33 @@ function RemoveInventory(player, item, amount)
     end
 end
 
+function GetPlayerCash(player)
+    if PlayerData[player].inventory['cash'] then
+        return PlayerData[player].inventory['cash']
+    else
+        return 0
+    end
+end
+
+function SetPlayerCash(player, amount)
+    PlayerData[player].inventory['cash'] = math.max(amount, 0)
+end
+
+function AddPlayerCash(player, amount)
+    AddInventory(player, 'cash', amount)
+end
+
+function RemovePlayerCash(player, amount)
+    RemoveInventory(player, 'cash', amount)
+end
+
+AddFunctionExport("AddInventory", AddInventory)
+AddFunctionExport("RemoveInventory", RemoveInventory)
+AddFunctionExport("GetPlayerCash", GetPlayerCash)
+AddFunctionExport("SetPlayerCash", SetPlayerCash)
+AddFunctionExport("AddPlayerCash", AddPlayerCash)
+AddFunctionExport("RemovePlayerCash", RemovePlayerCash)
+
 AddEvent("OnPackageStart", function()
-    
+
 end)

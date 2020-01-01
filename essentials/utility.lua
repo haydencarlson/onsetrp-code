@@ -18,12 +18,22 @@ AddCommand("tips", function(player)
 end)
 
 local tips = { 
-		'<span color="#ccc"> Type /tips for some help. </>',	
+		'<span color="#ccc"> Type /tips for some quick tips. </>',	
 	}
 	
 	for i in pairs(tips) do
 		CreateTimer(function() 
 			AddPlayerChatAll(tips[i])
+	end, 300000)
+end
+
+local serverinfo = { 
+	'<span color="#ccc"> Type /info to view server information and maybe find some answers. </>',	
+}
+
+for i in pairs(serverinfo) do
+	CreateTimer(function() 
+		AddPlayerChatAll(serverinfo[i])
 	end, 300000)
 end
  
@@ -52,7 +62,7 @@ function OnPackageStart(player)
 			end
 
 			AddBalanceToAccount(v, "cash", amount) 
-			balance = PlayerData[v].cash
+			balance = GetPlayerCash(v)
 			message = '<span color="#00B159">You received a paycheck of </>$' ..amount
 			welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount
 			newbal = '<span color="#00B159">Your new balance is</> $' ..balance
