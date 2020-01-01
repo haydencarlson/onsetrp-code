@@ -28,7 +28,8 @@ INSERT INTO `shops` (`id`, `name`, `category`, `x`, `y`, `z`, `h`) VALUES
 (5, 'twentyfour', 'miscellaneous', 171131, 203562, 1413, -180),
 (6, 'gunshop', 'weapons', -181943, -40882, 1163, 90),
 (7, 'gunshop', 'weapons', 206071, 193057, 1357, 180),
-(8, 'rockshop', 'mine', 67862, 184741, 535, 90);
+(8, 'rockshop', 'mine', 67862, 184741, 535, 90),
+(9, 'drugs_sell_zone', 'drugs_sell_zone', -177344, 3673, 1992);
 
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE IF NOT EXISTS `items` (
@@ -73,7 +74,11 @@ INSERT INTO `items` (`id`, `name`, `category`, `price`, `weight`, `hunger`, `thi
 (28, 'weapon_18', 'weapons', 20000, 5000, 0, 0),
 (29, 'weapon_19', 'weapons', 20000, 5000, 0, 0),
 (30, 'weapon_20', 'weapons', 30000, 6000, 0, 0),
-(31, 'processed_rock', 'mine', 160, 1000, 0, 0);
+(31, 'processed_rock', 'mine', 160, 1000, 0, 0),
+(32, 'processed_weed', 'drugs_sell_zone', 6000, 100, 0, 0),
+(33, 'processed_coke', 'drugs_sell_zone', 6000, 100, 0, 0),
+(34, 'processed_heroin', 'drugs_sell_zone', 6000, 100, 0, 0),
+(35, 'processed_meth', 'drugs_sell_zone', 6000, 100, 0, 0);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
