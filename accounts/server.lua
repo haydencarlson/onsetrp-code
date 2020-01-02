@@ -19,7 +19,7 @@ function OnPlayerSteamAuth(player)
     
     AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerName(player)..' from '..PlayerData[player].locale..' joined</>')
 	AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerCount()..' players online</>')
-	AddPlayerChat(player, '<span color="#ff0000">/info in the chat to view server information. Go check it out!</>')
+	AddPlayerChat(player, '<span color="#ff0000" size="17">/info in the chat to view server information. Go check it out!</>')
     
     -- First check if there is an account for this player
 	local query = mariadb_prepare(sql, "SELECT id FROM accounts WHERE steamid = '?' LIMIT 1;",
@@ -93,12 +93,12 @@ function OnAccountCheckIpBan(player)
 end
 
 function CreatePlayerAccount(player)
-	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, inventory, position) VALUES (NULL, '?', '[]' , '[]' , '[]' , '[]');",
+	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, inventory, position, police) VALUES (NULL, '?', '[]' , '[]' , '[]' , '[]', '1');",
 		tostring(GetPlayerSteamId(player)))
-	print(query)
 
 	mariadb_query(sql, query, OnAccountCreated, player)
 end
+
 
 function OnAccountCreated(player)
 	PlayerData[player].accountid = mariadb_get_insert_id()
@@ -145,14 +145,10 @@ function AddBalanceToAccount(player, account, amount)
 end
 
 function RemoveBalanceFromAccount(player, account, amount)
-	print(player)
-	print(account)
-	print(amount)
 	local bank_bal = PlayerData[player].bank_balance
 	local amount_to_remove = amount
 	local action = {
 		cash = function(player, amount_to_remove, bank_bal) 
-			print('removing cash')
 			RemovePlayerCash(player, amount_to_remove)
 			CallRemoteEvent(player, "RPNotify:HUDEvent", "cash", GetPlayerCash(player))
 		end,
@@ -192,9 +188,7 @@ function OnAccountLoaded(player)
 		SetPlayerArmor(player, tonumber(result['armor']))
 		setPlayerThirst(player, tonumber(result['thirst']))
 		setPlayerHunger(player, tonumber(result['hunger']))
-		print('here before pos')
 		setPositionAndSpawn(player, PlayerData[player].position)
-		print('her afte rpos')
 		SetPlayerLoggedIn(player)
 
 		if PlayerData[player].created == 0 then

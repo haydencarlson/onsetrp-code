@@ -62,7 +62,6 @@ AddRemoteEvent("ServerChangeClothes", function(player, playername, playerhairs, 
     
     CallRemoteEvent(player, "AskSpawnMenu")
     CallRemoteEvent(player, "OpenSpawnMenu", spawnLocation)
-
     PlayerData[player].created = 1
 
     for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
