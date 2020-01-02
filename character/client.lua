@@ -156,7 +156,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
                 Dialog.show(shoesCreation)
             else
                 playerShoes = args[1]
-
                 CallRemoteEvent("ServerChangeClothes", playerName, playerHairs, playerHairsColor, playerShirt, playerPants, playerShoes)
                 isCreated = true
                 StartTutorial()

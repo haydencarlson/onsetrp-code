@@ -101,6 +101,9 @@ AddRemoteEvent("RPNotify:CameraTutorial", function(selection)
         IsJobCameraDone()
         onCharacterCreation = false
     else
+        SetIgnoreMoveInput(false)
+        SetInputMode(INPUT_GAME)
+        onCharacterCreation = false
         CallRemoteEvent("ShowJobInformation")
     end
 end)

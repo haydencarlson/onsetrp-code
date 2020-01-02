@@ -190,7 +190,7 @@ function OnAccountLoaded(player)
 		setPlayerHunger(player, tonumber(result['hunger']))
 		setPositionAndSpawn(player, PlayerData[player].position)
 		SetPlayerLoggedIn(player)
-
+		
 		if PlayerData[player].created == 0 then
 			CallRemoteEvent(player, "askClientCreation")
 		else
