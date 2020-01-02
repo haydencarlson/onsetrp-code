@@ -17,6 +17,7 @@ function setPlayerHunger(player, hunger)
     if PlayerData[player].hunger > 100 then
         PlayerData[player].hunger = 100
     end
+    SetPlayerPropertyValue(player, "hunger", PlayerData[player].hunger, true)
 end
 AddRemoteEvent("setPlayerHunger", setPlayerHunger)
 
@@ -30,6 +31,7 @@ function addPlayerHunger(player, hunger)
     if PlayerData[player].hunger > 100 then
         PlayerData[player].hunger = 100
     end
+    SetPlayerPropertyValue(player, "hunger", PlayerData[player].hunger, true)
 end
 AddRemoteEvent("addPlayeHunger", addPlayerHunger)
 
@@ -50,6 +52,7 @@ function removePlayerHunger(player, hunger)
         SetPlayerHealth(player, health)
     end
     CallRemoteEvent(player, "RPNotify:HUDEvent", "hunger", PlayerData[player].hunger)
+    SetPlayerPropertyValue(player, "hunger", PlayerData[player].hunger, true)
 end
 AddRemoteEvent("removePlayerHunger", removePlayerHunger)
 
@@ -74,6 +77,7 @@ function setPlayerThirst(player, thirst)
     if  PlayerData[player].thirst == 0 then
         SetPlayerHealth(player, 0)
     end
+    SetPlayerPropertyValue(player, "thirst", PlayerData[player].thirst, true)
 end
 AddRemoteEvent("setPlayerThirst", setPlayerThirst)
 
@@ -87,6 +91,7 @@ function addPlayerThirst(player, thirst)
     if PlayerData[player].thirst > 100 then
         PlayerData[player].thirst = 100
     end
+    SetPlayerPropertyValue(player, "thirst", PlayerData[player].thirst, true)
 end
 AddRemoteEvent("addPlayerThirst", addPlayerThirst)
 
@@ -106,6 +111,7 @@ function removePlayerThirst(player, thirst)
         SetPlayerHealth(player, 0)
     end
     CallRemoteEvent(player, "RPNotify:HUDEvent", "thirst", PlayerData[player].thirst)
+    SetPlayerPropertyValue(player, "thirst", PlayerData[player].thirst, true)
 end
 AddRemoteEvent("removePlayerThirst", removePlayerThirst)
 

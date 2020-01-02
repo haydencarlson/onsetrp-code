@@ -10,7 +10,7 @@ local bus_stops = {
         { x= -23335, y= -12534, z= 2081, labelArret= _("desert_town") }, --Ville du desert
         { x= -162541, y= 79023, z= 1545, labelArret= _("prison") }, --Ville du desert
         { x= -181984, y= -44583, z= 1149, labelArret= _("town") }, --Village        
-        { x= -165259, y= -37945, z= 1149, labelArret= _("town").."2" }, --Village        
+        { x= -165259, y= -37945, z= 1149, labelArret= _("town").." 2" }, --Village        
         { x= 178654, y= 210121, z= 1314, labelArret= _("city").." 1" }, -- Ville
         { x= 210387, y= 194379, z= 1310, labelArret= _("city").." 2" }, -- Ville
         { x= 194706, y= 211555, z= 1310, labelArret= _("city").." 3" }, -- Ville

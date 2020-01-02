@@ -54,8 +54,7 @@ function LoadShopNpcs()
         CreateText3D(_(shop.name).."\n".._("press_e"), 18, shop.location[1], shop.location[2], shop.location[3] + 120, 0, 0, 0)
 
         table.insert(ShopObjectsCached, shop.npc)
-    end
-    print("Shops created")
+	end
 end
 
 AddEvent("OnPlayerJoin", function(player)

@@ -79,7 +79,7 @@ function JobSelected(player, selection)
     end
     CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
     CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
-    CallRemoteEvent(player, "CUI:AddOption", 'Close', 'Read above', 'Read the information provided for your job', 'Close')
+    CallRemoteEvent(player, "CUI:AddOption", 'Close', 'Please read', 'Read the information provided for your job', 'Close')
     CallRemoteEvent(player, "RPNotify:HUDEvent", "job", selection)
     CallRemoteEvent(player, "RPNotify:CameraTutorial", selection)
 end
