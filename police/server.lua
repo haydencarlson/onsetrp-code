@@ -136,6 +136,7 @@ function GetUniformServer(player)
 
     SetPlayerWeapon(player, 4, 200, false, 1, true)
 	SetPlayerWeapon(player, 21, 50, false, 2, true)
+	SetPlayerArmor(player, 100)
 
     for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
 		ChangeUniformOtherPlayerServer(k, player)
@@ -169,6 +170,8 @@ function RemoveUniformServer(player)
 	CallRemoteEvent(player, "ChangeUniformClient", player, PlayerData[player].clothing[5], 5)
     SetPlayerWeapon(player, 1, 0, true, 1)
 	SetPlayerWeapon(player, 1, 0, true, 2)
+	SetPlayerArmor(player, 0)
+
     for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
 		RemoveUniformOtherPlayerServer(k, player)
     end
@@ -229,8 +232,9 @@ function GetEquipped(player)
     if PlayerData[player].job ~= "police" then
 		return CallRemoteEvent(player, "MakeNotification", _("not_police"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     end
-	SetPlayerWeapon(player, 4, 200, false, 1, true)
+    SetPlayerWeapon(player, 4, 200, false, 1, true)
 	SetPlayerWeapon(player, 21, 50, false, 2, true)
+	SetPlayerArmor(player, 100)
 end
 AddRemoteEvent("GetEquipped", GetEquipped)
 
@@ -381,17 +385,18 @@ end)
 
 AddRemoteEvent("PayFine", function(player)
     local fine = tonumber(GetPlayerPropertyValue(player, "fine"))
-	if(GetPlayerCash(player) >= fine) then
-		RemoveBalanceFromAccount(player, "cash", fine)
-	elseif(PlayerData[player].bank_balance >= fine) then
-		RemoveBalanceFromAccount(player, "bank", fine)
+    local fineGiver = GetPlayerPropertyValue(player, "fine_giver")
+    if(GetPlayerCash(player) >= fine) then
+	RemovePlayerCash(player, fine)
+    elseif(PlayerData[player].bank_balance >= fine) then
+	   PlayerData[player].bank_balance = PlayerData[player].bank_balance - fine
+
     elseif((PlayerData[player].bank_balance + GetPlayerCash(player)) > fine) then
-		local amount = GetPlayerCash(player)
-		SetPlayerCash(player, 0)
-		RemoveBalanceFromAccount(player, "bank", (fine - amount))
+    	PlayerData[player].bank_balance = PlayerData[player].bank_balance - (fine - GetPlayerCash(player))
+    	SetPlayerCash(player, 0)
     else
-		SetPlayerCash(player, 0)
-		PlayerData[player].bank_balance = 0
+    	SetPlayerCash(player, 0)
+    	PlayerData[player].bank_balance = 0
     end
 
     SetPlayerPropertyValue(player, "fine", 0, true)

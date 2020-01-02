@@ -72,7 +72,9 @@ function SelectedJob(selection, playerjob)
     end
 
     local action = {
-        medic = function() SetPlayerClothingPreset(GetPlayerId(), 17) end,
+        medic = function() 
+            CallRemoteEvent("StartMedicJob")
+        end,
         delivery = function() SetPlayerClothingPreset(GetPlayerId(), 5) end,
         police = function() 
             CallRemoteEvent("StartStopPolice")

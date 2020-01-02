@@ -379,5 +379,22 @@
     "not_police": "You are not a police officer!",
     "police_armory": "Police Armory",
     "get_equipped": "Get equipped",
-    "paid_fine_giver": "The player paid his fine"
+    "paid_fine_giver": "The player paid his fine",
+    "medic_menu": "Medic Menu",
+    "start_medic": "Start medic",
+    "stop_medic": "Stop medic",
+    "medic_job": "Medic job",
+    "join_medic": "You are now a medic!",
+    "quit_medic": "You are no longer a medic!",
+    "revive_player_success": "You successfully revived this player",
+    "revive_player": "Revive Player",
+    "revive_reward": "You received 200$",
+    "medic_notification_on_death": "NEW EMERGENCY (F3)",
+    "medic_emergency": "Emergency",
+    "accept_emergency": "Accept emergency",
+    "medic_on_their_way": "Medics are on their way",
+    "emergency": "Emergency",
+    "accepted_emergency": "Go to the Emergency waypoint",
+    "end_of_emergency": "End of emergency",
+    "no_medic_online": "No medic online. Respawn in 5 seconds"
 }
