@@ -22,11 +22,15 @@ text = {
     },
     police = {
         short_desc = "Become a police officer",
-        long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car. As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
+        long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car (You can use GPS). As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
     },
     thief = {
         short_desc = "Mug and Rob to make your living",
         long_desc = "Push F3 to open your thief menu. Use the tools of your trade to rob and collect cash. Get caught, go to jail. High risk, high reward."
+    },
+    mechanic = {
+        short_desc = "In charge of repairing vehicles",
+        long_desc = "Push F3 to open your mechanic menu. When you are near a car you can select repair vehicle to repair the players vehicle."
     }
 }
 
@@ -75,8 +79,13 @@ function JobSelected(player, selection)
     end
     CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
     CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
-    CallRemoteEvent(player, "CUI:Show", "job_information", true)
+    CallRemoteEvent(player, "CUI:AddOption", 'Close', 'Read above', 'Read the information provided for your job', 'Close')
     CallRemoteEvent(player, "RPNotify:HUDEvent", "job", selection)
+    CallRemoteEvent(player, "RPNotify:CameraTutorial", selection)
+end
+
+function CloseJobInformation(player)
+    CallRemoteEvent(player, "CUI:Close", "job_information", true)
 end
 
 function ShowSelectJob(player) 
@@ -89,7 +98,13 @@ function ShowSelectJob(player)
     CallRemoteEvent(player, "CUI:Show", "job_selection", true)
 end
 
+AddRemoteEvent("ShowJobInformation", function(player)
+    CallRemoteEvent(player, "CUI:Show", "job_information", true)
+end)
+
+AddRemoteEvent("ShowSelectJob", ShowSelectJob)
 AddRemoteEvent("CUI:OptionClick_job_menu", JobSelected)
+AddRemoteEvent("CUI:OptionClick_job_information", CloseJobInformation)
 
 AddEvent("OnNPCDamage", function(npc)
     SetNPCHealth( npc, 100 )

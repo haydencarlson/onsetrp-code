@@ -7,6 +7,8 @@
     "sell_stocks": "Sell",
     "stock_trader": "Trade stocks",
     "valid_number": "Please enter a valid number",
+    "mechanic_menu": "Mechanic Menu",
+    "repair_vehicle": "Repair Nearest Vehicle",
     "atm": "$$$ ATM $$$",
     "bank_balance": "Bank: ",
     "enter_bank": "Enter Bank",

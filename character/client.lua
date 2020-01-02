@@ -1,6 +1,6 @@
 local Dialog = ImportPackage("dialogui")
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
-
+local Camera = ImportPackage('camera')
 local characterCreation
 
 local isCreated = true
@@ -159,11 +159,17 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 
                 CallRemoteEvent("ServerChangeClothes", playerName, playerHairs, playerHairsColor, playerShirt, playerPants, playerShoes)
                 isCreated = true
-                onCharacterCreation = false
+                StartTutorial()
             end
         end
     end
 end)
+
+function StartTutorial()
+    SetIgnoreMoveInput(true)
+    SetInputMode(INPUT_UI)
+    CallRemoteEvent("ShowSelectJob")
+end
 
 AddRemoteEvent("ClientChangeClothing", function(player, part, piece, r, g, b, a)
     local SkeletalMeshComponent
