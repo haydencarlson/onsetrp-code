@@ -1,15 +1,13 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
-
-AddCommand("want", function(player)
-    CallEvent("makeWanted", player)
-end)
-
 AddEvent("makeWanted", function(player)
+   local wanted = GetPlayerPropertyValue(player, "isWanted")
     playername = GetPlayerName(player)
     name = '(Criminal) '..playername
     SetPlayerName(player, name)
-    SetPlayerPropertyValue(player, "isWanted", 1, true)
+    if wanted == 1 then
+    else
+     SetPlayerPropertyValue(player, "isWanted", 1, true)
     CallRemoteEvent(player, "MakeNotification", _("make_wanted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     
 
@@ -17,11 +15,14 @@ AddEvent("makeWanted", function(player)
         SetPlayerPropertyValue(player, "isWanted", 0, true)
         CallRemoteEvent(player, "MakeNotification", _("bank_rob"), "linear-gradient(to right, #ff5f6d, #ffc371)")
         SetPlayerName(player, playername)
-    end)
-
+        end)
+    end
 end)
 
 AddEvent("bankRob", function(player)
+    local wanted = GetPlayerPropertyValue(player, "isWanted")
+    if wanted == 1 then
+    else
     SetPlayerPropertyValue(player, "isWanted", 1, true)
     AddPlayerChat(player, "You are robbing the bank.")
 
@@ -29,7 +30,7 @@ AddEvent("bankRob", function(player)
         SetPlayerPropertyValue(player, "isWanted", 0, true)
         AddPlayerChat(player, "You successfully escaped the bank robbery.")
     end)
-
+  end
 end)
 
 function OnPlayerDeath(player, instigator)
@@ -40,7 +41,7 @@ function OnPlayerDeath(player, instigator)
     
     if player == instigator then 
         AddPlayerChat(player,  death)  
-    else if IsCopInRange(x,y,z) then
+    elseif IsCopInRange(x,y,z) then
         CallEvent(instigator, "makeWanted")
     else
         AddPlayerChat(player,  message)
