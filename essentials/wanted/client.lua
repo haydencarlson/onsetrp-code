@@ -17,3 +17,4 @@ CreateTimer(function()
          SetTextBoxText(WantedHud, "")
     end
 end, 250)
+
