@@ -191,7 +191,7 @@ function OnAccountLoaded(player)
 		setPositionAndSpawn(player, PlayerData[player].position)
 		SetPlayerLoggedIn(player)
 		
-		if PlayerData[player].created == 0 then
+		if math.tointeger(result['created']) == 0 then
 			CallRemoteEvent(player, "askClientCreation")
 		else
 			SetPlayerName(player, PlayerData[player].name)

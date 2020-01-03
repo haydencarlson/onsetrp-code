@@ -79,7 +79,7 @@ function HandleStockPriceChange()
         math.randomseed(os.time())
         local stock = mariadb_get_assoc(i)
         local currentprice = stock['price']
-        local percentchange = math.random(-2, 2) / 100
+        local percentchange = math.random(-2, 4) / 100
         local newprice = tonumber(stock['price']) + tonumber(stock['price']) * percentchange
         local updateprice = mariadb_prepare(sql, "UPDATE stocks set price = '?' where id = '?'", newprice, stock['id'])
         print("Updated " .. stock['name'] .. ' to ' .. '$' .. newprice)
@@ -114,7 +114,7 @@ end)
 CreateTimer(function() 
     local query = mariadb_prepare(sql, "SELECT * FROM stocks;")
     mariadb_async_query(sql, query, HandleStockPriceChange)
-end, 600000)
+end, 300000 )
 
 
 AddCommand('wealth', function(player)
