@@ -96,19 +96,16 @@ AddRemoteEvent("SetupMedicUniformOnStreamIn", function(player, otherplayer)
 end)
 
 AddRemoteEvent("StopMedicJob", function(player,spawncar)
-    if PlayerData[player].medic == 0 then
-	return CallRemoteEvent(player, "MakeNotification", _("not_whitelisted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
-    end
     if PlayerData[player].job == "medic" then
-	if PlayerData[player].job_vehicle ~= nil then
-	    DestroyVehicle(PlayerData[player].job_vehicle)
-	    DestroyVehicleData(PlayerData[player].job_vehicle)
-	    PlayerData[player].job_vehicle = nil
-	end
-	PlayerData[player].job = ""
-	CallRemoteEvent(player, "MakeNotification", _("quit_medic"), "linear-gradient(to right, #00b09b, #96c93d)")
-	RemoveUniformServer(player)
-	playerMedic[player] = nil
+		if PlayerData[player].job_vehicle ~= nil then
+			DestroyVehicle(PlayerData[player].job_vehicle)
+			DestroyVehicleData(PlayerData[player].job_vehicle)
+			PlayerData[player].job_vehicle = nil
+		end
+		PlayerData[player].job = ""
+		CallRemoteEvent(player, "MakeNotification", _("quit_medic"), "linear-gradient(to right, #00b09b, #96c93d)")
+		RemoveUniformServer(player)
+		playerMedic[player] = nil
     end
 end)
 

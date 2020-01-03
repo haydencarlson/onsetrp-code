@@ -52,7 +52,7 @@ function SelectedJob(selection, playerjob)
     if playerjob ~= "" then
         local stopaction = {
             police = function() 
-                CallRemoteEvent("StartStopPolice")
+                CallRemoteEvent("StopPoliceJob")
             end,
             medic = function()
                 CallRemoteEvent("StopMedicJob")
@@ -66,18 +66,16 @@ function SelectedJob(selection, playerjob)
             mechanic = function()
                 CallRemoteEvent("StopMechanicJob")
             end
-                
         }
         stopaction[playerjob]()
     end
-
     local action = {
         medic = function() 
             CallRemoteEvent("StartMedicJob")
         end,
         delivery = function() SetPlayerClothingPreset(GetPlayerId(), 5) end,
         police = function() 
-            CallRemoteEvent("StartStopPolice")
+            CallRemoteEvent("StartPoliceJob")
         end,
         thief = function()
             CallRemoteEvent("StartThiefJob")

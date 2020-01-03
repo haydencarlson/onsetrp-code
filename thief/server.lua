@@ -29,29 +29,37 @@ AddRemoteEvent("StartThiefJob", function(player)
     PlayerData[player].job = "thief"
 end)
 
+AddRemoteEvent("StopThiefJob", function(player)
+    PlayerData[player].job = ""
+end)
+
 AddRemoteEvent("PickOpenDoor", function(player)
     if PlayerData[player].job == "thief" then
-        local nearestdoor = GetNearestDoor(player)
-        if globaldoors[nearestdoor] ~= nil then
-            AddPlayerChatAll('<span color="#ff0000">' .. GetPlayerName(player) .. 'is hitting the bank vault. Stop them from stealing the banks money</>')
-            LockPickAnimation(player)
-            pickanimationtimer = CreateTimer(LockPickAnimation, 2000, player)
-            CallEvent("bankRob", player)
-            CallRemoteEvent(player, "MakeNotification", _("picking_door"), "linear-gradient(to right, #00b09b, #96c93d)")
-            Delay(60000, function() 
-                DestroyTimer(pickanimationtimer)
-                SetPlayerAnimation(player, "STOP")
-                globaldoors[nearestdoor].locked = false
-                CallRemoteEvent(player, "MakeNotification", _("door_picklocked"), "linear-gradient(to right, #00b09b, #96c93d)")
-                Delay(60000, function()
-                    if IsDoorOpen(nearestdoor) then
-                        SetDoorOpen(nearestdoor, false)
-                    end
-                    globaldoors[nearestdoor].locked = true
+        if vaultTimer <= 0 then
+            local nearestdoor = GetNearestDoor(player)
+            if globaldoors[nearestdoor] ~= nil then
+                AddPlayerChatAll('<span color="#ff0000">' .. GetPlayerName(player) .. ' is hitting the bank vault. Stop them from stealing the banks money</>')
+                LockPickAnimation(player)
+                pickanimationtimer = CreateTimer(LockPickAnimation, 2000, player)
+                CallEvent("bankRob", player)
+                CallRemoteEvent(player, "MakeNotification", _("picking_door"), "linear-gradient(to right, #00b09b, #96c93d)")
+                Delay(60000, function() 
+                    DestroyTimer(pickanimationtimer)
+                    SetPlayerAnimation(player, "STOP")
+                    globaldoors[nearestdoor].locked = false
+                    CallRemoteEvent(player, "MakeNotification", _("door_picklocked"), "linear-gradient(to right, #00b09b, #96c93d)")
+                    Delay(60000, function()
+                        if IsDoorOpen(nearestdoor) then
+                            SetDoorOpen(nearestdoor, false)
+                        end
+                        globaldoors[nearestdoor].locked = true
+                    end)
                 end)
-            end)
+            else
+                CallRemoteEvent(player, "MakeNotification", _("cant_picklock_here"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            end
         else
-            CallRemoteEvent(player, "MakeNotification", _("cant_picklock_here"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallRemoteEvent(player, "MakeNotification", _("cant_steal_bars_now"), "linear-gradient(to right, #ff5f6d, #ffc371)")
         end
     end
 end)
@@ -84,23 +92,27 @@ AddRemoteEvent("RPNotify:ObjectInteract_trade_silver_bars", function(player, obj
 end)
 
 AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
-    local ox, oy, oz = GetObjectLocation(object)
-    local x, y, z = GetPlayerLocation(player)
-    if vaultTimer <= 0 then
-        if GetDistance3D(x, y, z, ox, oy, oz) <= 250.00 then
-            vaultTimer = 600000
-            SetPlayerAnimation(player, "PICKUP_MIDDLE")
-            Delay(1500, function() 
-                local thief = GetPlayerName(player)
-                math.randomseed(os.time())
-                random_bar_amount = math.random(20, 75)
-                AddPlayerChatAll('<span color="#ff0000">' .. thief .. ' has hit the bank vault. They have stolen ' .. random_bar_amount .. ' silver bars.' .. '</>')
-                AddInventory(player, "dirty_silver_bar", random_bar_amount)
-                CallRemoteEvent(player, "MakeNotification", _("stolen_bars"), "linear-gradient(to right, #00b09b, #96c93d)")
-            end)
+    if PlayerData[player].job == "thief" then
+        local ox, oy, oz = GetObjectLocation(object)
+        local x, y, z = GetPlayerLocation(player)
+        if vaultTimer <= 0 then
+            if GetDistance3D(x, y, z, ox, oy, oz) <= 250.00 then
+                vaultTimer = 600000
+                SetPlayerAnimation(player, "PICKUP_MIDDLE")
+                Delay(1500, function() 
+                    local thief = GetPlayerName(player)
+                    math.randomseed(os.time())
+                    random_bar_amount = math.random(20, 75)
+                    AddPlayerChatAll('<span color="#ff0000">' .. thief .. ' has hit the bank vault. They have stolen ' .. random_bar_amount .. ' silver bars.' .. '</>')
+                    AddInventory(player, "dirty_silver_bar", random_bar_amount)
+                    CallRemoteEvent(player, "MakeNotification", _("stolen_bars"), "linear-gradient(to right, #00b09b, #96c93d)")
+                end)
+            end
+        else
+            CallRemoteEvent(player, "MakeNotification", _("cant_steal_bars_now"), "linear-gradient(to right, #ff5f6d, #ffc371)")
         end
     else
-        CallRemoteEvent(player, "MakeNotification", _("cant_steal_bars_now"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, "MakeNotification", _("not_a_thief"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     end
 end)
 
