@@ -13,17 +13,9 @@ local medicPoint = {
 local medicNpcCached = {}
 local playerMedic = {}
 
-AddEvent("OnPackageStart", function()
-    for k,v in pairs(medicNpc) do
-        medicNpc[k].npc = CreateNPC(medicNpc[k].location[1], medicNpc[k].location[2], medicNpc[k].location[3],medicNpc[k].location[4])
-        CreateText3D(_("medic_job").."\n".._("press_e"), 18, medicNpc[k].location[1], medicNpc[k].location[2], medicNpc[k].location[3] + 120, 0, 0, 0)
-        table.insert(medicNpcCached, medicNpc[k].npc)
-    end
-end)
-
 AddEvent("OnPlayerSpawn", function(player)
     if(GetPlayerPropertyValue(player, "reviveHint") ~= nil) then
-	DestroyText3D(GetPlayerPropertyValue(player, "reviveHint"))
+		DestroyText3D(GetPlayerPropertyValue(player, "reviveHint"))
     end
 end)
 
