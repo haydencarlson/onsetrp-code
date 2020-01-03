@@ -396,5 +396,18 @@
     "emergency": "Emergency",
     "accepted_emergency": "Go to the Emergency waypoint",
     "end_of_emergency": "End of emergency",
-    "no_medic_online": "No medic online. Respawn in 5 seconds"
+    "no_medic_online": "No medic online. Respawn in 5 seconds",
+    "orange_juice": "Orange Juice",
+    "chicken_soup": "Chicken Soup",
+    "coca_cola": "Soft Drink",
+    "fried_chicken_rice": "Fried Chicken & Rice",
+    "coleslaw": "Coleslaw",
+    "chicken_sandwich": "Chicken Sandwich",
+    "chicken_poutine": "Chicken Poutine",
+    "chicken_breast_combo": "Chicken Breast Combo",
+    "chicken_bites": "Chicken Bites",
+    "chicken_leg": "Chicken Leg",
+    "chicken_wing": "Chicken Wing",
+    "scratch_ticket": "Scatch Ticket",
+    "scratch_ticket_random": "Lucky Scratch Ticket"
 }
