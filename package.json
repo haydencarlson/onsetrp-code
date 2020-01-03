@@ -85,12 +85,8 @@
         "stylist/client.lua",
         "licenses/client.lua",
         "transport/c_busstop.lua",
-<<<<<<< HEAD
-	"essentials/models/client.lua"
-=======
         "mechanic/client.lua",
         "medic/client.lua"
->>>>>>> f421048e4907e24ccfc3e39fa7388d9ca2eaa955
     ],
     "files": [
         "hud/speaking/speaking.png",
