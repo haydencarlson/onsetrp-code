@@ -58,6 +58,7 @@ AddEvent("OnPackageStart", function()
                     StopVehicleEngine(k)
                     VehicleData[k].fuel = 0
                 end
+                SetVehiclePropertyValue(k, "fuel", VehicleData[k].fuel, true)
             end
         end
     end, 15000)
@@ -72,6 +73,7 @@ AddEvent("OnPlayerEnterVehicle", function( player, vehicle, seat )
         return
     end
     if seat == 1 then
+        SetVehiclePropertyValue(vehicle, "fuel", VehicleData[vehicle].fuel, true)
         if VehicleData[vehicle].fuel == 0 then
             StopVehicleEngine(vehicle)
         end
@@ -101,6 +103,7 @@ AddRemoteEvent("StartRefuel", function(player, vehicle)
                 CallRemoteEvent(player, "MakeNotification", _("car_refuelled_for", price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
                 VehicleData[vehicle].fuel = 100
                 RemoveBalanceFromAccount(player, "cash", price)
+                SetVehiclePropertyValue(vehicle, "fuel", VehicleData[vehicle].fuel, true)
             end
         end
     end

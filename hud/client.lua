@@ -46,7 +46,6 @@ function updateHud(vehiclefuel)
         SetTextBoxText(VehicleFuelHud, "")
     end 
 end
-AddRemoteEvent("updateHud", updateHud)
 
 AddEvent("OnGameTick", function()
     if GetPlayerVehicle() ~= 0 then

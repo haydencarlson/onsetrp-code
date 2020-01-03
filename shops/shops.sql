@@ -29,7 +29,7 @@ INSERT INTO `shops` (`id`, `name`, `category`, `x`, `y`, `z`, `h`) VALUES
 (6, 'gunshop', 'weapons', -181943, -40882, 1163, 90),
 (7, 'gunshop', 'weapons', 206071, 193057, 1357, 180),
 (8, 'rockshop', 'mine', 67862, 184741, 535, 90),
-(9, 'drugs_sell_zone', 'drugs_sell_zone', -177344, 3673, 1992);
+(9, 'drugs_sell_zone', 'drugs_sell_zone', -177344, 3673, 1992, 90);
 
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE IF NOT EXISTS `items` (

@@ -158,17 +158,17 @@ end)
 AddRemoteEvent("StartProcessing", function(player, processzone) 
     gather = GetGatherByProcesszone(processzone)
     unprocessed_item = gatherTable[gather].gather_item
-
     if GetPlayerVehicle(player) ~= 0 then
         return
     end
     function DoProcessing(player, gather, unprocessed_item)
         if GetPlayerPropertyValue(player, 'actionInProgress') == 'false' then
-            SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
-            if PlayerData[player].inventory[unprocessed_item] == nil then
-                return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if PlayerData[player].inventory[unprocessed_item] == nil then	
+                SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
+                return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")	
             end
             if tonumber(PlayerData[player].inventory[unprocessed_item]) < 1 then
+                SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
                 return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
             else
                 CallRemoteEvent(player, "LockControlMove", true)

@@ -30,6 +30,8 @@ local hairsColor = {
     blond = { 250, 240, 190, 1 },
     black = { 0, 0, 0, 1 },
     red = { 255, 0, 0, 1 },
+	green = { 0, 255, 0, 1 },
+	blue = { 0, 0, 255, 1 },
     brown = { 139, 69, 19, 1 }
 }
 
@@ -62,7 +64,6 @@ AddRemoteEvent("ServerChangeClothes", function(player, playername, playerhairs, 
     
     CallRemoteEvent(player, "AskSpawnMenu")
     CallRemoteEvent(player, "OpenSpawnMenu", spawnLocation)
-
     PlayerData[player].created = 1
 
     for k,v in pairs(GetStreamedPlayersForPlayer(player)) do

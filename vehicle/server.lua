@@ -53,36 +53,37 @@ function OnPackageStart()
                 table.insert(vehicleToDelete, v)
             end
         end
-        for k,v in pairs(vehicleToDelete) do
-            local hasOwner = false
-            for w,z in pairs(GetAllPlayers()) do
-                if VehicleData[v] == nil then
-                    hasOwner = true
-                    break
+        if vehicleToDelete ~= nil then
+            for k,v in pairs(vehicleToDelete) do
+                local hasOwner = false
+                for w,z in pairs(GetAllPlayers()) do
+                    if VehicleData[v] == nil then
+                        hasOwner = true
+                        break
+                    end
+		            if PlayerData[z] == nil then
+                        goto continue
+                    end
+                    if PlayerData[z].accountid == 0 or PlayerData[z].accountid == nil then
+                        goto continue
+                    end
+                    if VehicleData[v].owner == PlayerData[z].accountid then
+                        hasOwner = true
+                        print(VehicleData[v].owner)
+                        print(PlayerData[z].accountid )
+                        break
+                    end
+		            ::continue::
                 end
-		if PlayerData[z] == nil then
-                    goto continue
+                if not hasOwner then
+                    if VehicleData[v].garageid ~= 0 then
+                        local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=1 WHERE `id` = ?;",
+                        VehicleData[v].garageid)
+                        mariadb_async_query(sql, query)
+                    end
+                    DestroyVehicleData(v)
+                    DestroyVehicle(v)
                 end
-                if PlayerData[z].accountid == 0 or PlayerData[z].accountid == nil then
-                    goto continue
-                end
-                if VehicleData[v].owner == PlayerData[z].accountid then
-                    hasOwner = true
-                    print(VehicleData[v].owner)
-                    print(PlayerData[z].accountid )
-                    break
-                end
-		::continue::
-            end
-            if not hasOwner then
-                if VehicleData[v].garageid ~= 0 then
-                    local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=1 WHERE `id` = ?;",
-                    VehicleData[v].garageid
-                    )
-                    mariadb_async_query(sql, query)
-                end
-                DestroyVehicleData(v)
-                DestroyVehicle(v)
             end
         end
         print("All vehicle have been cleaned up !")

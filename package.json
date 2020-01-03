@@ -43,10 +43,11 @@
         "idcard/server.lua",
 	    "essentials/wanted/server.lua",
 	    "essentials/interactions/server.lua",
-        "noclip/server.lua",
         "stylist/server.lua",
         "licenses/server.lua",
-        "transport/s_busstop.lua"
+        "transport/s_busstop.lua",
+        "mechanic/server.lua",
+        "medic/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -81,11 +82,15 @@
         "idcard/client.lua",
 	    "essentials/wanted/client.lua",
 	    "essentials/interactions/effects.lua",
-        "noclip/client.lua",
         "stylist/client.lua",
         "licenses/client.lua",
         "transport/c_busstop.lua",
+<<<<<<< HEAD
 	"essentials/models/client.lua"
+=======
+        "mechanic/client.lua",
+        "medic/client.lua"
+>>>>>>> f421048e4907e24ccfc3e39fa7388d9ca2eaa955
     ],
     "files": [
         "hud/speaking/speaking.png",

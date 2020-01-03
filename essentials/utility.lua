@@ -51,14 +51,17 @@ function OnPackageStart(player)
 			local delivery = PlayerData[v].job == "delivery"
 			local robber = PlayerData[v].job == "thief"
 			local citizen = PlayerData[v].job == "citizen" or PlayerData[v].job == ""
+			local mechanic = PlayerData[v].job == "mechanic"
 			if police then
-				amount = 500
+				amount = 1000
 			elseif medic then
-				amount = 400
+				amount = 600
 			elseif citizen then
 				amount = 150
 			elseif delivery then
-				amount = 250
+				amount = 500
+			elseif mechanic then
+				amount = 700
 			end
 
 			AddBalanceToAccount(v, "cash", amount) 

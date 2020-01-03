@@ -14,19 +14,23 @@ JobsTable = {
 text = {
     medic = {
         short_desc = 'Providing services to the injured',
-        long_desc = 'As a medic you will be in charge of helping the injured. When someone needs your help go help them!'
+        long_desc = 'As a medic you will be in charge of helping the injured. When someone needs your help go help them! Push F3 to bring up your medic menu. You can revive someone who died by pushing E'
     },
     delivery = {
         short_desc = 'Deliver packages to earn your pay',
-        long_desc = 'Travel to the delivery job, you can find it on your GPS. As a delivery driver you will be driving the work vehicle and completing deliveries. See your GPS for the location.'
+        long_desc = 'Travel to the delivery job, you can find it on your GPS. As a delivery driver you will be driving the work vehicle and completing deliveries. See your GPS for the location. Push F3 once started your job to bring up the delivery menu. From here you can set the next delivery which will show a waypoint on your map. Once you are at the delivery point select finish delivery from the menu to finish.'
     },
     police = {
         short_desc = "Become a police officer",
-        long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car. As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
+        long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car (You can use GPS). As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
     },
     thief = {
         short_desc = "Mug and Rob to make your living",
-        long_desc = "Push F3 to open your thief menu. Use the tools of your trade to rob and collect cash. Get caught, go to jail. High risk, high reward."
+        long_desc = "Push F3 to open your thief menu. Use the tools of your trade to rob and collect cash. Get caught, go to jail. High risk, high reward. Using your thief menu you can set a waypoint to the big bank to rob the bank vault, use your picklock on the vault to crack it open. Exchange the silver bars at the buyer for some cash"
+    },
+    mechanic = {
+        short_desc = "In charge of repairing vehicles",
+        long_desc = "Push F3 to open your mechanic menu. When you are near a car you can select repair vehicle to repair the players vehicle."
     }
 }
 
@@ -67,16 +71,24 @@ function GetJobGuyByObject(jobguyobject)
 end
 
 function JobSelected(player, selection)
-    PlayerData[player].job = ""
-    CallRemoteEvent(player, "CUI:Close", "job_selection", true)
-    CallRemoteEvent(player, "SelectedJob", selection, PlayerData[player].job)
-    if selection ~= "police" then
-        CallRemoteEvent(player, "MakeNotification", "Your new job: " .. selection, "linear-gradient(to right, #00b09b, #96c93d)")
+    if selection ~= PlayerData[player].job then
+        CallRemoteEvent(player, "CUI:Close", "job_selection", true)
+        CallRemoteEvent(player, "SelectedJob", selection, PlayerData[player].job)
+        if selection ~= "police" then
+            CallRemoteEvent(player, "MakeNotification", "Your new job: " .. selection, "linear-gradient(to right, #00b09b, #96c93d)")
+        end
+        CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
+        CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
+        CallRemoteEvent(player, "CUI:AddOption", 'Close', 'Please read', 'Read the information provided for your job', 'Close')
+        CallRemoteEvent(player, "RPNotify:HUDEvent", "job", selection)
+        CallRemoteEvent(player, "RPNotify:CameraTutorial", selection)
+    else
+        CallRemoteEvent(player, "MakeNotification", "Your job is already: " .. selection, "linear-gradient(to right, #ff5f6d, #ffc371)")
     end
-    CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
-    CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
-    CallRemoteEvent(player, "CUI:Show", "job_information", true)
-    CallRemoteEvent(player, "RPNotify:HUDEvent", "job", selection)
+end
+
+function CloseJobInformation(player)
+    CallRemoteEvent(player, "CUI:Close", "job_information", true)
 end
 
 function ShowSelectJob(player) 
@@ -89,7 +101,13 @@ function ShowSelectJob(player)
     CallRemoteEvent(player, "CUI:Show", "job_selection", true)
 end
 
+AddRemoteEvent("ShowJobInformation", function(player)
+    CallRemoteEvent(player, "CUI:Show", "job_information", true)
+end)
+
+AddRemoteEvent("ShowSelectJob", ShowSelectJob)
 AddRemoteEvent("CUI:OptionClick_job_menu", JobSelected)
+AddRemoteEvent("CUI:OptionClick_job_information", CloseJobInformation)
 
 AddEvent("OnNPCDamage", function(npc)
     SetNPCHealth( npc, 100 )
