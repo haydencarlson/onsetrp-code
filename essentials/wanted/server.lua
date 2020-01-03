@@ -1,10 +1,5 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
-
-AddCommand("want", function(player)
-    CallEvent("makeWanted", player)
-end)
-
 AddEvent("makeWanted", function(player)
    local wanted = GetPlayerPropertyValue(player, "isWanted")
     playername = GetPlayerName(player)
