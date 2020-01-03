@@ -41,7 +41,7 @@ function OnPlayerDeath(player, instigator)
     
     if player == instigator then 
         AddPlayerChat(player,  death)  
-    else if IsCopInRange(x,y,z) then
+    elseif IsCopInRange(x,y,z) then
         CallEvent(instigator, "makeWanted")
     else
         AddPlayerChat(player,  message)
