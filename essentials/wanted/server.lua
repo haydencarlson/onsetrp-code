@@ -1,12 +1,22 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
+
+AddCommand("want", function(player)
+    CallEvent("makeWanted", player)
+end)
+
 AddEvent("makeWanted", function(player)
+    playername = GetPlayerName(player)
+    name = '(Criminal) '..playername
+    SetPlayerName(player, name)
     SetPlayerPropertyValue(player, "isWanted", 1, true)
     CallRemoteEvent(player, "MakeNotification", _("make_wanted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+    
 
     Delay(80000, function()
         SetPlayerPropertyValue(player, "isWanted", 0, true)
         CallRemoteEvent(player, "MakeNotification", _("bank_rob"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        SetPlayerName(player, playername)
     end)
 
 end)

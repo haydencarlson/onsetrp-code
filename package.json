@@ -133,6 +133,7 @@
         "idcard/id.html",
         "idcard/id.js",
         "idcard/id.css",
-        "idcard/Cedarville-Cursive.ttf"
+        "idcard/Cedarville-Cursive.ttf",
+	"essentials/models/lamboav/content/lamboav.pak"
     ]
 }
