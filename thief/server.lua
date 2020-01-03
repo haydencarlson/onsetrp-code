@@ -1,5 +1,7 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 vaultTimer = 0 
+vaultLockProgress = 0
+local vaultProgressText 
 AddEvent("OnPackageStart", function()
     bankenterobject = CreateObject(340, 191911, 198230, 1309)
     SetObjectPropertyValue(bankenterobject, "action", "bankenter", true)
@@ -16,6 +18,8 @@ AddEvent("OnPackageStart", function()
     bartradernpc = CreateNPC(151589, 203814, 363, 240)
     SetNPCPropertyValue(bartradernpc, "action", "trade_silver_bars", true)
     CreateText3D(_("press_e"), 18, 151584, 203722, 380, 0, 0, 0)
+
+    vaultProgressText = CreateText3D("Picklock Progress: " .. vaultLockProgress .. " %", 18, 185145.328125, 203271.4375, 160.6325378418, 0, 0, 0)
 end)
 
 AddEvent("OnPlayerInteractDoor", function( player, door, bWantsOpen )
@@ -34,27 +38,36 @@ AddRemoteEvent("StopThiefJob", function(player)
 end)
 
 AddRemoteEvent("PickOpenDoor", function(player)
-    if PlayerData[player].job == "thief" then
+    if PlayerData[player].job == "thief" and GetPlayerPropertyValue(player, "actionInProgress") == 'false' then
         if vaultTimer <= 0 then
             local nearestdoor = GetNearestDoor(player)
             if globaldoors[nearestdoor] ~= nil then
-                AddPlayerChatAll('<span color="#ff0000">' .. GetPlayerName(player) .. ' is hitting the bank vault. Stop them from stealing the banks money</>')
+                if vaultLockProgress == 0 then
+                    AddPlayerChatAll('<span color="#ff0000">' .. GetPlayerName(player) .. ' is hitting the bank vault. Stop them from stealing the banks money</>')
+                end
+                SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
                 LockPickAnimation(player)
-                pickanimationtimer = CreateTimer(LockPickAnimation, 2000, player)
                 CallEvent("bankRob", player)
-                CallRemoteEvent(player, "MakeNotification", _("picking_door"), "linear-gradient(to right, #00b09b, #96c93d)")
-                Delay(60000, function() 
-                    DestroyTimer(pickanimationtimer)
-                    SetPlayerAnimation(player, "STOP")
+                if vaultLockProgress + 5 < 100 then
+                    Delay(2000, function()
+                        vaultLockProgress = vaultLockProgress + 5
+                        SetText3DText(vaultProgressText, "Picklock Progress: " .. vaultLockProgress .. " %")
+                        SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
+                    end)
+                else
+                    SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
+                    SetText3DText(vaultProgressText, "Picklock Progress: 100 %")
                     globaldoors[nearestdoor].locked = false
                     CallRemoteEvent(player, "MakeNotification", _("door_picklocked"), "linear-gradient(to right, #00b09b, #96c93d)")
                     Delay(60000, function()
+                        SetText3DText(vaultProgressText, "Picklock Progress: 0 %")
+                        vaultLockProgress = 0
                         if IsDoorOpen(nearestdoor) then
                             SetDoorOpen(nearestdoor, false)
                         end
                         globaldoors[nearestdoor].locked = true
                     end)
-                end)
+                end
             else
                 CallRemoteEvent(player, "MakeNotification", _("cant_picklock_here"), "linear-gradient(to right, #ff5f6d, #ffc371)")
             end
@@ -82,7 +95,7 @@ AddRemoteEvent("RPNotify:ObjectInteract_trade_silver_bars", function(player, obj
     local total_silver_bars = PlayerData[player]['inventory']['dirty_silver_bar']
     if total_silver_bars ~= nil then
         math.randomseed(os.time())
-        random_bar_amount = math.random(50, 100)
+        random_bar_amount = math.random(50, 200)
         AddBalanceToAccount(player, "cash", random_bar_amount * total_silver_bars)
         RemoveInventory(player, "dirty_silver_bar", total_silver_bars)
         CallRemoteEvent(player, "MakeNotification", _("silver_bars_sold"), "linear-gradient(to right, #00b09b, #96c93d)")
@@ -102,7 +115,7 @@ AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
                 Delay(1500, function() 
                     local thief = GetPlayerName(player)
                     math.randomseed(os.time())
-                    random_bar_amount = math.random(20, 75)
+                    random_bar_amount = math.random(20, 100)
                     AddPlayerChatAll('<span color="#ff0000">' .. thief .. ' has hit the bank vault. They have stolen ' .. random_bar_amount .. ' silver bars.' .. '</>')
                     AddInventory(player, "dirty_silver_bar", random_bar_amount)
                     CallRemoteEvent(player, "MakeNotification", _("stolen_bars"), "linear-gradient(to right, #00b09b, #96c93d)")
