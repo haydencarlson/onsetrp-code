@@ -25,6 +25,9 @@ AddEvent("makeWanted", function(player)
 end)
 
 AddEvent("bankRob", function(player)
+    local wanted = GetPlayerPropertyValue(player, "isWanted")
+    if wanted == 1 then
+    else
     SetPlayerPropertyValue(player, "isWanted", 1, true)
     AddPlayerChat(player, "You are robbing the bank.")
 
@@ -32,7 +35,7 @@ AddEvent("bankRob", function(player)
         SetPlayerPropertyValue(player, "isWanted", 0, true)
         AddPlayerChat(player, "You successfully escaped the bank robbery.")
     end)
-
+  end
 end)
 
 function OnPlayerDeath(player, instigator)
