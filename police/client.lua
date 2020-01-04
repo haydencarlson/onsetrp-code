@@ -145,17 +145,6 @@ AddEvent("OnKeyPress", function(key)
     end
 end)
 
-AddEvent("OnGameTick", function()
-    if(GetPlayerPropertyValue(GetPlayerId(), "cuffed")) then
-		if(GetPlayerMovementSpeed() > 0 and GetPlayerMovementMode() ~= 1) then
-	    	CallRemoteEvent("DisableMovementForCuffedPlayer")
-		else
-	    	local x, y, z = GetPlayerLocation()
-	    	CallRemoteEvent("UpdateCuffPosition", x, y, z)
-		end
-    end
-end)
-
 AddEvent("OnPlayerDeath", function(player, instigator)
     if(GetPlayerPropertyValue(GetPlayerId(), "cuffed")) then
 	CallRemoteEvent("FreeHandcuffPlayer")
