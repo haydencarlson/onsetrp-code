@@ -2,18 +2,19 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 
 function OnPlayerChat(player, message)
     -- Region message
-    local streamedPlayers = GetStreamedPlayersForPlayer(player)
+    local player_who_sent = player
+    local streamedPlayers = GetStreamedPlayersForPlayer(player_who_sent)
+
+    local message_action = {
+        [0] = '<span>'..GetPlayerName(player)..':</> '..message,
+        [1] = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
+    }
     for k,v in pairs(streamedPlayers) do
-        if tonumber (PlayerData[player].admin) == 1 then
-            message = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
-            AddPlayerChat(k, message)
-        else
-            message = '<span>'..GetPlayerName(player)..':</> '..message
+        local message = message_action[PlayerData[player].admin]
         AddPlayerChat(k, message)
-        end
     end
 end
-
+AddEvent("OnPlayerChat", OnPlayerChat)
 -- Global chat
 AddCommand("g", function(player, ...)
     local args = { ... }
