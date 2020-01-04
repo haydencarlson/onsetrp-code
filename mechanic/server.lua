@@ -1,6 +1,3 @@
-
-
-
 local MechanicPickup
 local vehicleColors = {
     black = '000000',
@@ -20,13 +17,15 @@ local vehicleColors = {
 AddEvent("OnPackageStart", function()
     MechanicPickup = CreatePickup(336, 210791.96875, 175153.03125, 1307.1500244141)
     CreateText3D("Mechanic Vehicle Modder" .. "\n" .. "Drive in car" , 18, 210791.96875, 175153.03125, 1307.1500244141, 0, 0, 0)
-    
 end)
 
 AddRemoteEvent("StartMechanicJob", function(player) 
     PlayerData[player].job = 'mechanic'
 end)
 
+AddRemoteEvent("StopMechanicJob", function(player)
+    PlayerData[player].job = ''
+end)
 AddRemoteEvent("ApplyVehicleMod", function(player, mod, color_name) 
     local vehicle = GetPlayerVehicle(player)
     if vehicle ~= 0 then
