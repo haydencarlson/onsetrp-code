@@ -13,6 +13,7 @@ function OnPlayerChat(player, message)
         end
     end
 end
+AddEvent("OnPlayerChat", OnPlayerChat)
 
 -- Global chat
 AddCommand("g", function(player, ...)
