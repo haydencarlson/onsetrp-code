@@ -12,6 +12,7 @@ function OnPlayerChat(player, message)
     for k,v in pairs(streamedPlayers) do
         local message = message_action[PlayerData[player].admin]
         AddPlayerChat(k, message)
+        end
     end
 end
 AddEvent("OnPlayerChat", OnPlayerChat)
@@ -26,7 +27,11 @@ AddCommand("g", function(player, ...)
         end
         message = message..args[i]
     end
-    message = '['.._("global")..'] <span>'..GetPlayerName(player)..'('..player..'):</> '..message
+    if tonumber (PlayerData[player].admin) == 1 then
+        message = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
+    else
+    message = '<span color="#008000">[Global] </><span>'..GetPlayerName(player)..':</> '..message
+    end
     AddPlayerChatAll(message)
 end)
 
@@ -41,7 +46,7 @@ AddCommand("/", function(player, ...)
         end
         message = message..args[i]
     end
-    message = '['.._("admin")..'] <span>'..GetPlayerName(player)..'('..player..'):</> '..message
+    message = '<span color="#00FF7F">['.._("admin")..']</> <span>'..GetPlayerName(player)..':</> '..message
     AddPlayerChat(player, message)
     for k,v in pairs(GetAllPlayers()) do
         if PlayerData[k].admin == 1 then
@@ -60,7 +65,7 @@ AddCommand("p", function(player, toplayer, ...)
         end
         message = message..args[i]
     end 
-    message = '['.._("private_message")..'] <span>'..GetPlayerName(player)..'('..player..'):</> '..message
+    message = '<span color="#00BFFF">['.._("private_message")..']</><span>'..GetPlayerName(player)..':</> '..message
     AddPlayerChat(player, message)
     AddPlayerChat(toplayer, message)
 end)

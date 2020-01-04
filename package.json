@@ -47,7 +47,9 @@
         "licenses/server.lua",
         "transport/s_busstop.lua",
         "mechanic/server.lua",
-        "medic/server.lua"
+        "medic/server.lua",
+        "essentials/undermap/server.lua",
+        "essentials/anticheat.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -86,7 +88,8 @@
         "licenses/client.lua",
         "transport/c_busstop.lua",
         "mechanic/client.lua",
-        "medic/client.lua"
+        "medic/client.lua",
+        "essentials/undermap/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -134,6 +137,6 @@
         "idcard/id.js",
         "idcard/id.css",
         "idcard/Cedarville-Cursive.ttf",
-	"essentials/models/lamboav/content/lamboav.pak"
+	    "essentials/models/lamboav/content/lamboav.pak"
     ]
 }

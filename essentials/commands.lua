@@ -21,6 +21,6 @@ AddCommand("advert", function(player, ...)
         end
         message = message..args[i]
     end
-    message = '<span color="#ebc034">[Advert] '..GetPlayerName(player)..'('..player..'):</> '..message
+    message = '<span color="#ebc034">[Advert] '..GetPlayerName(player)..':</> '..message
     AddPlayerChatAll(message)
 end)
