@@ -63,7 +63,7 @@ function ApplyColorChange(player, vehicle, color_name)
     if GetPlayerCash(player) >= cost then
         RemoveBalanceFromAccount(player, 'cash', cost)
         SetVehicleColor(vehicle, "0x" .. vehicleColors[color_name])
-        local update_query = mariadb_prepare(sql, "UPDATE player_garage set color = '?' WHERE id = '?';", VehicleData[vehicle].garageid)
+        local update_query = mariadb_prepare(sql, "UPDATE player_garage set color = '?' WHERE id = '?';", vehicleColors[color_name], VehicleData[vehicle].garageid)
         mariadb_query(sql, update_query)
         StartVehicleEngine(vehicle)
         CallRemoteEvent(player, "MakeNotification", "The color has been changed on this vehicle", "linear-gradient(to right, #00b09b, #96c93d)")
