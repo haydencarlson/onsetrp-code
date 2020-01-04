@@ -46,7 +46,6 @@ function OnAccountLoadId(player)
 	else
 		--There is an account for this player, continue by checking if it's banned
         PlayerData[player].accountid = mariadb_get_value_index(1, 1)
-
 		local query = mariadb_prepare(sql, "SELECT FROM_UNIXTIME(bans.ban_time), bans.reason FROM bans WHERE bans.steamid = ?;",
 			tostring(GetPlayerSteamId(player)))
 

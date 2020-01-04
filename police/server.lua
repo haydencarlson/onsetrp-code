@@ -277,12 +277,6 @@ function FreeHandcuffPlayer(player)
 end
 AddRemoteEvent("FreeHandcuffPlayer", FreeHandcuffPlayer)
 
-AddRemoteEvent("DisableMovementForCuffedPlayer", function(player)
-    local pos = GetPlayerPropertyValue(player, "cuffed_pos")
-    SetPlayerLocation(player, pos[1], pos[2], pos[3])
-    CallRemoteEvent(player, "MakeNotification", _("only_walk"), "linear-gradient(to right, #ff5f6d, #ffc371)")
-end)
-
 AddRemoteEvent("UpdateCuffPosition", function(player, x, y, z)
     SetPlayerPropertyValue(player, "cuffed_pos", {x, y, z}, true)
 end)

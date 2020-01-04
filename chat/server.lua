@@ -2,9 +2,15 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 
 function OnPlayerChat(player, message)
     -- Region message
-    local streamedPlayers = GetStreamedPlayersForPlayer(player)
-    message = '<span>'..GetPlayerName(player)..'('..player..'):</> '..message
+    local player_who_sent = player
+    local streamedPlayers = GetStreamedPlayersForPlayer(player_who_sent)
+
+    local message_action = {
+        [0] = '<span>'..GetPlayerName(player)..':</> '..message,
+        [1] = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
+    }
     for k,v in pairs(streamedPlayers) do
+        local message = message_action[PlayerData[player].admin]
         AddPlayerChat(k, message)
     end
 end
@@ -57,11 +63,6 @@ AddCommand("p", function(player, toplayer, ...)
     message = '['.._("private_message")..'] <span>'..GetPlayerName(player)..'('..player..'):</> '..message
     AddPlayerChat(player, message)
     AddPlayerChat(toplayer, message)
-end)
-
---
-AddCommand("kill", function(player)
-    SetPlayerHealth(player, 0)
 end)
 
 AddCommand("getpos", function(player)
