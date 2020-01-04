@@ -410,5 +410,6 @@
     "chicken_leg": "Chicken Leg",
     "chicken_wing": "Chicken Wing",
     "scratch_ticket": "Scatch Ticket",
-    "scratch_ticket_random": "Lucky Scratch Ticket"
+    "scratch_ticket_random": "Lucky Scratch Ticket",
+    "undermap": "You were automatically teleport as you were detected to be under the map."
 }
