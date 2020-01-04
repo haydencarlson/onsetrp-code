@@ -60,7 +60,6 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
             if item == "jerican" then
                 local nearestCar = GetNearestCar(player)
                 if nearestCar ~= 0 then
-                    print(VehicleData[nearestCar].fuel)
                     if VehicleData[nearestCar].fuel >= 100 then
                         AddPlayerChat(player, _("car_full"))
                     else
