@@ -17,7 +17,7 @@ function GlobalStockDataLoaded(player)
         local stock = mariadb_get_assoc(i)
         globalstocks[stock['name']] = string.format("%s ($%s)", stock['name'], string.format("%.2f", stock['price']))
     end
-    local playerstocksquery =  mariadb_prepare(sql, "SELECT * from stocks INNER JOIN player_stocks on stocks.id=player_stocks.stock_id WHERE player_id = '?';", player)
+    local playerstocksquery =  mariadb_prepare(sql, "SELECT * from stocks INNER JOIN player_stocks on stocks.id=player_stocks.stock_id WHERE player_id = '?';", PlayerData[player].accountid)
     mariadb_async_query(sql, playerstocksquery, PlayerStockDataLoaded, player, globalstocks)
 end
 
@@ -26,7 +26,7 @@ function UpdateOrCreatePlayerStock(existingstock, player, stockid, price, quanti
         local updatequery = mariadb_prepare(sql, "UPDATE player_stocks SET amount = amount + '?' WHERE id = '?';", quantity, existingstock['id'])
         mariadb_async_query(sql, updatequery)
     else
-        local insertquery = mariadb_prepare(sql, "INSERT INTO player_stocks (player_id, stock_id, amount) VALUES (?, ?, ?);", player, stockid, quantity)
+        local insertquery = mariadb_prepare(sql, "INSERT INTO player_stocks (player_id, stock_id, amount) VALUES (?, ?, ?);", PlayerData[player].accountid, stockid, quantity)
         mariadb_async_query(sql, insertquery)
     end
     RemoveBalanceFromAccount(player, "cash", price * quantity)
@@ -50,7 +50,7 @@ function SingleStockDataLoaded(player, quantity, side)
         local price = stock['price']
         local stockid = stock['id']
         if GetPlayerCash(player) >= tonumber(price) * tonumber(quantity) then
-            local existingstock = mariadb_prepare(sql, "SELECT * FROM player_stocks WHERE stock_id = '?' AND player_id = '?';", stockid, player)
+            local existingstock = mariadb_prepare(sql, "SELECT * FROM player_stocks WHERE stock_id = '?' AND player_id = '?';", stockid, PlayerData[player].accountid)
             mariadb_async_query(sql, existingstock, LookForExistingStockLoaded, player, stockid, price, quantity, stock['name'])
         else
             CallRemoteEvent(player, "MakeNotification", _("not_enought_cash"), "linear-gradient(to right, #ff5f6d, #ffc371)")
@@ -79,7 +79,7 @@ function HandleStockPriceChange()
         math.randomseed(os.time())
         local stock = mariadb_get_assoc(i)
         local currentprice = stock['price']
-        local percentchange = math.random(-2, 4) / 100
+        local percentchange = math.random(-3, 3) / 100
         local newprice = tonumber(stock['price']) + tonumber(stock['price']) * percentchange
         local updateprice = mariadb_prepare(sql, "UPDATE stocks set price = '?' where id = '?'", newprice, stock['id'])
         print("Updated " .. stock['name'] .. ' to ' .. '$' .. newprice)
@@ -102,7 +102,7 @@ AddRemoteEvent("BuyStocks", function(player, stock, quantity)
 end)
 
 AddRemoteEvent("SellStocks", function(player, playerstock, quantity)
-    local query = mariadb_prepare(sql, "SELECT * from stocks INNER JOIN player_stocks on stocks.id=player_stocks.stock_id WHERE player_id = '?' AND name = '?';", player, playerstock)
+    local query = mariadb_prepare(sql, "SELECT * from stocks INNER JOIN player_stocks on stocks.id=player_stocks.stock_id WHERE player_id = '?' AND name = '?';", PlayerData[player].accountid, playerstock)
 	mariadb_async_query(sql, query, SingleStockDataLoaded, player, quantity, "sell")
 end)
 
