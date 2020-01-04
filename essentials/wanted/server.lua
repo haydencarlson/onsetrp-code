@@ -1,20 +1,14 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
-
-AddCommand("want", function(player)
-    CallEvent("makeWanted", player)
-end)
-
 AddEvent("makeWanted", function(player)
-   local wanted = GetPlayerPropertyValue(player, "isWanted") 
+    local wanted = GetPlayerPropertyValue(player, "isWanted")
     playername = GetPlayerName(player)
     name = '(Criminal) '..playername
     SetPlayerName(player, name)
     if wanted == 1 then
     else
-     SetPlayerPropertyValue(player, "isWanted", 1, true)
-    CallRemoteEvent(player, "MakeNotification", _("make_wanted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
-    
+        SetPlayerPropertyValue(player, "isWanted", 1, true)
+        CallRemoteEvent(player, "MakeNotification", _("make_wanted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 
     Delay(80000, function()
         SetPlayerPropertyValue(player, "isWanted", 0, true)
@@ -46,12 +40,11 @@ function OnPlayerDeath(player, instigator)
     
     if player == instigator then 
         AddPlayerChat(player,  death)  
-    else if IsCopInRange(x,y,z) then
+    elseif IsCopInRange(x,y,z) then
         CallEvent(instigator, "makeWanted")
     else
         AddPlayerChat(player,  message)
     end
-end
 end
 AddRemoteEvent("OnPlayerDeath", OnPlayerDeath)
 
