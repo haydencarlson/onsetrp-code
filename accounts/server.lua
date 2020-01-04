@@ -46,7 +46,6 @@ function OnAccountLoadId(player)
 	else
 		--There is an account for this player, continue by checking if it's banned
         PlayerData[player].accountid = mariadb_get_value_index(1, 1)
-
 		local query = mariadb_prepare(sql, "SELECT FROM_UNIXTIME(bans.ban_time), bans.reason FROM bans WHERE bans.steamid = ?;",
 			tostring(GetPlayerSteamId(player)))
 
@@ -210,11 +209,11 @@ function OnAccountLoaded(player)
 end
 
 function setPositionAndSpawn(player, position) 
-	SetPlayerSpawnLocation(player, 211755.015625, 175760.046875, 1337, 0 )
+	SetPlayerSpawnLocation(player, 212727.4375, 175845.5, 1309.1500244141, 90)
 	if position ~= nil and position.x ~= nil and position.y ~= nil and position.z ~= nil then
 		SetPlayerLocation(player, PlayerData[player].position.x, PlayerData[player].position.y, PlayerData[player].position.z + 150) -- Pour empêcher de se retrouver sous la map
 	else
-		SetPlayerLocation(player, 211755.015625, 175760.046875, 1337)
+		SetPlayerLocation(player, 212727.4375, 175845.5, 1309.1500244141)
 	end
 end
 

@@ -16,15 +16,15 @@ function OnPackageStart()
 	LoadWebFile(HealthHud, "http://asset/onsetrp/hud/health/health.html")
     SetWebVisibility(HealthHud, WEB_HIDDEN)
     
-    VehicleSpeedHud = CreateTextBox(-15, 260, "Speed", "right" )
+    VehicleSpeedHud = CreateTextBox(-15, 260, "", "right" )
     SetTextBoxAnchors(VehicleSpeedHud, 1.0, 0.0, 1.0, 0.0)
     SetTextBoxAlignment(VehicleSpeedHud, 1.0, 0.0)
     
-    VehicleHealthHud = CreateTextBox(-15, 280, "Health", "right" )
+    VehicleHealthHud = CreateTextBox(-15, 280, "", "right" )
     SetTextBoxAnchors(VehicleHealthHud, 1.0, 0.0, 1.0, 0.0)
-	SetTextBoxAlignment(VehicleHealthHud, 1.0, 0.0)
+    SetTextBoxAlignment(VehicleHealthHud, 1.0, 0.0)
 
-    VehicleFuelHud = CreateTextBox(-15, 300, "Fuel", "right" )
+    VehicleFuelHud = CreateTextBox(-15, 300, "", "right" )
     SetTextBoxAnchors(VehicleFuelHud, 1.0, 0.0, 1.0, 0.0)
     SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
 
@@ -40,15 +40,23 @@ end
 AddEvent("OnPackageStart", OnPackageStart)
 
 function updateHud(vehiclefuel)
-    if GetPlayerVehicle() ~= 0 then
+    if GetPlayerVehicle() ~= 0 and IsPlayerInVehicle() then
         SetTextBoxText(VehicleFuelHud, _("fuel")..vehiclefuel)
     else
         SetTextBoxText(VehicleFuelHud, "")
     end 
 end
+AddRemoteEvent("updateHud", updateHud)
+
+
+AddEvent("OnPlayerLeaveVehicle", function(player, vehicle, seat) 
+    SetTextBoxText(VehicleSpeedHud, "")
+    SetTextBoxText(VehicleHealthHud, "")
+    SetTextBoxText(VehicleFuelHud, "")
+end)
 
 AddEvent("OnGameTick", function()
-    if GetPlayerVehicle() ~= 0 then
+    if GetPlayerVehicle() ~= 0 and IsPlayerInVehicle() then
         vehiclespeed = math.floor(GetVehicleForwardSpeed(GetPlayerVehicle()))
         vehiclehealth = math.floor(GetVehicleHealth(GetPlayerVehicle()))
         SetTextBoxText(VehicleSpeedHud, _("speed")..vehiclespeed.."KM/H")
