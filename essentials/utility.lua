@@ -84,23 +84,3 @@ function OnPackageStart(player)
 	end, 600000, v)
 end
 AddEvent("OnPackageStart", OnPackageStart)
-
-function vc(player, r, g, b)
-	if (r == nil or g == nil or b == nil) then
-		return AddPlayerChat(player, "Usage: /vc 220 110 55")
-	end
-
-	local vehicle = GetPlayerVehicle(player)
-
-	if (vehicle == 0) then
-		return AddPlayerChat(player, "You must be in a vehicle")
-	end
-
-	if (GetPlayerVehicleSeat(player) ~= 1) then
-		return AddPlayerChat(player, "You must be the driver of the vehicle")
-	end
-
-	SetVehicleColor(vehicle, RGB(r, g, b))
-	AddPlayerChat(player, "New vehicle color applied.")
-end
-AddCommand("vc", vc)
