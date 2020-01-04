@@ -91,6 +91,7 @@ function OnPackageStart()
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
+
 function SaveVehicleData(vehicle) 
     local query = mariadb_prepare(sql, "UPDATE player_garage SET ownerid = '?', inventory = '?' WHERE id = '?' LIMIT 1;",
     VehicleData[vehicle].owner,
@@ -98,7 +99,7 @@ function SaveVehicleData(vehicle)
     VehicleData[vehicle].garageid
     )
     
-mariadb_query(sql, query)
+    mariadb_query(sql, query)
 end
 
 function DestroyVehicleData(vehicle)
