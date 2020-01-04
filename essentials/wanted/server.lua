@@ -6,7 +6,7 @@ AddCommand("want", function(player)
 end)
 
 AddEvent("makeWanted", function(player)
-   local wanted = GetPlayerPropertyValue(player, "isWanted")
+   local wanted = GetPlayerPropertyValue(player, "isWanted") 
     playername = GetPlayerName(player)
     name = '(Criminal) '..playername
     SetPlayerName(player, name)
@@ -19,7 +19,7 @@ AddEvent("makeWanted", function(player)
     Delay(80000, function()
         SetPlayerPropertyValue(player, "isWanted", 0, true)
         CallRemoteEvent(player, "MakeNotification", _("bank_rob"), "linear-gradient(to right, #ff5f6d, #ffc371)")
-        SetPlayerName(player, playername)
+        SetPlayerName(player, PlayerData[player].name)
         end)
     end
 end)

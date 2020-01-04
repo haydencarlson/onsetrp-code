@@ -24,7 +24,7 @@ local teleportPlace = {
     wealthbank = { 211925, 191382, 1306 },
     coke_gather_zone = { 192080, -45155, 1529 },
     coke_process_zone = { 71981, 106, 1367 },
-    mining_gather_zone = { 32853, 98521, 1849 },
+    mining_gather_zone = { 181257, 222843, 675 },
     mining_process_zone = { 2427, 98041, 1497 },
     mining_sell_zone = { 21799, 137848, 1555 },
     drugs_sell_zone = { -177344, 3673, 1992 },
@@ -91,22 +91,11 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 		local args = { ... }
 		if button == 1 then
 			local chords = teleportPlace[args[1]]
-			CreateWaypoint(chords[1], chords[2], chords[3], _(args[1]))
+			if currentWaypoint ~= nil then
+				DestroyWaypoint(currentWaypoint)
+			end
+			currentWaypoint = CreateWaypoint(chords[1], chords[2], chords[3], _(args[1]))
 		end
 	end
 end)
-
-AddRemoteEvent("ClientDestroyCurrentWaypoint", function()
-    DestroyWaypoint(currentWaypoint)
-end)
-
-
-function OnKeyPress(k)
-	if k == "L" then
-		if waypointId ~= nil then
-			DestroyWaypoint(waypointId)
-		end
-	end
-end
-AddEvent("OnKeyPress", OnKeyPress)
 
