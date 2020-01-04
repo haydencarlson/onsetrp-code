@@ -30,7 +30,7 @@ text = {
     },
     mechanic = {
         short_desc = "In charge of repairing vehicles",
-        long_desc = "Push F3 to open your mechanic menu. When you are near a car you can select repair vehicle to repair the players vehicle."
+        long_desc = "Push F3 to open your mechanic menu. When you are near a car you can select repair vehicle to repair the players vehicle. Drive other peoples car into the mechanic mod spot to apply mods to their vehicle. Be sure to get money from them and it will come out of your pocket"
     }
 }
 
