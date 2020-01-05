@@ -168,7 +168,7 @@ end)
 AddRemoteEvent("OpenAdminMenu", function(teleportPlace, playersNames, weaponsIds, vehicleIds) 
     local tpPlace = {}
     for k,v in pairs(teleportPlace) do
-        tpPlace[k] = _(k)
+        tpPlace[tostring(k)] = _(k)
     end
     Dialog.setSelectLabeledOptions(teleportPlaceMenu, 1, 1, tpPlace)
     Dialog.setSelectLabeledOptions(teleportToPlayereMenu, 1, 1, playersNames)
@@ -177,12 +177,12 @@ AddRemoteEvent("OpenAdminMenu", function(teleportPlace, playersNames, weaponsIds
     Dialog.setSelectLabeledOptions(banMenu, 1, 1, playersNames)
     local weaponList = {}
     for k,v in pairs(weaponsIds) do
-        weaponList[k] = _(k)
+        weaponList[tostring(k)] = _(k)
     end
     Dialog.setSelectLabeledOptions(weaponMenu, 1, 1, weaponList)
     local vehicleList = {}
     for k,v in pairs(vehicleIds) do
-        vehicleList[k] = _(k)
+        vehicleList[tostring(k)] = _(k)
     end
     Dialog.setSelectLabeledOptions(vehicleMenu, 1, 1, vehicleList)
     Dialog.show(adminMenu)
