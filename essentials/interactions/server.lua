@@ -26,7 +26,7 @@ AddEvent("rape", function(player)
         local outcome = Random(1, 3)
         local rapehp = Random(25, 65)
         if outcome > 2 then
-            local current_health = GetPlayerHealth(player)
+            local current_health = GetPlayerHealth(victim)
             SetPlayerHealth(victim, current_health - rapehp) 
             SetPlayerHealth(instigator, 100)
             CallRemoteEvent(victim, "AidsOn")

@@ -20,6 +20,7 @@
     "silver_bars_sold": "You have sold your silver bars",
     "no_bars_to_trade": "You have no dirty silver bars",
     "not_a_thief": "Your not a thief so dont try stealing",
+    "hiv": "HIV Pill",
     "picking_door": "Attempting to pick open door",
     "cant_picklock_here": "You cant picklock here",
     "thief_menu": "Thief Menu",
@@ -411,5 +412,13 @@
     "chicken_wing": "Chicken Wing",
     "scratch_ticket": "Scatch Ticket",
     "scratch_ticket_random": "Lucky Scratch Ticket",
-    "undermap": "You were automatically teleport as you were detected to be under the map."
+    "undermap": "You were automatically teleport as you were detected to be under the map.",
+    "peach": "Peach",
+    "radio_radios_availables": "Radios availables",
+    "radio_turning_on": "The radio is turning on",
+    "radio_turning_off": "The radio is turning off",
+    "radio_station": "Station",
+    "radio_switching_radio": "Switching station",
+    "item_backpack": "Backpack",
+    "inventory_not_enough_space": "Not enough space in the inventory"
 }

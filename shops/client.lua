@@ -85,11 +85,9 @@ AddRemoteEvent("openShop", function(inventory, items, shopid)
 	local shopItems = {}
 
 	for inventoryItem, inventoryCount in pairs(inventory) do
-		-- Check if this NPC can buy this item (NPCs can only buy items they're selling)
 		for key, item in pairs(items) do
 			if inventoryItem == item.name then
-				
-				inventoryItems[key] = inventoryCount.." x ".._(inventoryItem)
+				inventoryItems[tostring(key)] = inventoryCount .. ' x ' .. _(inventoryItem)
 			end
 		end
 	end
@@ -100,7 +98,6 @@ AddRemoteEvent("openShop", function(inventory, items, shopid)
 
 	lastItems = items
 	lastShop = shopid
-
 	Dialog.setSelectLabeledOptions(shop, 1, 1, inventoryItems)
 	Dialog.setSelectLabeledOptions(shop, 2, 1, shopItems)
 	Dialog.show(shop)
