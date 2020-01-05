@@ -68,6 +68,10 @@ AddCommand("p", function(player, toplayer, ...)
     AddPlayerChat(toplayer, message)
 end)
 
+AddCommand("kill", function(player)
+    SetPlayerHealth(player, 0)
+end)
+
 AddCommand("getpos", function(player)
     local x, y, z = GetPlayerLocation(player)
     AddPlayerChat(player, "X : "..x.." Y : "..y.." Z : "..z)

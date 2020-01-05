@@ -1,8 +1,23 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
+local function GetNearestPlayer(player)
+	local x, y, z = GetPlayerLocation(player)
+    for k, v in pairs(GetStreamedPlayersForPlayer(player)) do
+        if k ~= player then
+            local x2, y2, z2 = GetPlayerLocation(k)
+            local dist = GetDistance3D(x, y, z, x2, y2, z2)
+            if dist < 150 then
+                return k
+            end
+        end
+	end
+	return 0
+end
+
+
 AddEvent("makeWanted", function(player)
     local wanted = GetPlayerPropertyValue(player, "isWanted")
-    playername = GetPlayerName(player)
+    local playername = GetPlayerName(player)
     if wanted == 1 then
     else
         name = '(Criminal) '..playername
@@ -32,24 +47,6 @@ AddEvent("bankRob", function(player)
   end
 end)
 
-function OnPlayerDeath(player, instigator)
-    local playersinrange = GetPlayersInRange3D(x, y, z, 250)
-    local cops_in_range = false
-    message = '<span color="#9B0700">You were killed by '..GetPlayerName(instigator)..'('..player..')</> '
-    death = '<span color="#9B0700">You played yourself!</> '
-    
-    if player == instigator then 
-        AddPlayerChat(player,  death)  
-    elseif IsCopInRange(x,y,z) then
-        CallEvent(instigator, "makeWanted")
-    else
-        AddPlayerChat(player,  message)
-    end
-end
-AddRemoteEvent("OnPlayerDeath", OnPlayerDeath)
-
-
-
 function IsCopInRange(x, y, z)
     local playersinrange = GetPlayersInRange3D(x, y, z, 250)
     for key, p in pairs(playersinrange) do
@@ -59,3 +56,38 @@ function IsCopInRange(x, y, z)
     end
     return false
 end
+
+
+AddEvent("arrest", function(player)
+    local instigator = player
+    local criminal = GetNearestPlayer(instigator)
+    local police = PlayerData[instigator].job == "police"
+    if criminal == 0 and police then  
+        AddPlayerChat(player, "No one is near you.")
+    elseif criminal ~= 0 then
+        local arrest = "You have arrested ".. PlayerData[criminal].name
+        local arrestcrim = "You have been arrested by ".. PlayerData[instigator].name
+        local wanted = GetPlayerPropertyValue(player, "isWanted")
+        local release = "You have been released from jail."
+        AddPlayerChat(instigator, arrest)
+        AddPlayerChat(criminal, arrestcrim)
+        if wanted == 0 then
+            AddPlayerChat(instigator, "Player is not wanted")
+        else
+           local playername = GetPlayerName(criminal)
+           local name = '(In Jail) '..playername
+            SetPlayerPropertyValue(player, "isWanted", 0, true)
+            SetPlayerName(criminal, name)
+            SetPlayerLocation(crimnial, -175307.578125, 83121.9921875, 1628.1500244141)
+                delay(120000, function(criminal)
+            SetPlayerLocation(crimnial, -171522.84375, 81275.1171875, 1628.1500244141)
+            AddPlayerChat(criminal, release)
+            SetPlayerName(criminal, playername) 
+            end, criminal)  
+        end
+    end
+end)
+
+AddCommand("arrest", function(player, instigator)
+    CallEvent("arrest", player, instigator)
+end)

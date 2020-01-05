@@ -12,10 +12,23 @@ local function GetNearestPlayer(player)
 	return 0
 end
 
+
+function IsCopInRange(x, y, z)
+    local playersinrange = GetPlayersInRange3D(x, y, z, 250)
+    for key, p in pairs(playersinrange) do
+        if PlayerData[p].job == 'police' then
+            return true
+        end
+    end
+    return false
+end
+
 AddEvent("rape", function(player)
     local instigator = player
+    local nojob = PlayerData[player].job == ""
+    local citizen = PlayerData[player].job == "citizen"
     local victim = GetNearestPlayer(instigator)
-    if victim == 0 then   
+    if victim == 0 and nojob or citizen then   
         AddPlayerChat(player, "No one is near you.")
     elseif victim ~= 0 then
         local rapefail = "You have failed to rape ".. PlayerData[victim].name
@@ -36,7 +49,9 @@ AddEvent("rape", function(player)
             SetPlayerAnimation(victim, "SIT01")
             CallRemoteEvent(instigator, "LockControlMove", true)
             CallRemoteEvent(victim, "LockControlMove", true)
+           if IsCopInRange(x,y,z) then
             CallEvent("makeWanted", instigator)
+           end
             delay(5000, function()
                 SetPlayerAnimation(victim, 'STOP')
                 CallRemoteEvent(instigator, "LockControlMove", false)
@@ -63,4 +78,43 @@ AddCommand("rfo", function(player)
         
     CallRemoteEvent(player, "AidsOff")
 
+end)
+
+AddEvent("rob", function(player)
+    local instigator = player
+    local victim = GetNearestPlayer(instigator)
+    local job = PlayerData[instigator].job == "thief"
+    if victim == 0 and job then  
+        AddPlayerChat(player, "No one is near you.")
+    elseif victim ~= 0 then
+        local outcome = Random(1, 3)
+        local robfail = "You have failed to rob ".. PlayerData[victim].name
+        local robfailvic = "You feel your pockets move slightly.."
+        local robsuc = "You have robbed "..money.." from ".. PlayerData[victim].name
+        local robsucvic = "Your pockets feel lighter."
+        if outcome > 2 then
+            local current_money_victim = PlayerData[victim].cash
+            local current_money = PlayerData[instigator].cash
+            local money = Random(1, current_money_victim)
+            RemoveBalanceFromAccount(victim, "cash", money)
+            AddBalanceToAccount(instigator, "cash", money) 
+            AddPlayerChat(victim, robsucvic)
+            AddPlayerChat(instigator, robsuc)
+            SetPlayerAnimation(instigator, "HANDSHAKE")
+            CallRemoteEvent(instigator, "LockControlMove", true)
+            if IsCopInRange(x,y,z) then
+                CallEvent("makeWanted", instigator)
+               end
+            delay(2500, function()
+                CallRemoteEvent(instigator, "LockControlMove", false)
+            end)
+        else
+            AddPlayerChat(instigator, robfail)
+            AddPlayerChat(victim, robfailvic)
+        end
+    end
+end)
+
+AddCommand("rob", function(player, instigator)
+    CallEvent("rob", player, instigator)
 end)
