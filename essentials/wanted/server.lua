@@ -3,10 +3,10 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 AddEvent("makeWanted", function(player)
     local wanted = GetPlayerPropertyValue(player, "isWanted")
     playername = GetPlayerName(player)
-    name = '(Criminal) '..playername
-    SetPlayerName(player, name)
     if wanted == 1 then
     else
+        name = '(Criminal) '..playername
+        SetPlayerName(player, name)
         SetPlayerPropertyValue(player, "isWanted", 1, true)
         CallRemoteEvent(player, "MakeNotification", _("make_wanted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 
