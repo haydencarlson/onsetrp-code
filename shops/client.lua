@@ -42,7 +42,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 				if args[2] == "" or math.floor(args[2]) < 1 then
 					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 				else
-					AddPlayerChat(args[1])
 					CallRemoteEvent("ShopSell", lastShop, lastItems[tonumber(args[1])], math.floor(args[2]))
 				end
 			end
