@@ -1,6 +1,33 @@
 local frozen = {}
 local freezeTimer = 0
 
+local function IsCopInRange(x, y, z)
+	local playersinrange = GetPlayersInRange3D(x, y, z, 250)
+	for key, p in pairs(playersinrange) do
+        if PlayerData[p].job == 'police' then
+			return true
+        end
+    end
+    return false
+end
+
+function OnPlayerDeath(player, instigator)
+    message = '<span color="#9B0700">You were killed by '..GetPlayerName(instigator)..'</>'
+    death = '<span color="#9B0700">You played yourself!</> '
+    local x, y, z = GetPlayerLocation(instigator)
+	if player == instigator then 
+		AddPlayerChat(player,  death)
+	elseif IsCopInRange(x, y, z) then
+		print('inside cop is in range')
+        CallEvent(instigator, "makeWanted")
+    else
+        AddPlayerChat(player,  message)
+    end
+end
+AddRemoteEvent("OnPlayerDeath", OnPlayerDeath)
+
+AddEvent("OnPlayerDeath", OnPlayerDeath)
+
 AddCommand("tips", function(player)
 	local tips = {
 		'<span color="#575757"> Press F3 when you have a job to access your job menu </>',
