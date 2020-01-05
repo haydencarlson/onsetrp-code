@@ -163,6 +163,7 @@ AddRemoteEvent("StartProcessing", function(player, processzone)
     end
     function DoProcessing(player, gather, unprocessed_item)
         if GetPlayerPropertyValue(player, 'actionInProgress') == 'false' then
+            SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
             if PlayerData[player].inventory[unprocessed_item] == nil then	
                 SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
                 return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")	
