@@ -155,6 +155,7 @@ function spawnCarServerLoaded(player)
         local modelid = math.tointeger(result["modelid"])
         local color = tostring(result["color"])
         local name = _("vehicle_"..modelid)
+        local nos_equipped = math.tointeger(result['nos_equipped'])
 
         local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=0 WHERE `id` = ?;",
         tostring(id)
@@ -177,6 +178,9 @@ function spawnCarServerLoaded(player)
                 end
                 if isSpawnable then
                     local vehicle = CreateVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4])
+                    if nos_equipped == 1 then
+                        AttachVehicleNitro(vehicle , true)
+                    end
                     SetVehicleRespawnParams(vehicle, false)
                     SetVehicleColor(vehicle, "0x"..color)
                     SetVehiclePropertyValue(vehicle, "locked", true, true)

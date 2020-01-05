@@ -467,3 +467,6 @@ INSERT INTO `roleplay`.`stocks`
   (`name`,`price`)
 VALUES
   ("Gold", 15000);
+
+alter table player_garage add column nos_equipped tinyint(1) default 0;
+alter table player_garage add column engine_level tinyint(1) default 0;
