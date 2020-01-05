@@ -108,7 +108,6 @@ AddEvent("OnPackageStart", function()
 	end
 end)
 
-
 AddEvent("OnPlayerJoin", function(player)
     CallRemoteEvent(player, "gatheringSetup", gatherZoneCached, processZoneCached)
 end)
