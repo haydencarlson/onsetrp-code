@@ -53,8 +53,8 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 				if args[2] == ""  or math.floor(args[2]) < 1 then
 					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 				else
-                    CallRemoteEvent("UseInventory", args[1], math.floor(args[2]))
-			CallRemoteEvent("UseInventory2", args[1], math.floor(args[2]))
+                    CallRemoteEvent("UseInventory2", args[1], math.floor(args[2]))
+			        -- CallRemoteEvent("UseInventory2", args[1], math.floor(args[2]))
 				end
 			end
         end
