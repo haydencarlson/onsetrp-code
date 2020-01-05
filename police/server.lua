@@ -267,9 +267,15 @@ function HandcuffPlayer(player, otherPlayer, x, y, z)
     SetPlayerPropertyValue(otherPlayer, "cuffed", true, true)
     SetPlayerPropertyValue(otherPlayer, "cuffed_pos", {x, y, z}, true)
     Delay(1000, function(x)
-	SetPlayerAnimation(otherPlayer, "CUFF")
+		SetPlayerAnimation(otherPlayer, "CUFF")
     end)
 end
+
+AddRemoteEvent("DisableMovementForCuffedPlayer", function(player)	
+    local pos = GetPlayerPropertyValue(player, "cuffed_pos")	
+    SetPlayerLocation(player, pos[1], pos[2], pos[3])	
+    CallRemoteEvent(player, "MakeNotification", _("only_walk"), "linear-gradient(to right, #ff5f6d, #ffc371)")	
+end)
 
 function FreeHandcuffPlayer(player)
     SetPlayerAnimation(player, "STOP")

@@ -1,11 +1,9 @@
-# Onset RP Framework
-
-Roleplay framework for the game [Onset](https://store.steampowered.com/app/1105810/Onset/)
+# How to install
 
 ## Host Requirements
 
 - Windows / Linux Host
-- MariaDB 10.4+ (database on lower version need to be tweaked)
+- MariaDB/MySQL Server
 
 ## Packages requirements (They need to be put in orders and before the framework in the config file)
 
@@ -22,8 +20,3 @@ Roleplay framework for the game [Onset](https://store.steampowered.com/app/11058
 - remove default in your server_config.json file.
 - configure misc/s_database.json with your MariaDB credentials
 - restart your onset server.
-
-## More information / Support
-
-- [Discord](https://discord.gg/ejRhqMF)
-- [Twitch](https://twitch.tv/frederiic2ec)
