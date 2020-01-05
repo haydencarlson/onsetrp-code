@@ -18,7 +18,7 @@ AddRemoteEvent("ShowIdCard", function(player)
     
 end)
 
-function GetNearestPlayer(player, distanceMax)
+local function GetNearestPlayer(player, distanceMax)
     local x, y, z = GetPlayerLocation(player)
     local listStreamed = GetStreamedPlayersForPlayer(player)
     local closestDistance = 50000

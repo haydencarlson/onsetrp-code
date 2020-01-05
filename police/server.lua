@@ -351,7 +351,7 @@ AddRemoteEvent("RemoveAllWeaponsOfPlayer", function(player)
     end
 end)
 
-function GetNearestPlayer(player, distanceMax)
+local function GetNearestPlayer(player, distanceMax)
     local x, y, z = GetPlayerLocation(player)
     local listStreamed = GetStreamedPlayersForPlayer(player)
     local closestDistance = 50000
