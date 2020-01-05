@@ -20,6 +20,26 @@ local policeNpcCached = {}
 local playerPolice = {}
 local policeText3D = {"police_job", "police_garage", "police_armory"}
 
+local function GetNearestPlayer(player, distanceMax)
+    local x, y, z = GetPlayerLocation(player)
+    local listStreamed = GetStreamedPlayersForPlayer(player)
+    local closestDistance = 50000
+    local otherPlayer
+    local _x, _y, _z
+    for k,v in pairs(listStreamed) do
+	    _x, _y, _z = GetPlayerLocation(v)
+	    local tmpDistance = GetDistance3D(x, y, z, _x, _y, _z)
+	    if(tmpDistance < closestDistance and v ~= player and tmpDistance < distanceMax) then
+		closestDistance = tmpDistance
+		otherPlayer = v
+	    end
+    end
+    if(otherPlayer ~= nil) then
+	return {otherPlayer, _x, _y, _z}
+    end
+    return
+end
+
 AddEvent("OnPackageStart", function()
     for k,v in pairs(policeNpc) do
         policeNpc[k].npc[1] = CreateNPC(policeNpc[k].location[1], policeNpc[k].location[2], policeNpc[k].location[3], policeNpc[k].location[4])
@@ -356,26 +376,6 @@ AddRemoteEvent("RemoveAllWeaponsOfPlayer", function(player)
 	end
     end
 end)
-
-local function GetNearestPlayer(player, distanceMax)
-    local x, y, z = GetPlayerLocation(player)
-    local listStreamed = GetStreamedPlayersForPlayer(player)
-    local closestDistance = 50000
-    local otherPlayer
-    local _x, _y, _z
-    for k,v in pairs(listStreamed) do
-	    _x, _y, _z = GetPlayerLocation(v)
-	    local tmpDistance = GetDistance3D(x, y, z, _x, _y, _z)
-	    if(tmpDistance < closestDistance and v ~= player and tmpDistance < distanceMax) then
-		closestDistance = tmpDistance
-		otherPlayer = v
-	    end
-    end
-    if(otherPlayer ~= nil) then
-	return {otherPlayer, _x, _y, _z}
-    end
-    return
-end
 
 AddRemoteEvent("GiveFineToPlayer", function(player, amount, toplayer, reason)
     if tonumber(amount) <= 0 then return end
