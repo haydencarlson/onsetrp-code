@@ -15,7 +15,6 @@ function OnPlayerChat(player, message)
     end
 end
 AddEvent("OnPlayerChat", OnPlayerChat)
-
 -- Global chat
 AddCommand("g", function(player, ...)
     local args = { ... }
