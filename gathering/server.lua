@@ -82,6 +82,11 @@ gatherTable = {
         gather_item = "fish",
         gather_tool = "fishing_rod",
     },
+    {
+        gather_zone = { 187378, 146733, 5969 },
+        gather_item = "peach",
+        pickup_animation = "PICKUP_UPPER"
+    }
 }
 
 gatherZoneCached = {}
@@ -126,6 +131,10 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
     elseif gatherTable[gather].gather_tool == "fishing_rod" then
         animation = "FISHING"
         attached_item = 1111
+    end
+
+    if gatherTable[gather].pickup_animation ~= nil then
+        animation = gatherTable[gather].pickup_animation
     else
         animation = "PICKUP_LOWER"
     end

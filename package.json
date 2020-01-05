@@ -49,7 +49,9 @@
         "mechanic/server.lua",
         "medic/server.lua",
         "essentials/undermap/server.lua",
-        "essentials/anticheat.lua"
+        "essentials/anticheat.lua",
+        "transport/s_busstop.lua",
+        "vehicle_radio/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -89,7 +91,8 @@
         "transport/c_busstop.lua",
         "mechanic/client.lua",
         "medic/client.lua",
-        "essentials/undermap/client.lua"
+        "essentials/undermap/client.lua",
+        "vehicle_radio/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
