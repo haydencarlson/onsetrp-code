@@ -15,14 +15,16 @@ end
 AddEvent("rape", function(player)
     local instigator = player
     local victim = GetNearestPlayer(instigator)
-    if victim ~= 0 then
+    if victim == 0 then   
+        AddPlayerChat(player, "No one is near you.")
+    elseif victim ~= 0 then
         local rapefail = "You have failed to rape ".. PlayerData[victim].name
         local rapefailvic = "You feel your anus expand..."
         local rapesuc = "You have raped ".. PlayerData[victim].name
         local rapesucvic = "You have been raped by " .. PlayerData[instigator].name
 
         local outcome = Random(1, 3)
-        local rapehp = Random(25, 100)
+        local rapehp = Random(25, 65)
         if outcome > 2 then
             local current_health = GetPlayerHealth(player)
             SetPlayerHealth(victim, current_health - rapehp) 
@@ -30,7 +32,16 @@ AddEvent("rape", function(player)
             CallRemoteEvent(victim, "AidsOn")
             AddPlayerChat(victim, rapesucvic)
             AddPlayerChat(instigator, rapesuc)
-
+            SetPlayerAnimation(instigator, "HANDSHAKE")
+            SetPlayerAnimation(victim, "SIT01")
+            CallRemoteEvent(instigator, "LockControlMove", true)
+            CallRemoteEvent(victim, "LockControlMove", true)
+            CallEvent("makeWanted", instigator)
+            delay(5000, function()
+                SetPlayerAnimation(victim, 'STOP')
+                CallRemoteEvent(instigator, "LockControlMove", false)
+                CallRemoteEvent(victim, "LockControlMove", false)
+            end)
         else
             AddPlayerChat(instigator, rapefail)
             AddPlayerChat(victim, rapefailvic)
