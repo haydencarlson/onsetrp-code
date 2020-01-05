@@ -47,7 +47,7 @@ AddEvent("bankRob", function(player)
   end
 end)
 
-function IsCopInRange(x, y, z)
+function IsCopInRdange(x, y, z)
     local playersinrange = GetPlayersInRange3D(x, y, z, 250)
     for key, p in pairs(playersinrange) do
         if PlayerData[p].job == 'police' then
@@ -64,25 +64,26 @@ AddEvent("arrest", function(player)
     local police = PlayerData[instigator].job == "police"
     if criminal == 0 and police then  
         AddPlayerChat(player, "No one is near you.")
-    elseif criminal ~= 0 then
+    elseif criminal ~= 0 and police then
         local arrest = "You have arrested ".. PlayerData[criminal].name
         local arrestcrim = "You have been arrested by ".. PlayerData[instigator].name
-        local wanted = GetPlayerPropertyValue(player, "isWanted")
+        local wanted = GetPlayerPropertyValue(criminal, "isWanted")
         local release = "You have been released from jail."
-        AddPlayerChat(instigator, arrest)
-        AddPlayerChat(criminal, arrestcrim)
         if wanted == 0 then
             AddPlayerChat(instigator, "Player is not wanted")
-        else
-           local playername = GetPlayerName(criminal)
-           local name = '(In Jail) '..playername
+        elseif wanted == 1 then
+            AddPlayerChat(instigator, arrest)
+            AddPlayerChat(criminal, arrestcrim)
+            local playername = GetPlayerName(criminal)
+            local name = '(In Jail) '..playername
             SetPlayerPropertyValue(player, "isWanted", 0, true)
             SetPlayerName(criminal, name)
-            SetPlayerLocation(crimnial, -175307.578125, 83121.9921875, 1628.1500244141)
-                delay(120000, function(criminal)
-            SetPlayerLocation(crimnial, -171522.84375, 81275.1171875, 1628.1500244141)
-            AddPlayerChat(criminal, release)
-            SetPlayerName(criminal, playername) 
+            SetPlayerLocation(criminal, -175307.578125, 83121.9921875, 1628.1500244141)
+            Delay(120000, function(criminal)
+                local name = PlayerData[criminal].name
+                SetPlayerLocation(criminal, -171522.84375, 81275.1171875, 1628.1500244141)
+                AddPlayerChat(criminal, release)
+                SetPlayerName(criminal, name) 
             end, criminal)  
         end
     end

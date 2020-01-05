@@ -1,11 +1,11 @@
 local frozen = {}
 local freezeTimer = 0
 
-function IsCopInRange(x, y, z)
-    local playersinrange = GetPlayersInRange3D(x, y, z, 250)
-    for key, p in pairs(playersinrange) do
+local function IsCopInRange(x, y, z)
+	local playersinrange = GetPlayersInRange3D(x, y, z, 250)
+	for key, p in pairs(playersinrange) do
         if PlayerData[p].job == 'police' then
-            return true
+			return true
         end
     end
     return false
@@ -14,12 +14,14 @@ end
 function OnPlayerDeath(player, instigator)
     message = '<span color="#9B0700">You were killed by '..GetPlayerName(instigator)..'</>'
     death = '<span color="#9B0700">You played yourself!</> '
-    if player == instigator then return
+    local x, y, z = GetPlayerLocation(instigator)
+	if player == instigator then 
 		AddPlayerChat(player,  death)
-	elseif IsCopInRange(x,y,z) then
-		CallEvent(instigator, "makeWanted")
-	else
-		AddPlayerChat(player,  message)
+	elseif IsCopInRange(x, y, z) then
+		print('inside cop is in range')
+        CallEvent(instigator, "makeWanted")
+    else
+        AddPlayerChat(player,  message)
     end
 end
 AddRemoteEvent("OnPlayerDeath", OnPlayerDeath)
