@@ -52,11 +52,11 @@ AddEvent("rape", function(player)
            if IsCopInRange(x,y,z) then
             CallEvent("makeWanted", instigator)
            end
-            delay(5000, function()
+            Delay(5000, function(instigator, victim)
                 SetPlayerAnimation(victim, 'STOP')
                 CallRemoteEvent(instigator, "LockControlMove", false)
                 CallRemoteEvent(victim, "LockControlMove", false)
-            end)
+            end, instigator, victim)
         else
             AddPlayerChat(instigator, rapefail)
             AddPlayerChat(victim, rapefailvic)
@@ -86,23 +86,24 @@ AddEvent("rob", function(player)
     local job = PlayerData[instigator].job == "thief"
     if victim == 0 and job then  
         AddPlayerChat(player, "No one is near you.")
-    elseif victim ~= 0 then
+    elseif victim ~= 0 and job then
+        local money = Random(1, current_money_victim)
         local outcome = Random(1, 3)
         local robfail = "You have failed to rob ".. PlayerData[victim].name
         local robfailvic = "You feel your pockets move slightly.."
         local robsuc = "You have robbed "..money.." from ".. PlayerData[victim].name
         local robsucvic = "Your pockets feel lighter."
-        if outcome > 2 then
+        if outcome > 2 and job then
             local current_money_victim = PlayerData[victim].cash
             local current_money = PlayerData[instigator].cash
-            local money = Random(1, current_money_victim)
+            local x, y, z = GetPlayerLocation(instigator)
             RemoveBalanceFromAccount(victim, "cash", money)
             AddBalanceToAccount(instigator, "cash", money) 
             AddPlayerChat(victim, robsucvic)
             AddPlayerChat(instigator, robsuc)
             SetPlayerAnimation(instigator, "HANDSHAKE")
             CallRemoteEvent(instigator, "LockControlMove", true)
-            if IsCopInRange(x,y,z) then
+            if IsCopInRange(x,y,z) and job then
                 CallEvent("makeWanted", instigator)
                end
             delay(2500, function()

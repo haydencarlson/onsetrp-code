@@ -13,10 +13,11 @@ end
 
 function OnPlayerDeath(player, instigator)
     message = '<span color="#9B0700">You were killed by '..GetPlayerName(instigator)..'</>'
-    death = '<span color="#9B0700">You played yourself!</> '
+	death = '<span color="#9B0700">You played yourself!</> '
+	x, y, z = GetPlayerLocation(instigator)
     if player == instigator then return
 		AddPlayerChat(player,  death)
-	elseif IsCopInRange(x,y,z) then
+	elseif IsCopInRange(x, y, z) then
 		CallEvent(instigator, "makeWanted")
 	else
 		AddPlayerChat(player,  message)
