@@ -420,5 +420,10 @@
     "radio_station": "Station",
     "radio_switching_radio": "Switching station",
     "item_backpack": "Backpack",
-    "inventory_not_enough_space": "Not enough space in the inventory"
+    "inventory_not_enough_space": "Not enough space in the inventory",
+    "lottomenu": "lottery",
+    "joinlotto": "Join the lottery",
+    "joinlottomenu": "Join lottery",
+    "lotto_amount": "Please enter a number between 1 and 150.",
+    "lottonumber": "Pick a number 1-150"
 }

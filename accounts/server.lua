@@ -262,6 +262,7 @@ function CreatePlayerData(player)
 	PlayerData[player].clothing_police = {}
 	PlayerData[player].police = 1
 	PlayerData[player].medic = 0
+	PlayerData[player].lotto_number = 0
 	PlayerData[player].inventory = { cash = 100 }
 	PlayerData[player].driver_license = 0
 	PlayerData[player].gun_license = 0
@@ -302,6 +303,17 @@ function DestroyPlayerData(player)
 
 	PlayerData[player] = nil
 	print("Data destroyed for : "..player)
+end
+
+function FindPlayerByAccountId(accountid)
+	if PlayerData[1] ~= nil then
+		for key, player in pairs(PlayerData) do
+			if tonumber(player['accountid']) == tonumber(accountid) then
+				return key
+			end
+		end
+	end
+	return false
 end
 
 function SavePlayerAccount(player)
@@ -350,3 +362,4 @@ function IsAdmin(player)
 end
 
 AddFunctionExport("isAdmin", IsAdmin)
+AddFunctionExport("FindPlayerByAccountId", FindPlayerByAccountId)

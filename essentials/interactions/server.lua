@@ -57,7 +57,7 @@ AddEvent("rape", function(player)
                 SetPlayerAnimation(victim, 'STOP')
                 CallRemoteEvent(instigator, "LockControlMove", false)
                 CallRemoteEvent(victim, "LockControlMove", false)
-            end)
+            end, instigator, victim)
         else
             AddPlayerChat(instigator, rapefail)
             AddPlayerChat(victim, rapefailvic)
@@ -88,11 +88,7 @@ AddEvent("rob", function(player)
     elseif victim ~= 0 and job then
         local outcome = Random(1, 3)
         local current_money_victim = GetPlayerCash(victim)
-        print('current money victim')
-        print(current_money_victim)
         local current_money = GetPlayerCash(instigator)
-        print('current money inst')
-        print(current_money)
         local money = Random(1, 2500)
         local robfail = "You have failed to rob ".. PlayerData[victim].name
         local robfailvic = "You feel your pockets move slightly.."
@@ -106,7 +102,7 @@ AddEvent("rob", function(player)
             AddPlayerChat(instigator, robsuc)
             SetPlayerAnimation(instigator, "HANDSHAKE")
             CallRemoteEvent(instigator, "LockControlMove", true)
-            if IsCopInRange(x,y,z) then
+            if IsCopInRange(x,y,z) and job then
                 CallEvent("makeWanted", instigator)
             end
             Delay(2500, function()
