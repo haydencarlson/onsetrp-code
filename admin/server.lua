@@ -88,9 +88,7 @@ AddRemoteEvent("ServerAdminMenu", function(player)
     if tonumber(PlayerData[player].admin) == 1 then
         playersNames = {}
         for k,v in pairs(playersIds) do
-            if PlayerData[k] == nil or PlayerData[k].name == nil or PlayerData[k].steamname == nil then
-                return
-            else
+            if PlayerData[k] ~= nil or PlayerData[k].name ~= nil or PlayerData[k].steamname ~= nil then
                 playersNames[tostring(k)] = PlayerData[k].name.." ["..PlayerData[k].steamname.."]"
                 ::continue::
             end
@@ -101,7 +99,6 @@ end)
 
 AddRemoteEvent("AdminTeleportToPlace", function(player, place)
     if tonumber(PlayerData[player].admin) ~= 1 then return end
-
     for k,v in pairs(teleportPlace) do
         if k == place then
             SetPlayerLocation(player, v[1], v[2], v[3] + 200)
