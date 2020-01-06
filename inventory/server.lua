@@ -8,7 +8,12 @@ AddRemoteEvent("ServerPersonalMenu", function(player)
     local playerList = {}
     for k,v in pairs(nearestPlayers) do
         if k ~= player then
-            playerList[tostring(k)] = GetPlayerName(k)
+            if PlayerData[k] ~= nil then 
+                local name = PlayerData[k].name
+                if name ~= nil then
+                    playerList[tostring(k)] = name
+                end
+            end
         end
     end
     local inventorySlots = GetPlayerUsedSlots(player).." / "..GetPlayerMaxSlots(player)
@@ -168,7 +173,7 @@ end)
 
 function AddInventory(player, item, amount)
     local slotsAvailables = tonumber(GetPlayerMaxSlots(player)) - tonumber(GetPlayerUsedSlots(player))
-     if slotsAvailables >= amount or item == "cash"then
+     if tonumber(slotsAvailables) >= tonumber(amount) or item == "cash"then
         if item == "item_backpack" and GetPlayerBag(player) == 1 then -- On ne peux pas acheter plusieurs sacs
             return false
         end

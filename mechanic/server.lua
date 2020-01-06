@@ -38,6 +38,9 @@ AddRemoteEvent("ApplyVehicleMod", function(player, mod, color_name)
             end,
             vehicle_nos = function(player, vehicle) 
                 ApplyNos(player, vehicle, hex)
+            end,
+            vehicle_durability = function(player, vehicle)
+                ApplyVehicleDurability(player, vehicle)
             end
         }
         upgrade_action[mod](player, vehicle, color_name)
@@ -62,6 +65,8 @@ function ApplyColorChange(player, vehicle, color_name)
     local cost = 500
     if GetPlayerCash(player) >= cost then
         RemoveBalanceFromAccount(player, 'cash', cost)
+        print(color_name)
+        print(vehicleColors[color_name])
         SetVehicleColor(vehicle, "0x" .. vehicleColors[color_name])
         local update_query = mariadb_prepare(sql, "UPDATE player_garage set color = '?' WHERE id = '?';", vehicleColors[color_name], VehicleData[vehicle].garageid)
         mariadb_query(sql, update_query)
@@ -69,6 +74,20 @@ function ApplyColorChange(player, vehicle, color_name)
         CallRemoteEvent(player, "MakeNotification", "The color has been changed on this vehicle", "linear-gradient(to right, #00b09b, #96c93d)")
     else
         CallRemoteEvent(player, "MakeNotification", "You dont have enough to respray", "linear-gradient(to right, #ff5f6d, #ffc371)")
+    end
+end
+
+function ApplyVehicleDurability(player, vehicle) 
+    local cost = 5000
+    if GetPlayerCash(player) >= cost then
+        RemoveBalanceFromAccount(player, 'cash', cost)
+        SetVehicleHealth(vehicle, 10000)
+        local update_query = mariadb_prepare(sql, "UPDATE player_garage set vehicle_durability = '?' WHERE id = '?';", '1', VehicleData[vehicle].garageid)
+        mariadb_query(sql, update_query)
+        StartVehicleEngine(vehicle)
+        CallRemoteEvent(player, "MakeNotification", "Vehicle durability increased", "linear-gradient(to right, #00b09b, #96c93d)")
+    else
+        CallRemoteEvent(player, "MakeNotification", "You dont have enough to upgrade vehicle durability", "linear-gradient(to right, #ff5f6d, #ffc371)")
     end
 end
 

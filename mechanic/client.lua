@@ -22,7 +22,7 @@ local vehicleColors = {
 AddEvent("OnTranslationReady", function()
     vehicleColorSelectMenu = Dialog.create("Vehicle Color", nil, "Choose Color", _("cancel"))
     Dialog.addSelect(vehicleColorSelectMenu, 1, "Colors", 10)
-    vehicleModMenu = Dialog.create("Vehicle Mods", nil, "Vehicle Color ($1,000)", "Add NOS ($20,000)",  _("cancel"))
+    vehicleModMenu = Dialog.create("Vehicle Mods", nil, "Vehicle Color ($1,000)", "Add NOS ($20,000)", "Vehicle Durability ($5,000)",  _("cancel"))
     mechanicMenu = Dialog.create(_("mechanic_menu"), nil, _("repair_vehicle"), _("cancel"))
 end)
 
@@ -55,6 +55,9 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
         end
         if button == 2 then
             CallRemoteEvent("ApplyVehicleMod", "vehicle_nos")
+        end
+        if button == 3 then
+            CallRemoteEvent("ApplyVehicleMod", "vehicle_durability")
         end
     end
 end)
