@@ -65,8 +65,6 @@ function ApplyColorChange(player, vehicle, color_name)
     local cost = 500
     if GetPlayerCash(player) >= cost then
         RemoveBalanceFromAccount(player, 'cash', cost)
-        print(color_name)
-        print(vehicleColors[color_name])
         SetVehicleColor(vehicle, "0x" .. vehicleColors[color_name])
         local update_query = mariadb_prepare(sql, "UPDATE player_garage set color = '?' WHERE id = '?';", vehicleColors[color_name], VehicleData[vehicle].garageid)
         mariadb_query(sql, update_query)
