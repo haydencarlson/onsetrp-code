@@ -291,6 +291,14 @@ function CreatePlayerData(player)
     print("Data created for : "..player)
 end
 
+function AddBalanceToBankAccountSQL(accountid, amount)
+	if accountid ~= nil and amount ~= nil then
+		local update_query = mariadb_prepare(sql, "UPDATE accounts set bank_balance = bank_balance + '?' where id = '?';", amount, accountid)
+		print("updating bank balance")
+		mariadb_query(sql, update_query)
+	end
+end
+
 function DestroyPlayerData(player)
 	if (PlayerData[player] == nil) then
 		return
@@ -369,3 +377,4 @@ end
 
 AddFunctionExport("isAdmin", IsAdmin)
 AddFunctionExport("FindPlayerByAccountId", FindPlayerByAccountId)
+AddFunctionExport("AddBalanceToBankAccountSQL", AddBalanceToBankAccountSQL)

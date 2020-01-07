@@ -116,6 +116,7 @@
         "notification/notification/notification.html",
         "notification/notification/toastify.js",
         "notification/notification/toastify.min.css",
+        "notification/notification/noti.mp3",
         "animation/web/images/crossarms.png",
         "animation/web/images/dab.png",
         "animation/web/images/dancing.png",
