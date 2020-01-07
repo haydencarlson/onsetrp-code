@@ -29,9 +29,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `lotteries` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PK NOT NULL,
   `winner` varchar(255) NOT NULL,
-  `status` varchar(10) NOT NULL
+  `status` varchar(10) NOT NULL,
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -51,7 +52,8 @@ CREATE TABLE `lottery_entries` (
   `id` int(11) NOT NULL,
   `accountid` int(11) NOT NULL,
   `lotto_number` int(11) NOT NULL,
-  `lottery_id` int(11) NOT NULL
+  `lottery_id` int(11) NOT NULL,
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -60,26 +62,6 @@ CREATE TABLE `lottery_entries` (
 
 INSERT INTO `lottery_entries` (`id`, `accountid`, `lotto_number`, `lottery_id`) VALUES
 (2, 35, 77, 1);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `lotteries`
---
-ALTER TABLE `lotteries`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `lottery_entries`
---
-ALTER TABLE `lottery_entries`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
 
 --
 -- AUTO_INCREMENT for table `lotteries`
