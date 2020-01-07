@@ -17,6 +17,7 @@ function OnLotteryIdFound(player, number)
 end
     
 AddCommand("lottery", function(player, number)
+    
     CallEvent("joinLotto", player, number)
 end)
 

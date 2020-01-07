@@ -300,12 +300,7 @@ function DestroyPlayerData(player)
         DestroyVehicle(PlayerData[player].job_vehicle)
         DestroyVehicleData( PlayerData[player].job_vehicle)
         PlayerData[player].job_vehicle = nil
-	end
-	
-	if PlayerData[player].backpack ~= nil then
-		DestroyObject(PlayerData[player].backpack)
-    	PlayerData[player].backpack = nil
-	end
+    end
 
 	PlayerData[player] = nil
 	print("Data destroyed for : "..player)

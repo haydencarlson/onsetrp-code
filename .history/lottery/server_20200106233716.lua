@@ -1,12 +1,31 @@
 AddEvent("joinLotto", function(player, number)
     PlayerData[player].lotto_number = number
-    message = "Your number is "..PlayerData[player].lotto_number
-    AddPlayerChat(player, message)
-    local queryid = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open';")
-    mariadb_async_query(sql, queryid, OnLotteryIdFound, player, number)
+    print("number")
+    local query = mariadb_prepare(sql, "SELECT * FROM lottery_entries")
+    mariadb_async_query(sql, query, OnSubmitLotto, player)
+    print(query)
 end)
 
-function OnLotteryIdFound(player, number)
+function OnSubmitLotto(player)
+    print("submit")
+    local lottery = mariadb_get_assoc(1)
+    local query = mariadb_prepare(sql, "SELECT * FROM lottery_entries WHERE accountid = '?' and lottery_id = '?';", PlayerData[player].accountid, lottery['id'])
+    mariadb_async_query(sql, query, OnNewEntryCheck, player)
+end
+
+function OnNewEntryCheck(player)
+    print("entry")
+    for i = 1, mariadb_get_row_count() do
+        local check = mariadb_get_assoc(i)
+        print("b4entry")
+    local queryid = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open';")
+    mariadb_async_query(sql, queryid, OnLotteryIdFound, player)
+    print("entr2y")
+end
+end
+
+function OnLotteryIdFound(player)
+    print("idf")
     local lottery = mariadb_get_assoc(1)
     local query = mariadb_prepare(sql, "INSERT INTO lottery_entries SET accountid = '?', lotto_number = '?', lottery_id = '?';",
     tostring(PlayerData[player].accountid),
@@ -14,6 +33,8 @@ function OnLotteryIdFound(player, number)
       tostring(lottery['id'])
     )
     mariadb_query(sql, query)
+    message = "Your number is "..PlayerData[player].lotto_number
+    AddPlayerChat(player, message)
 end
     
 AddCommand("lottery", function(player, number)

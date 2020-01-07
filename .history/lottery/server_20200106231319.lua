@@ -1,12 +1,24 @@
 AddEvent("joinLotto", function(player, number)
+    local query = mariadb_prepare(sql, "SELECT * FROM lottery_entries WHERE accountid = '?' and lottery_id = '?';", PlayerData[player].accountid, lottery['id'])
+    mariadb_async_query(sql, query, OnNewEntryCheck, player, number)
+end)
+
+function OnNewEntryCheck(player, number)
+    for i = 1, mariadb_get_row_count() do
+        local check = mariadb_get_assoc(i)
+        if tonumber(entry['accountid']) and tonumber(entry['lottery_id']) > 0 then
+            AddPlayerChat(player, "You already joined the lottery.")
+        else
+    local queryid = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open';")
+    mariadb_async_query(sql, queryid, OnLotteryIdFound, player, number)
+   end
+end
+end
+
+function OnLotteryIdFound(player, number)
     PlayerData[player].lotto_number = number
     message = "Your number is "..PlayerData[player].lotto_number
     AddPlayerChat(player, message)
-    local queryid = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open';")
-    mariadb_async_query(sql, queryid, OnLotteryIdFound, player, number)
-end)
-
-function OnLotteryIdFound(player, number)
     local lottery = mariadb_get_assoc(1)
     local query = mariadb_prepare(sql, "INSERT INTO lottery_entries SET accountid = '?', lotto_number = '?', lottery_id = '?';",
     tostring(PlayerData[player].accountid),
@@ -17,6 +29,8 @@ function OnLotteryIdFound(player, number)
 end
     
 AddCommand("lottery", function(player, number)
+    local query = mariadb_prepare(sql, "SELECT * FROM lottery_entries WHERE lottery_id = '?';", lottery['id'])
+    mariadb_async_query(sql, query, OnLoadedLotteryEntries)
     CallEvent("joinLotto", player, number)
 end)
 

@@ -263,7 +263,6 @@ function CreatePlayerData(player)
 	PlayerData[player].police = 1
 	PlayerData[player].medic = 0
 	PlayerData[player].lotto_number = 0
-	PlayerData[player].lotto_winner = false
 	PlayerData[player].inventory = { cash = 100 }
 	PlayerData[player].driver_license = 0
 	PlayerData[player].gun_license = 0
@@ -300,12 +299,7 @@ function DestroyPlayerData(player)
         DestroyVehicle(PlayerData[player].job_vehicle)
         DestroyVehicleData( PlayerData[player].job_vehicle)
         PlayerData[player].job_vehicle = nil
-	end
-	
-	if PlayerData[player].backpack ~= nil then
-		DestroyObject(PlayerData[player].backpack)
-    	PlayerData[player].backpack = nil
-	end
+    end
 
 	PlayerData[player] = nil
 	print("Data destroyed for : "..player)

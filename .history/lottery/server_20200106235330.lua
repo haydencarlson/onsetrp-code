@@ -2,9 +2,16 @@ AddEvent("joinLotto", function(player, number)
     PlayerData[player].lotto_number = number
     message = "Your number is "..PlayerData[player].lotto_number
     AddPlayerChat(player, message)
+    local query = mariadb_prepare(sql, "INSERT INTO lottery_entries SET accountid = '?', lotto_number = '?', lottery_id = '?';",
+    mariadb_async_query(sql, query, OnNewEntryCheck, player, number)
+end)
+
+function OnNewEntryCheck(player, number)
+    local  = mariadb_get_assoc(1)
+
     local queryid = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open';")
     mariadb_async_query(sql, queryid, OnLotteryIdFound, player, number)
-end)
+end
 
 function OnLotteryIdFound(player, number)
     local lottery = mariadb_get_assoc(1)
@@ -17,6 +24,7 @@ function OnLotteryIdFound(player, number)
 end
     
 AddCommand("lottery", function(player, number)
+    
     CallEvent("joinLotto", player, number)
 end)
 
