@@ -103,6 +103,43 @@ AddRemoteEvent("OpenPoliceMenu", function(player)
     end
 end)
 
+AddRemoteEvent("StartStopPolice", function(player)
+    if PlayerData[player].police == 0 then
+	return CallRemoteEvent(player, "MakeNotification", _("not_whitelisted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+    end
+    if PlayerData[player].job == "" then
+        if PlayerData[player].job_vehicle ~= nil then
+            DestroyVehicle(PlayerData[player].job_vehicle)
+            DestroyVehicleData(PlayerData[player].job_vehicle)
+            PlayerData[player].job_vehicle = nil
+            CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
+        else
+	    local jobCount = 0
+	    for k,v in pairs(PlayerData) do
+		if v.job == "police" then
+		    jobCount = jobCount + 1
+		end
+	    end
+	    if jobCount == 10 then
+		return CallRemoteEvent(player, "MakeNotification", _("job_full"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+	    end
+	PlayerData[player].job = "police"
+	GetUniformServer(player)
+	CallRemoteEvent(player, "MakeNotification", _("join_police"), "linear-gradient(to right, #00b09b, #96c93d)")
+	return
+    end
+    elseif PlayerData[player].job == "police" then
+        if PlayerData[player].job_vehicle ~= nil then
+            DestroyVehicle(PlayerData[player].job_vehicle)
+            DestroyVehicleData(PlayerData[player].job_vehicle)
+            PlayerData[player].job_vehicle = nil
+        end
+	CallRemoteEvent(player, "MakeNotification", _("quit_police"), "linear-gradient(to right, #00b09b, #96c93d)")
+        PlayerData[player].job = ""
+	RemoveUniformServer(player)
+    end
+end)
+
 AddRemoteEvent("OpenPoliceFineMenu", function(player)
     if PlayerData[player].job == "police" then
 	local x, y, z = GetPlayerLocation(player)

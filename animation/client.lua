@@ -1,7 +1,6 @@
 -- Based on MasterCedric (https://github.com/MasterCedric/)
 
 web = nil
-
 function OnPackageStart()
 	web = CreateWebUI(0, 0, 0, 0, 10)
 	LoadWebFile(web, "http://asset/" .. GetPackageName() .. "/animation/web/index.html")
@@ -14,18 +13,21 @@ AddEvent("OnPackageStart", OnPackageStart)
 
 function OnKeyPress(key)
 	if key == "F2" and not onSpawn and not onCharacterCreation then
-		if(GetWebVisibility(web) == 0) then
 			SetWebVisibility(web, WEB_VISIBLE)
 			ShowMouseCursor(true)
 			SetInputMode(INPUT_GAMEANDUI)
-		else
-			SetWebVisibility(web, WEB_HIDDEN)
-			ShowMouseCursor(false)
-			SetInputMode(INPUT_GAME)
-		end
 	end
 end
 AddEvent("OnKeyPress", OnKeyPress)
+
+function OnKeyRelease(key)
+	if key == "F2" and not onSpawn and not onCharacterCreation then
+	SetWebVisibility(web, WEB_HIDDEN)
+	ShowMouseCursor(false)
+	SetInputMode(INPUT_GAME)
+	end
+end
+AddEvent("OnKeyRelease", OnKeyRelease)
 
 function OnPlayerAnimation(id)
 	CallRemoteEvent("Server_OnPlayerAnimation", id)
