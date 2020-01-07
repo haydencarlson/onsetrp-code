@@ -114,7 +114,7 @@ function OnPackageStart(player)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
---[[ on steam auth ?
+
 function SetPlayerOnline(player)
 		local query = mariadb_prepare(sql, "SELECT * accounts;")
 	  mariadb_query(sql, query)
@@ -124,11 +124,10 @@ AddEvent("OnPlayerJoin", SetPlayerOnline)
 
 function OnLoadedData(player)
 	local entry = mariadb_get_assoc(1)
-	update_query = mariadb_prepare(sql, "UPDATE lotteries SET winner = '?', status = 'closed' WHERE steamid = '?';",
+	local player = FindPlayerByAccountId(entry['accountid'])
+	update_query = mariadb_prepare(sql, "UPDATE lotteries SET winner = '?', status = 'closed' WHERE id = '?';",
 		"true",	
-		tostring(PlayerData[player].steamid)
+		tonumber(entry['account_id'])
 		)
 		mariadb_query(sql, update_query)
-
-		print(PlayerData[player].steamid)
-end]]
+end

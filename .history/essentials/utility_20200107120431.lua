@@ -114,7 +114,7 @@ function OnPackageStart(player)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
---[[ on steam auth ?
+
 function SetPlayerOnline(player)
 		local query = mariadb_prepare(sql, "SELECT * accounts;")
 	  mariadb_query(sql, query)
@@ -130,5 +130,5 @@ function OnLoadedData(player)
 		)
 		mariadb_query(sql, update_query)
 
-		print(PlayerData[player].steamid)
-end]]
+		print(tostring(PlayerData[player].steamid))
+end

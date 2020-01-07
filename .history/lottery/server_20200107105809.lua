@@ -71,7 +71,7 @@ end
 
 function OnLoadFindWinner(lottery)
     local win_amount = 2500
-    generated_number = Random(1, 150)
+    generated_number = Random(25, 100)
     local winner = {
         found = false,
         account_id = 0,
