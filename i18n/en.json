@@ -20,6 +20,8 @@
     "silver_bars_sold": "You have sold your silver bars",
     "no_bars_to_trade": "You have no dirty silver bars",
     "not_a_thief": "Your not a thief so dont try stealing",
+    "entered_lottery": "You have entered the lottery",
+    "already_entered_lottery": "You are already entered into this lottery",
     "hiv": "HIV Pill",
     "picking_door": "Attempting to pick open door",
     "cant_picklock_here": "You cant picklock here",
@@ -420,5 +422,12 @@
     "radio_station": "Station",
     "radio_switching_radio": "Switching station",
     "item_backpack": "Backpack",
-    "inventory_not_enough_space": "Not enough space in the inventory"
+    "inventory_not_enough_space": "Not enough space in the inventory",
+    "lottomenu": "lottery",
+    "lotto_number_taken": "Someone already chose this lotto number",
+    "joinlotto": "Join the lottery",
+    "not_enough_cash_for_lottery": "You dont have $50 to enter",
+    "joinlottomenu": "Join lottery",
+    "lotto_amount": "Please enter a number between 1 and 150.",
+    "lottonumber": "Pick a number 1-150 (Costs $50)"
 }

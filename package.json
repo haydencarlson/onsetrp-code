@@ -51,7 +51,8 @@
         "essentials/undermap/server.lua",
         "essentials/anticheat.lua",
         "transport/s_busstop.lua",
-        "vehicle_radio/server.lua"
+        "vehicle_radio/server.lua",
+        "lottery/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -92,7 +93,8 @@
         "mechanic/client.lua",
         "medic/client.lua",
         "essentials/undermap/client.lua",
-        "vehicle_radio/client.lua"
+        "vehicle_radio/client.lua",
+        "lottery/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -114,6 +116,7 @@
         "notification/notification/notification.html",
         "notification/notification/toastify.js",
         "notification/notification/toastify.min.css",
+        "notification/notification/noti.mp3",
         "animation/web/images/crossarms.png",
         "animation/web/images/dab.png",
         "animation/web/images/dancing.png",

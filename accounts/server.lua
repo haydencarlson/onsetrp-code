@@ -183,6 +183,11 @@ function OnAccountLoaded(player)
 		else
 			SetAvailablePhoneNumber(player)
 		end
+		if GetPlayerBag(player) == 1 then
+			local x, y, z = GetPlayerLocation(player)
+            PlayerData[player].backpack = CreateObject(820, x, y, z)
+            SetObjectAttached(PlayerData[player].backpack, ATTACH_PLAYER, player, -30.0, -9.0, 0.0, -90.0, 0.0, 0.0, "spine_03")
+		end
 		SetPlayerPropertyValue(player, "actionInProgress", 'false', true)
 		SetPlayerHealth(player, tonumber(result['health']))
 		SetPlayerArmor(player, tonumber(result['armor']))
@@ -289,6 +294,14 @@ function CreatePlayerData(player)
     print("Data created for : "..player)
 end
 
+function AddBalanceToBankAccountSQL(accountid, amount)
+	if accountid ~= nil and amount ~= nil then
+		local update_query = mariadb_prepare(sql, "UPDATE accounts set bank_balance = bank_balance + '?' where id = '?';", amount, accountid)
+		print("updating bank balance")
+		mariadb_query(sql, update_query)
+	end
+end
+
 function DestroyPlayerData(player)
 	if (PlayerData[player] == nil) then
 		return
@@ -298,10 +311,26 @@ function DestroyPlayerData(player)
         DestroyVehicle(PlayerData[player].job_vehicle)
         DestroyVehicleData( PlayerData[player].job_vehicle)
         PlayerData[player].job_vehicle = nil
-    end
+	end
+	
+	if PlayerData[player].backpack ~= nil then
+		DestroyObject(PlayerData[player].backpack)
+		PlayerData[player].backpack = nil
+	end
 
 	PlayerData[player] = nil
 	print("Data destroyed for : "..player)
+end
+
+function FindPlayerByAccountId(accountid)
+	if PlayerData[1] ~= nil then
+		for key, player in pairs(PlayerData) do
+			if tonumber(player['accountid']) == tonumber(accountid) then
+				return key
+			end
+		end
+	end
+	return false
 end
 
 function SavePlayerAccount(player)
@@ -350,3 +379,5 @@ function IsAdmin(player)
 end
 
 AddFunctionExport("isAdmin", IsAdmin)
+AddFunctionExport("FindPlayerByAccountId", FindPlayerByAccountId)
+AddFunctionExport("AddBalanceToBankAccountSQL", AddBalanceToBankAccountSQL)
