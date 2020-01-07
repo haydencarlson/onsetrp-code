@@ -114,21 +114,24 @@ function OnPackageStart(player)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
---[[ on steam auth ?
+--[[
 function SetPlayerOnline(player)
-		local query = mariadb_prepare(sql, "SELECT * accounts;")
-	  mariadb_query(sql, query)
-	  mariadb_async_query(sql, query, OnLoadedData, player)
-end
-AddEvent("OnPlayerJoin", SetPlayerOnline)
-
-function OnLoadedData(player)
-	local entry = mariadb_get_assoc(1)
-	update_query = mariadb_prepare(sql, "UPDATE lotteries SET winner = '?', status = 'closed' WHERE steamid = '?';",
+		local query = mariadb_prepare(sql, "UPDATE accounts SET online = '?' WHERE steamid = '?';",
 		"true",	
 		tostring(PlayerData[player].steamid)
 		)
-		mariadb_query(sql, update_query)
+	  mariadb_query(sql, query)
+	  print(PlayerData[player].steamid)
+end
+AddEvent("OnPlayerSteamAuth", SetPlayerOnline)
 
-		print(PlayerData[player].steamid)
-end]]
+function SetPlayerOffline(player)
+	local player = FindPlayerByAccountId(PlayerData[player].accountid)
+	local query = mariadb_prepare(sql, "UPDATE accounts SET online = '?' WHERE id = '?';",
+	"false",	
+	tostring(player)
+	)
+  mariadb_query(sql, query)
+  print(player)
+end
+AddEvent("OnPlayerQuit", SetPlayerOffline)]]
