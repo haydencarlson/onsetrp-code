@@ -183,6 +183,11 @@ function OnAccountLoaded(player)
 		else
 			SetAvailablePhoneNumber(player)
 		end
+		if GetPlayerBag(player) == 1 then
+			local x, y, z = GetPlayerLocation(player)
+            PlayerData[player].backpack = CreateObject(820, x, y, z)
+            SetObjectAttached(PlayerData[player].backpack, ATTACH_PLAYER, player, -30.0, -9.0, 0.0, -90.0, 0.0, 0.0, "spine_03")
+		end
 		SetPlayerPropertyValue(player, "actionInProgress", 'false', true)
 		SetPlayerHealth(player, tonumber(result['health']))
 		SetPlayerArmor(player, tonumber(result['armor']))
@@ -262,8 +267,6 @@ function CreatePlayerData(player)
 	PlayerData[player].clothing_police = {}
 	PlayerData[player].police = 1
 	PlayerData[player].medic = 0
-	PlayerData[player].lotto_number = 0
-	PlayerData[player].lotto_winner = false
 	PlayerData[player].inventory = { cash = 100 }
 	PlayerData[player].driver_license = 0
 	PlayerData[player].gun_license = 0
@@ -312,7 +315,7 @@ function DestroyPlayerData(player)
 	
 	if PlayerData[player].backpack ~= nil then
 		DestroyObject(PlayerData[player].backpack)
-    	PlayerData[player].backpack = nil
+		PlayerData[player].backpack = nil
 	end
 
 	PlayerData[player] = nil
