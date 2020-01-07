@@ -22,6 +22,14 @@ end)
 
 function OnPackageStart(player)
     CreateTimer(function()
+        local none = "none"
+        local open = "open"
+        local query = mariadb_prepare(sql, "INSERT INTO lotteries SET winner = '?', status = '?';",
+        none,
+        open
+      )
+      mariadb_query(sql, query)   
+
         local query = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open'; ORDER BY 'id' DESC")
         mariadb_async_query(sql, query, OnLoadedOpenLottery)
     end, 15000)
@@ -40,29 +48,15 @@ function OnLoadedLotteryEntries(player)
         local entry = mariadb_get_assoc(i)
         print(tostring(entry['lottery_id']))
         if tonumber(entry['lotto_number']) == tonumber(generated_number) then
-           local player = FindPlayerByAccountId(entry['accountid'])
+            local player = FindPlayerByAccountId(entry['accountid'])
            AddPlayerChat(player, "You Won")
            local query = mariadb_prepare(sql, "UPDATE lotteries SET winner = '?', status = 'closed' WHERE id = '?';",
            tostring(PlayerData[player].accountid),
            tostring(entry['lottery_id'])
-                )
-           mariadb_query(sql, query)
-        AddPlayerChatAll("The lottery has been drawn the number is "..generated_number)
+        )
+        mariadb_query(sql, query)
     else
-        local none = "none"
-        local query = mariadb_prepare(sql, "UPDATE lotteries SET winner = '?', status = 'closed' WHERE id = '?';",
-           none,
-           tostring(entry['lottery_id'])
-                )
-            mariadb_query(sql, query)
         AddPlayerChatAll("The lottery has been drawn the number is "..generated_number)
     end
-    local none = "none"
-    local open = "open"
-    local query2 = mariadb_prepare(sql, "INSERT INTO lotteries SET winner = '?', status = '?';",
-    none,
-    open
-  )
-  mariadb_query(sql, query2)
     end
 end

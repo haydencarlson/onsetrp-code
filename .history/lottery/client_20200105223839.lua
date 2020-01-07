@@ -4,14 +4,6 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 local lottomenu
 local lottomenumain
 
-function OnKeyPress(key)
-	if key == "H" then
-		print("key pressed")
-		Dialog.show(lottomenu)
-	end
-end
-AddEvent("OnKeyPress", OnKeyPress)
-
 AddEvent("OnTranslationReady", function()
     lottomenu = Dialog.create(_("lottomenu"), nil, _("joinlotto"), _("cancel"))
     Dialog.addTextInput(lottomenu, 1, _("lottonumber"))
@@ -31,3 +23,11 @@ AddEvent("OnDialogSubmit", function(dialog, button, ..., player)
         end
     end
 end)
+
+function OnKeyPress(key)
+	if key == "H" then
+		print("key pressed")
+		Dialog.show(lottomenu)
+	end
+end
+AddEvent("OnKeyPress", OnKeyPress)
