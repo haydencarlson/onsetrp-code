@@ -2,7 +2,7 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 
 -- Joining lottery
 AddRemoteEvent("joinLotto", function(player, number)
-    if GetPlayerCash(player) > 50 then
+    if GetPlayerCash(player) >= 50 then
         RemoveBalanceFromAccount(player, 'cash', 50)
         local queryid = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open';")
         mariadb_async_query(sql, queryid, OnLoadedLotteriesCheckPlayer, player, number)

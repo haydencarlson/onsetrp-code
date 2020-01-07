@@ -32,7 +32,9 @@ local teleportPlace = {
     train_station = { 134704, 209961, 1292 },
 	delivery_npc_location = { 202284, 170229, 1306 },
 	city_hall = {211882, 175167, 1307},
-    license_shop = { 183339, 182525, 1291 }
+	license_shop = { 183339, 182525, 1291 },
+	stock_trader = { 214434, 190802, 1309 },
+	gun_seller = { 205888, 192905, 1357 }
 }
 
 AddEvent("OnKeyPress", function( key )
