@@ -14,7 +14,7 @@ end
 
 
 local function IsCopInRange(x, y, z)
-    local playersinrange = GetPlayersInRange3D(x, y, z, 250)
+    local playersinrange = GetPlayersInRange3D(x, y, z, 1000)
     for key, p in pairs(playersinrange) do
         if PlayerData[p].job == 'police' then
             return true
