@@ -2,7 +2,7 @@ local Dialog = ImportPackage("dialogui")
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local Camera = ImportPackage('camera')
 local characterCreation
-
+UIOpen = false
 local isCreated = true
 
 local playerName = ""
@@ -28,6 +28,10 @@ AddEvent("OnTranslationReady", function()
     shoesCreation = Dialog.create(_("shoes_creation"), _("choose_shoes"), _("create"))
     Dialog.addSelect(shoesCreation, 1, _("shoes"), 5)
 end)
+
+AddRemoteEvent("SetUIOpenStatusClient", function(isOpen)
+    UIOpen = isOpen
+end) 
 
 AddEvent("OnKeyPress", function(key)
     if onCharacterCreation then

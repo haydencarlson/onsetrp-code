@@ -19,7 +19,7 @@ function OnPlayerSteamAuth(player)
     
     AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerName(player)..' from '..PlayerData[player].locale..' joined</>')
 	AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerCount()..' players online</>')
-	AddPlayerChat(player, '<span color="#ff0000" size="17">/info in the chat to view rules, key shortcuts and server information. Go check it out!</>')
+	AddPlayerChat(player, '<span color="#ff0000" size="17">Please type /help to view rules, key shortcuts, commands. and server information</>')
     SetPlayerPropertyValue(player, "isWanted", 0, true)
 	
     -- First check if there is an account for this player

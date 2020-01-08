@@ -39,6 +39,10 @@ AddRemoteEvent("ServerCharacterCreation", function(player)
     CallRemoteEvent(player, "openCharacterCreation", hairsModel, shirtsModel, pantsModel, shoesModel, hairsColor)
 end)
 
+AddRemoteEvent("SetUIOpenStatus", function(player, isOpen) 
+    CallRemoteEvent(player, "SetUIOpenStatusClient", isOpen)
+end)
+
 
 AddRemoteEvent("ServerChangeClothes", function(player, playername, playerhairs, playerhairscolor, playershirt, playerpants, playershoes)
     PlayerData[player].name = playername
