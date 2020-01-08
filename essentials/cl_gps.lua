@@ -38,7 +38,8 @@ local teleportPlace = {
 }
 
 AddEvent("OnKeyPress", function( key )
-    if key == "G" and not onSpawn and not onCharacterCreation then
+	if key == "G" and not onSpawn and not onCharacterCreation and not UIOpen then
+		UIOpen = true
 		if not IsPlayerInVehicle() then
 			Dialog.show(gpsmain)
 			return 

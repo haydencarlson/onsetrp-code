@@ -57,7 +57,7 @@ local tips = {
 end
 
 local serverinfo = { 
-	'<span color="#ccc"> Type /info to view server information and maybe find some answers. </>',	
+	'<span color="#ccc"> Please type /help to view rules, key shortcuts, commands. and server information </>',	
 }
 
 for i in pairs(serverinfo) do

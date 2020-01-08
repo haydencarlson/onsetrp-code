@@ -12,19 +12,22 @@ end
 AddEvent("OnPackageStart", OnPackageStart)
 
 function OnKeyPress(key)
-	if key == "F2" and not onSpawn and not onCharacterCreation then
-			SetWebVisibility(web, WEB_VISIBLE)
-			ShowMouseCursor(true)
-			SetInputMode(INPUT_GAMEANDUI)
+
+	if key == "F2" and not onCharacterCreation then
+		UIOpen = true
+		SetWebVisibility(web, WEB_VISIBLE)
+		ShowMouseCursor(true)
+		SetInputMode(INPUT_GAMEANDUI)
 	end
 end
 AddEvent("OnKeyPress", OnKeyPress)
 
 function OnKeyRelease(key)
-	if key == "F2" and not onSpawn and not onCharacterCreation then
-	SetWebVisibility(web, WEB_HIDDEN)
-	ShowMouseCursor(false)
-	SetInputMode(INPUT_GAME)
+	if key == "F2" and not onCharacterCreation then
+		UIOpen = false
+		SetWebVisibility(web, WEB_HIDDEN)
+		ShowMouseCursor(false)
+		SetInputMode(INPUT_GAME)
 	end
 end
 AddEvent("OnKeyRelease", OnKeyRelease)
