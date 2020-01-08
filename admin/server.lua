@@ -15,8 +15,8 @@ local teleportPlace = {
     weed_process_zone = { 70695, 9566, 1366 },
     heroin_gather_zone = { 186474, -43277, 1451 },
     heroin_process_zone = { 73218, 3822, 1367 },
-    meth_gather_zone = { 193607, -46512, 1451 },
-    meth_process_zone = { 72095, 1418, 1367 },
+    meth_gather_zone = { 192892, -48217, 1444 },
+    meth_process_zone = { 193607, -46512, 1451 },
     wealthbank = { 211925, 191382, 1306 },
     coke_gather_zone = { 192080, -45155, 1529 },
     coke_process_zone = { 71981, 106, 1367 },
@@ -88,7 +88,7 @@ AddRemoteEvent("ServerAdminMenu", function(player)
     if tonumber(PlayerData[player].admin) == 1 then
         playersNames = {}
         for k,v in pairs(playersIds) do
-            if PlayerData[k] ~= nil or PlayerData[k].name ~= nil or PlayerData[k].steamname ~= nil then
+            if PlayerData[k] ~= nil and PlayerData[k].name ~= nil and PlayerData[k].steamname ~= nil then
                 playersNames[tostring(k)] = PlayerData[k].name.." ["..PlayerData[k].steamname.."]"
                 ::continue::
             end
