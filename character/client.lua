@@ -52,19 +52,16 @@ AddEvent("OnKeyPress", function(key)
     end
 end)
 
-
-AddEvent("OnDialogUIReady", function()
-    if not isCreated then
-        CallRemoteEvent("ServerCharacterCreation")
-    end
-end)
-
 AddRemoteEvent( "askClientCreation", function() 
     isCreated = false
 end)
 
 AddEvent("OnPlayerStreamIn", function( player, otherplayer )
     CallRemoteEvent("ServerChangeOtherPlayerClothes", player, otherplayer)
+end)
+
+AddEvent("OnDialogUIReady", function()
+    CallRemoteEvent("SendIsCreatedToInfoUI", isCreated)
 end)
 
 AddRemoteEvent("openCharacterCreation", function(lhairs, lshirts, lpants, lshoes,lhairscolor)
