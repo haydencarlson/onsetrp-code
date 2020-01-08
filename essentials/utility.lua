@@ -113,3 +113,25 @@ function OnPackageStart(player)
 	end, 600000, v)
 end
 AddEvent("OnPackageStart", OnPackageStart)
+
+--[[
+function SetPlayerOnline(player)
+		local query = mariadb_prepare(sql, "UPDATE accounts SET online = '?' WHERE steamid = '?';",
+		"true",	
+		tostring(PlayerData[player].steamid)
+		)
+	  mariadb_query(sql, query)
+	  print(PlayerData[player].steamid)
+end
+AddEvent("OnPlayerSteamAuth", SetPlayerOnline)
+
+function SetPlayerOffline(player)
+	local player = FindPlayerByAccountId(PlayerData[player].accountid)
+	local query = mariadb_prepare(sql, "UPDATE accounts SET online = '?' WHERE id = '?';",
+	"false",	
+	tostring(player)
+	)
+  mariadb_query(sql, query)
+  print(player)
+end
+AddEvent("OnPlayerQuit", SetPlayerOffline)]]
