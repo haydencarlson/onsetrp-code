@@ -21,7 +21,7 @@ function OnLoadedCheckForEntryNumber(player, lottery, number)
     if (mariadb_get_row_count() ~= 0) then   
         CallRemoteEvent(player, "MakeNotification", _("lotto_number_taken"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     else
-        local query = mariadb_prepare(sql, "SELECT * FROM lottery_entries WHERE lottery_id = '?';", lottery['id'])
+        local query = mariadb_prepare(sql, "SELECT * FROM lottery_entries WHERE lottery_id = '?' AND accountid = '?';", lottery['id'], PlayerData[player].accountid)
         mariadb_async_query(sql, query , OnLoadInsertEntry, player, number, lottery)
     end
 end
