@@ -40,7 +40,6 @@ AddRemoteEvent("ServerCharacterCreation", function(player)
 end)
 
 AddRemoteEvent("SetUIOpenStatus", function(player, isOpen) 
-    print(isOpen)
     CallRemoteEvent(player, "SetUIOpenStatusClient", isOpen)
 end)
 
