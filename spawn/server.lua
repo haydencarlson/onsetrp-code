@@ -13,7 +13,7 @@ function SetupSpawn()
     CreateText3D("Server Information", 17, server_info[0], server_info[1], 2050, 0, 0, 0)
     tips = "Type /tips to see some quick tips"
     CreateText3D(tips, 9, server_info[0], server_info[1], 2000, 0, 0, 0)
-    tips = "Please type /info to view rules, key shortcuts, commands. and server information"
+    tips = "Please type /help to view rules, key shortcuts, commands. and server information"
     CreateText3D(tips, 9, server_info[0], server_info[1], 1950, 0, 0, 0)
 
     -- Rules section
