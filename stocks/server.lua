@@ -46,7 +46,7 @@ end
 
 function SingleStockDataLoaded(player, quantity, side)
     local stock = mariadb_get_assoc(1) 
-    if quantity < 0 then
+    if tonumber(quantity) <= 0 then
         return CallRemoteEvent(player, "MakeNotification", _("less_then_zero"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     end
     if side == "buy" then
