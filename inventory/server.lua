@@ -28,14 +28,6 @@ function getWeaponID(modelid)
     return 0
 end
 
-AddEvent("OnPlayerSpawn", function(player)
-    if PlayerData[player] ~= nil then
-        DestroyObject(PlayerData[player].backpack)        
-        PlayerData[player].backpack = nil
-        DisplayPlayerBackpack(player)
-    end
-end)
-
 AddRemoteEvent("UseInventory", function(player, item, amount)
     weapon = getWeaponID(item)
     if tonumber(PlayerData[player].inventory[item]) < tonumber(amount) then
