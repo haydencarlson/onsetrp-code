@@ -14,6 +14,7 @@ local phoneContacts
 
 AddEvent("OnKeyPress", function(key)
     if key == "K" and not phoneOpened and not UIOpen then
+        UIOpen = true
         OpenPhone()
     elseif key == "Escape" and phoneOpened then
         ClosePhone()
@@ -67,6 +68,7 @@ end)
 -- UI FUNCTIONS
 
 AddEvent("ClosePhone", function()
+    UIOpen = false
     ClosePhone()
 end)
 

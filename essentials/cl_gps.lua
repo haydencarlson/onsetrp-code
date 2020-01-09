@@ -30,7 +30,7 @@ local teleportPlace = {
     drugs_sell_zone = { -177344, 3673, 1992 },
     home_cardealer = { 207113, 171199, 1330 },
     train_station = { 134704, 209961, 1292 },
-	delivery_npc_location = { 202284, 170229, 1306 },
+	delivery_npc_location = { 202380, 170234, 1306 },
 	city_hall = {211882, 175167, 1307},
 	license_shop = { 183339, 182525, 1291 },
 	stock_trader = { 214434, 190802, 1309 },
@@ -89,6 +89,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 		Dialog.show(gpsmenu)
 	end
 	if button == 4 then
+		UIOpen = false
 		end
  	end
 	if dialog == gpsmenu then

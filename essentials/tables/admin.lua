@@ -23,5 +23,5 @@ local teleportPlace = {
     drugs_sell_zone = { -177344, 3673, 1992 },
     home_cardealer = { 161069, 191846, 1322},
     old_cardealer = { 127720, 80774, 1567},
-    delivery_npc_location = { -16925, -29058, 2200 }
+    delivery_npc_location = { 202380, 170234, 1306 }
 }
