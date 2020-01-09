@@ -95,7 +95,7 @@ AddRemoteEvent("RPNotify:ObjectInteract_trade_silver_bars", function(player, obj
     local total_silver_bars = PlayerData[player]['inventory']['dirty_silver_bar']
     if total_silver_bars ~= nil then
         math.randomseed(os.time())
-        random_bar_amount = math.random(50, 200)
+        random_bar_amount = math.random(150, 400)
         AddBalanceToAccount(player, "cash", random_bar_amount * total_silver_bars)
         RemoveInventory(player, "dirty_silver_bar", total_silver_bars)
         CallRemoteEvent(player, "MakeNotification", _("silver_bars_sold"), "linear-gradient(to right, #00b09b, #96c93d)")
@@ -110,12 +110,12 @@ AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
         local x, y, z = GetPlayerLocation(player)
         if vaultTimer <= 0 then
             if GetDistance3D(x, y, z, ox, oy, oz) <= 250.00 then
-                vaultTimer = 600000
+                vaultTimer = 300000
                 SetPlayerAnimation(player, "PICKUP_MIDDLE")
                 Delay(1500, function() 
                     local thief = GetPlayerName(player)
                     math.randomseed(os.time())
-                    random_bar_amount = math.random(20, 100)
+                    random_bar_amount = math.random(10, GetPlayerInventorySpace(player))
                     AddPlayerChatAll('<span color="#ff0000">' .. thief .. ' has hit the bank vault. They have stolen ' .. random_bar_amount .. ' silver bars.' .. '</>')
                     AddInventory(player, "dirty_silver_bar", random_bar_amount)
                     CallRemoteEvent(player, "MakeNotification", _("stolen_bars"), "linear-gradient(to right, #00b09b, #96c93d)")

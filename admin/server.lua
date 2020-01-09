@@ -28,7 +28,8 @@ local teleportPlace = {
     train_station = { 134704, 209961, 1292 },
     old_cardealer = { 127720, 80774, 1567 },
     delivery_npc_location = { -16925, -29058, 2200 },
-    license_shop = { 183339, 182525, 1291 }
+    license_shop = { 183339, 182525, 1291 },
+    city_hall = {211882, 175167, 1307}
 }
 
 

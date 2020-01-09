@@ -235,6 +235,10 @@ function GetPlayerBag(player)
     end
 end
 
+function GetPlayerInventorySpace(player)
+    return tonumber(GetPlayerMaxSlots(player)) - tonumber(GetPlayerUsedSlots(player))
+end
+
 function GetPlayerMaxSlots(player)
     if PlayerData[player].inventory['item_backpack'] and math.tointeger(PlayerData[player].inventory['item_backpack']) > 0 then
         return math.floor(inventory_base_max_slots * 1.25)
@@ -292,6 +296,7 @@ AddFunctionExport("GetPlayerBag", GetPlayerBag)
 AddFunctionExport("GetPlayerMaxSlots", GetPlayerMaxSlots)
 AddFunctionExport("GetPlayerUsedSlots", GetPlayerUsedSlots)
 AddFunctionExport("DisplayPlayerBackpack", DisplayPlayerBackpack)
+AddFunctionExport("GetPlayerInventorySpace", GetPlayerInventorySpace)
 
 AddEvent("OnPackageStart", function()
 
