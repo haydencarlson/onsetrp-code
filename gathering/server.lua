@@ -116,6 +116,9 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
     local gather = GetGatherByGatherzone(gatherzone)
     local animation = ""
     local attached_item = 0
+    if GetPlayerInventorySpace(player) == 0 then
+        return CallRemoteEvent(player, "MakeNotification", _("inventory_not_enough_space"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+    end
     if gatherTable[gather].gather_tool ~= nil then
         if PlayerData[player].inventory[gatherTable[gather].gather_tool] == nil then
             return CallRemoteEvent(player, "MakeNotification", _("need_tool"), "linear-gradient(to right, #ff5f6d, #ffc371)")
