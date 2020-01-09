@@ -431,5 +431,6 @@
     "not_enough_cash_for_lottery": "You dont have $50 to enter",
     "joinlottomenu": "Join lottery",
     "lotto_amount": "Please enter a number between 1 and 150.",
-    "lottonumber": "Pick a number 1-150 (Costs $50)"
+    "lottonumber": "Pick a number 1-150 (Costs $50)",
+    "less_then_zero": "Quantity less then 0"
 }
