@@ -12,7 +12,7 @@ SetWebURL(webIdCard, "http://asset/onsetrp/idcard/id.html")
 local idCardMenu
 
 AddEvent("OnKeyPress", function(key)
-    if key == "F5" and not onCharacterCreation then
+    if key == "F5" and not onCharacterCreation and not UIOpen then
         Dialog.show(idCardMenu)
     end
 end)
@@ -38,7 +38,6 @@ end)
 -- LOADING
 
 AddRemoteEvent("OnCardDataLoaded", function(id, name, driverLicense, gunLicense, helicopterLicense)
-    print("OnCardDataLoaded")
     SetIgnoreLookInput(true)
     SetIgnoreMoveInput(true)
     ShowMouseCursor(true)
