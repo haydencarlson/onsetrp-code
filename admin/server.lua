@@ -89,8 +89,8 @@ AddRemoteEvent("ServerAdminMenu", function(player)
     if tonumber(PlayerData[player].admin) == 1 then
         playersNames = {}
         for k,v in pairs(playersIds) do
-            if PlayerData[k] ~= nil and PlayerData[k].name ~= nil and PlayerData[k].steamname ~= nil then
-                playersNames[tostring(k)] = PlayerData[k].name.." ["..PlayerData[k].steamname.."]"
+            if PlayerData[v] ~= nil and PlayerData[v].name ~= nil and PlayerData[v].steamname ~= nil then
+                playersNames[tostring(v)] = PlayerData[v].name.." ["..PlayerData[v].steamname.."]"
                 ::continue::
             end
         end

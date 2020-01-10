@@ -76,6 +76,7 @@ end)
 AddEvent("OnDialogSubmit", function(dialog, button, ...)
 	if dialog == gpsmain then
 		if button == 1 then
+			UIOpen = false
 			local x, y, z = GetPlayerLocation()
 			if currentWaypoint ~= nil then
 			DestroyWaypoint(currentWaypoint)
@@ -83,11 +84,13 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 		currentWaypoint = CreateWaypoint(x, y, z, "Important Location")
 	end
 	if button == 2 then
+		UIOpen = false
 		if currentWaypoint ~= nil then
 			DestroyWaypoint(currentWaypoint)
 		end
 	end
 	if button == 3 then
+		UIOpen = false
 		Dialog.show(gpsmenu)
 	end
 	if button == 4 then
@@ -97,6 +100,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 	if dialog == gpsmenu then
 		local args = { ... }
 		if button == 1 then
+			UIOpen = false
 			local chords = teleportPlace[args[1]]
 			if currentWaypoint ~= nil then
 				DestroyWaypoint(currentWaypoint)
