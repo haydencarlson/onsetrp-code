@@ -432,5 +432,6 @@
     "joinlottomenu": "Join lottery",
     "lotto_amount": "Please enter a number between 1 and 150.",
     "lottonumber": "Pick a number 1-150 (Costs $50)",
-    "less_then_zero": "Quantity less then or equal to 0"
+    "less_then_zero": "Quantity less then or equal to 0",
+    "dirty_bar_buyer": "Buys stolen bars"
 }

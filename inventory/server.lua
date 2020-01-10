@@ -8,10 +8,10 @@ AddRemoteEvent("ServerPersonalMenu", function(player)
     local playerList = {}
     for k,v in pairs(nearestPlayers) do
         if k ~= player then
-            if PlayerData[k] ~= nil then 
-                local name = PlayerData[k].name
+            if PlayerData[v] ~= nil then 
+                local name = PlayerData[v].name
                 if name ~= nil then
-                    playerList[tostring(k)] = name
+                    playerList[tostring(v)] = name
                 end
             end
         end
