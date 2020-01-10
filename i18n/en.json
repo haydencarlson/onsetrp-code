@@ -61,6 +61,8 @@
     "car_dealer": "Car Dealer",
     "car_buy_sucess": "You bought a {1} for {2}{3}",
     "this_vehicle_locked": "This vehicle is locked",
+    "already_delivery_driver": "You are already a delivery driver",
+    "not_delivery_driver": "You arent a delivery driver. Go to the job manager.",
     "car_locked": "Car locked",
     "car_unlocked": "Car unlocked",
     "buy": "Buy",

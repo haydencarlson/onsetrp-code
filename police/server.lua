@@ -35,7 +35,7 @@ local function GetNearestPlayer(player, distanceMax)
 	    end
     end
     if(otherPlayer ~= nil) then
-	return {otherPlayer, _x, _y, _z}
+		return {otherPlayer, _x, _y, _z}
     end
     return
 end
@@ -299,7 +299,7 @@ AddRemoteEvent("GetEquipped", GetEquipped)
 AddRemoteEvent("HandcuffPlayerSetup", function(player)
     if(PlayerData[player].job == "police") then
 	local info = GetNearestPlayer(player, 115)
-	if(info ~= nil) then
+	if(info ~= nil) then	
 	    if(PlayerData[info[1]].job ~= "police") then
 		SetPlayerAnimation(info[1], "STOP")
 		if(GetPlayerPropertyValue(info[1], "cuffed") ~= true) then
