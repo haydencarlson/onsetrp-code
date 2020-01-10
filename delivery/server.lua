@@ -108,6 +108,8 @@ AddRemoteEvent("StartStopDelivery", function(player)
                 SetVehiclePropertyValue(vehicle, "locked", true, true)
                 PlayerData[player].job = "delivery"
                 return
+            else
+                return CallRemoteEvent(player, "MakeNotification", _("cannot_spawn_work_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
             end
         end
     elseif PlayerData[player].job == "delivery" then

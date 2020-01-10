@@ -11,7 +11,7 @@ function OnPlayerChat(player, message)
     }
     for k,v in pairs(streamedPlayers) do
         local message = message_action[PlayerData[player].admin]
-        AddPlayerChat(k, message)
+        AddPlayerChat(v, message)
     end
 end
 AddEvent("OnPlayerChat", OnPlayerChat)
