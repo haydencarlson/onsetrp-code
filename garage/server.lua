@@ -177,27 +177,31 @@ function spawnCarServerLoaded(player)
                     end
                 end
                 if isSpawnable then
-                    local vehicle = CreateVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4])
-                    if nos_equipped == 1 then
-                        AttachVehicleNitro(vehicle , true)
-                    end
-                    if vehicle_durability == 1 then
-                        SetVehicleHealth(vehicle, 10000)
-                    end
-                    SetVehicleRespawnParams(vehicle, false)
-                    SetVehicleColor(vehicle, "0x"..color)
-                    SetVehiclePropertyValue(vehicle, "locked", true, true)
-                    CreateVehicleData(player, vehicle, modelid)
-                    VehicleData[vehicle].garageid = id
-                    mariadb_async_query(sql, query)
-                    CallRemoteEvent(player, "closeGarageDealer")
-                    return CallRemoteEvent(player, "MakeNotification", _("spawn_vehicle_success", tostring(name)), "linear-gradient(to right, #00b09b, #96c93d)")
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name)
                 else
-                    return CallRemoteEvent(player, "MakeNotification", _("cannot_spawn_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2] - 300, v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name)
                 end
             end
         end
 	end
+end
+
+function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id, name)
+    local vehicle = CreateVehicle(modelid, x, y, z, h)
+    if nos_equipped == 1 then
+        AttachVehicleNitro(vehicle , true)
+    end
+    if vehicle_durability == 1 then
+        SetVehicleHealth(vehicle, 10000)
+    end
+    SetVehicleRespawnParams(vehicle, false)
+    SetVehicleColor(vehicle, "0x"..color)
+    SetVehiclePropertyValue(vehicle, "locked", true, true)
+    CreateVehicleData(player, vehicle, modelid)
+    VehicleData[vehicle].garageid = id
+    mariadb_async_query(sql, query)
+    CallRemoteEvent(player, "closeGarageDealer")
+    return CallRemoteEvent(player, "MakeNotification", _("spawn_vehicle_success", tostring(name)), "linear-gradient(to right, #00b09b, #96c93d)")
 end
 
 function sellCarServer(player, id)

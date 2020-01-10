@@ -30,7 +30,7 @@ end)
 AddEvent("OnDialogSubmit", function(dialog, button, ...)
 	if dialog == deliveryNpcMenu then
 		if button == 1 then
-            CallRemoteEvent("StartStopDelivery")
+            CallRemoteEvent("StartDelivery")
         end
     end
     if dialog == deliveryMenu then

@@ -83,9 +83,9 @@ AddEvent("OnPlayerJoin", function(player)
     CallRemoteEvent(player, "SetupDelivery", deliveryNpcCached)
 end)
 
-AddRemoteEvent("StartStopDelivery", function(player)
+AddRemoteEvent("StartDelivery", function(player)
     local nearestDelivery = GetNearestDelivery(player)
-    if PlayerData[player].job == "" then
+    if PlayerData[player].job == "delivery" then
         if PlayerData[player].job_vehicle ~= nil then
             DestroyVehicle(PlayerData[player].job_vehicle)
             DestroyVehicleData(PlayerData[player].job_vehicle)
@@ -112,16 +112,20 @@ AddRemoteEvent("StartStopDelivery", function(player)
                 return CallRemoteEvent(player, "MakeNotification", _("cannot_spawn_work_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
             end
         end
-    elseif PlayerData[player].job == "delivery" then
-        if PlayerData[player].job_vehicle ~= nil then
-            DestroyVehicle(PlayerData[player].job_vehicle)
-            DestroyVehicleData(PlayerData[player].job_vehicle)
-            PlayerData[player].job_vehicle = nil
-        end
-        PlayerData[player].job = ""
-        playerDelivery[player] = nil
-        CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
+    else
+        return CallRemoteEvent(player, "MakeNotification", _("not_delivery_driver"), "linear-gradient(to right, #ff5f6d, #ffc371)")
     end
+end)
+
+AddRemoteEvent("StopDelivery", function()
+    if PlayerData[player].job_vehicle ~= nil then
+        DestroyVehicle(PlayerData[player].job_vehicle)
+        DestroyVehicleData(PlayerData[player].job_vehicle)
+        PlayerData[player].job_vehicle = nil
+    end
+    PlayerData[player].job = ""
+    playerDelivery[player] = nil
+    CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
 end)
 
 AddRemoteEvent("OpenDeliveryMenu", function(player)
@@ -154,7 +158,7 @@ AddRemoteEvent("FinishDelivery", function(player)
     if dist < 150.0 then
         local reward = Random(1111, 2222)
 
-        CallRemoteEvent(player, "MakeNotification", _("finished_delivery", reward, _("currency")), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, "MakeNotification", _("finished_delivery", reward, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
         
         AddBalanceToAccount(player, "cash", reward)
         playerDelivery[player] = nil

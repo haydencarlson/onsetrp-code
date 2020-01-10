@@ -26,16 +26,16 @@ end)
 
 AddEvent("OnKeyPress", function( key )
     if key == "E" and not onSpawn and not onCharacterCreation then
-	local NearestPolice, purpose = GetNearestPolice()
-	if NearestPolice ~= 0 then
-	    if(purpose == "police_job") then
-		Dialog.show(policeNpcMenu)
-	    elseif(purpose == "police_garage") then
-		Dialog.show(policeNpcGarageMenu)
-	    elseif(purpose == "police_armory") then
-		Dialog.show(policeNpcArmoryMenu)
-	    end
-	end
+		local NearestPolice, purpose = GetNearestPolice()
+		if NearestPolice ~= 0 then
+			if(purpose == "police_job") then
+				Dialog.show(policeNpcMenu)
+			elseif(purpose == "police_garage") then
+				Dialog.show(policeNpcGarageMenu)
+			elseif(purpose == "police_armory") then
+				Dialog.show(policeNpcArmoryMenu)
+			end
+		end
     end
     if key == "F3" and not onSpawn and not onCharacterCreation then
         CallRemoteEvent("OpenPoliceMenu")

@@ -18,14 +18,14 @@ text = {
     },
     delivery = {
         short_desc = 'Deliver packages to earn your pay',
-        long_desc = 'Travel to the delivery job, you can find it on your GPS. As a delivery driver you will be driving the work vehicle and completing deliveries. See your GPS for the location. Push F3 once started your job to bring up the delivery menu. From here you can set the next delivery which will show a waypoint on your map. Once you are at the delivery point select finish delivery from the menu to finish.'
+        long_desc = 'Travel to the delivery npc to start your delivery and get a delivery vehicle, you can find it on your GPS. You can use your own vehicle but you get a truck if you visit a delivery NPC. Once you are at the delivery point select finish delivery from the F3 menu to finish.'
     },
     police = {
         short_desc = "Become a police officer",
         long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car (You can use GPS). As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
     },
     thief = {
-        short_desc = "Mug and Rob to make your living",
+        short_desc = "Mug and complete bank robberies to make your living",
         long_desc = "Push F3 to open your thief menu. Use the tools of your trade to rob and collect cash. Get caught, go to jail. High risk, high reward. Using your thief menu you can set a waypoint to the big bank to rob the bank vault, use your picklock on the vault to crack it open. Exchange the silver bars at the buyer for some cash"
     },
     mechanic = {
@@ -86,6 +86,14 @@ function JobSelected(player, selection)
         CallRemoteEvent(player, "MakeNotification", "Your job is already: " .. selection, "linear-gradient(to right, #ff5f6d, #ffc371)")
     end
 end
+
+AddRemoteEvent("StartDeliveryJob", function(player)
+    if PlayerData[player].job ~= "delivery" then
+        PlayerData[player].job = "delivery"
+    else
+        CallRemoteEvent(player, "MakeNotification", _("already_delivery_driver"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+    end
+end)
 
 function CloseJobInformation(player)
     CallRemoteEvent(player, "CUI:Close", "job_information", true)
