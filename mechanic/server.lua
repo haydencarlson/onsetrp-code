@@ -95,7 +95,7 @@ AddEvent("OnPlayerPickupHit", function(player, pickup)
         if player_vehicle ~= 0 then
             if PlayerData[player].job == 'mechanic' then
                 if VehicleData[player_vehicle].player == player then
-                    CallRemoteEvent(player, 'KNotify:Send', "You cant modify your own vehicle", "#f00")
+                    return CallRemoteEvent(player, 'KNotify:Send', "You cant modify your own vehicle", "#f00")
                 end
                 StopVehicleEngine(player_vehicle)
                 SetVehicleLocation(player_vehicle, 211144.015625, 175584.203125, 1307.1500244141)

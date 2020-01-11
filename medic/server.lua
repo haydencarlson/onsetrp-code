@@ -30,7 +30,7 @@ AddEvent("OnPlayerQuit", function(player)
 		local reviver = GetPlayerPropertyValue(player, "medic_on_the_way")
 		if(PlayerData[reviver] ~= nil) then
 			CallRemoteEvent(reviver, "ClientDestroyCurrentWaypoint")
-			CallRemoteEvent(player, 'KNotify:Send', _("end_of_emergency"), "#0f0")
+			CallRemoteEvent(reviver, 'KNotify:Send', _("end_of_emergency"), "#0f0")
 		end
     end
 end)
@@ -48,7 +48,7 @@ AddRemoteEvent("StartMedicJob", function(player)
             end
         end
 		if jobCount == 10 then
-			CallRemoteEvent(player, 'KNotify:Send', _("job_full"), "#f00")
+			return CallRemoteEvent(player, 'KNotify:Send', _("job_full"), "#f00")
         end
         if PlayerData[player].job_vehicle ~= nil then
             DestroyVehicle(PlayerData[player].job_vehicle)

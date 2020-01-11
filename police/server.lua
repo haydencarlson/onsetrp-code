@@ -125,7 +125,7 @@ AddRemoteEvent("StartStopPolice", function(player)
 	    end
 	PlayerData[player].job = "police"
 	GetUniformServer(player)
-	CallRemoteEvent(fineGiver, 'KNotify:Send', _("join_police"), "#0f0")
+	CallRemoteEvent(player, 'KNotify:Send', _("join_police"), "#0f0")
 	return
     end
     elseif PlayerData[player].job == "police" then
