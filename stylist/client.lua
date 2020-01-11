@@ -50,8 +50,8 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     end
 	if dialog == hairsMenu then
 		if button == 1 then
-			if args[1] == "" or args[2] == "" then
-				MakeNotification(_("please_choose_hairs"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[1] == "" or args[2] == "" then
+                CallEvent('KNotify:Send', _("please_choose_hairs"), "#f00")
 				Dialog.show(hairsMenu)
 			else
 				playerHairs = args[1]
@@ -62,8 +62,8 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     end
 	if dialog == shirtMenu then
 		if button == 1 then
-			if args[1] == "" then
-				MakeNotification(_("please_choose_shirt"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[1] == "" then
+                CallEvent('KNotify:Send', _("please_choose_shirt"), "#f00")
 				Dialog.show(shirtMenu)
 			else
 				playerShirt = args[1]
@@ -73,8 +73,8 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     end
 	if dialog == pantsMenu then
 		if button == 1 then
-			if args[1] == "" then
-				MakeNotification(_("please_choose_pants"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[1] == "" then
+                CallEvent('KNotify:Send', _("please_choose_pants"), "#f00")
 				Dialog.show(pantsMenu)
 			else
 				playerPants = args[1]
@@ -84,8 +84,8 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     end	
 	if dialog == shoesMenu then
 		if button == 1 then
-			if args[1] == "" then
-				MakeNotification(_("please_choose_shoes"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[1] == "" then
+                CallEvent('KNotify:Send', _("please_choose_shoes"), "#f00")
 				Dialog.show(shoesMenu)
 			else
 				playerShoes = args[1]

@@ -23,15 +23,15 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 	if dialog == garageDealer then
 		local args = { ... }
 		if button == 1 then
-			if args[1] == "" then
-				MakeNotification(_("select_car_to_spawn"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[1] == "" then
+                CallEvent('KNotify:Send', _("select_car_to_spawn"), "#f00")
             else
                 CallRemoteEvent("spawnCarServer", args[1])
 			end
         end
         if button == 2 then
             if args[1] == "" then
-                MakeNotification(_("select_car_to_sell"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallEvent('KNotify:Send', _("select_car_to_sell"), "#f00")
             else
                 CallRemoteEvent("sellCarServer", args[1])
             end

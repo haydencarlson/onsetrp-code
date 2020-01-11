@@ -5,8 +5,8 @@ local lastLocations = {}
 function teleportUp(player, terrain)
 
 	local x, y, z = GetPlayerLocation(player)
-    CallEvent("SafeTeleport", player, x, y, terrain + 200)
-    CallRemoteEvent(player, "MakeNotification", _("undermap"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+	CallEvent("SafeTeleport", player, x, y, terrain + 200)
+	CallRemoteEvent(player, 'KNotify:Send', _("undermap"), "#f00")
 end
 
 AddRemoteEvent("UnderMapFix", teleportUp)

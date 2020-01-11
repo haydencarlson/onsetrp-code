@@ -39,13 +39,13 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == personalMenu then
         if button == 1 then
             if args[1] == "" then
-				MakeNotification(_("select_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallEvent('KNotify:Send', _("select_item"), "#f00")
 			else
-				if args[2] == ""  or math.floor(args[2]) < 1 then
-					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                if args[2] == ""  or math.floor(args[2]) < 1 then
+                    CallEvent('KNotify:Send', _("select_amount"), "#f00")
                 else
                     if args[3] == "" then
-                        MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                        CallEvent('KNotify:Send', _("select_player"), "#f00")
                     else
                         CallRemoteEvent("TransferInventory", args[1], math.floor(args[2]), args[3])
                     end   
@@ -53,11 +53,11 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 			end
         end
 		if button == 2 then
-			if args[1] == "" then
-				MakeNotification(_("select_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[1] == "" then
+                CallEvent('KNotify:Send', _("select_item"), "#f00")
 			else
-				if args[2] == ""  or math.floor(args[2]) < 1 then
-					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                if args[2] == ""  or math.floor(args[2]) < 1 then
+                    CallEvent('KNotify:Send', _("select_amount"), "#f00")
 				else
                     CallRemoteEvent("UseInventory2", args[1], math.floor(args[2]))
 			        CallRemoteEvent("UseInventory", args[1], math.floor(args[2]))

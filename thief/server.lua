@@ -25,7 +25,7 @@ end)
 AddEvent("OnPlayerInteractDoor", function( player, door, bWantsOpen )
     if globaldoors[door] ~= nil and globaldoors[door].locked then
         SetDoorOpen(door, false)
-        CallRemoteEvent(player, "MakeNotification", _("vault_locked"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("vault_locked"), "#f00")
     end
 end)
 
@@ -58,7 +58,7 @@ AddRemoteEvent("PickOpenDoor", function(player)
                     SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
                     SetText3DText(vaultProgressText, "Picklock Progress: 100 %")
                     globaldoors[nearestdoor].locked = false
-                    CallRemoteEvent(player, "MakeNotification", _("door_picklocked"), "linear-gradient(to right, #00b09b, #96c93d)")
+                    CallRemoteEvent(player, 'KNotify:Send', _("door_picklocked"), "#0f0")
                     Delay(60000, function()
                         SetText3DText(vaultProgressText, "Picklock Progress: 0 %")
                         vaultLockProgress = 0
@@ -69,10 +69,10 @@ AddRemoteEvent("PickOpenDoor", function(player)
                     end)
                 end
             else
-                CallRemoteEvent(player, "MakeNotification", _("cant_picklock_here"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallRemoteEvent(player, 'KNotify:Send', _("cant_picklock_here"), "#f00")
             end
         else
-            CallRemoteEvent(player, "MakeNotification", _("cant_steal_bars_now"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallRemoteEvent(player, 'KNotify:Send', _("cant_steal_bars_now"), "#f00")
         end
     end
 end)
@@ -98,9 +98,9 @@ AddRemoteEvent("RPNotify:ObjectInteract_trade_silver_bars", function(player, obj
         random_bar_amount = math.random(150, 400)
         AddBalanceToAccount(player, "cash", random_bar_amount * total_silver_bars)
         RemoveInventory(player, "dirty_silver_bar", total_silver_bars)
-        CallRemoteEvent(player, "MakeNotification", _("silver_bars_sold"), "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', _("silver_bars_sold"), "#0f0")
     else
-        CallRemoteEvent(player, "MakeNotification", _("no_bars_to_trade"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("no_bars_to_trade"), "#f00")
     end
 end)
 
@@ -118,14 +118,14 @@ AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
                     random_bar_amount = math.random(10, GetPlayerInventorySpace(player))
                     AddPlayerChatAll('<span color="#ff0000">' .. thief .. ' has hit the bank vault. They have stolen ' .. random_bar_amount .. ' silver bars.' .. '</>')
                     AddInventory(player, "dirty_silver_bar", random_bar_amount)
-                    CallRemoteEvent(player, "MakeNotification", _("stolen_bars"), "linear-gradient(to right, #00b09b, #96c93d)")
+                    CallRemoteEvent(player, 'KNotify:Send', _("stolen_bars"), "#0f0")
                 end)
             end
         else
-            CallRemoteEvent(player, "MakeNotification", _("cant_steal_bars_now"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallRemoteEvent(player, 'KNotify:Send', _("cant_steal_bars_now"), "#f00")
         end
     else
-        CallRemoteEvent(player, "MakeNotification", _("not_a_thief"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("not_a_thief"), "#f00")
     end
 end)
 

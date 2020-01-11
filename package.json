@@ -80,7 +80,6 @@
         "delivery/client.lua",
 	    "essentials/cl_animation.lua",
         "scoreboard/client.lua",
-        "notification/client.lua",
         "animation/client.lua",
         "essentials/cl_gps.lua",
         "police/client.lua",
@@ -99,7 +98,7 @@
         "vehicle_radio/client.lua",
         "lottery/client.lua",
         "robbery/config.lua",
-		"robbery/client.lua"
+        "robbery/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -118,10 +117,6 @@
         "scoreboard/scoreboard/scoreboard.css",
         "scoreboard/scoreboard/scoreboard.html",
         "scoreboard/scoreboard/scoreboard.js",
-        "notification/notification/notification.html",
-        "notification/notification/toastify.js",
-        "notification/notification/toastify.min.css",
-        "notification/notification/noti.mp3",
         "animation/web/images/crossarms.png",
         "animation/web/images/dab.png",
         "animation/web/images/dancing.png",

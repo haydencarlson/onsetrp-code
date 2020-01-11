@@ -37,10 +37,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 	if dialog == shop then
 		if button == 1 then
 			if args[1] == "" then
-				MakeNotification(_("select_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+				CallEvent('KNotify:Send', _("select_item"), "#f00")
 			else
 				if args[2] == "" or math.floor(args[2]) < 1 then
-					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+					CallEvent('KNotify:Send', _("select_amount"), "#f00")
 				else
 					CallRemoteEvent("ShopSell", lastShop, lastItems[tonumber(args[1])], math.floor(args[2]))
 				end
@@ -48,10 +48,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 		end
 		if button == 2 then
 			if args[3] == "" then
-				MakeNotification(_("select_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+				CallEvent('KNotify:Send', _("select_item"), "#f00")
 			else
 				if args[4] == ""  or math.floor(args[4]) < 1 then
-					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+					CallEvent('KNotify:Send', _("select_amount"), "#f00")
 				else
 					CallRemoteEvent("ShopBuy", lastShop, lastItems[tonumber(args[3])], math.floor(args[4]))
 				end

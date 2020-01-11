@@ -75,7 +75,7 @@ AddRemoteEvent("OnCardDataLoaded", function(id, name, driverLicense, gunLicense,
 end)
 
 AddRemoteEvent("ConfirmIdCardShow", function(shownTo)
-    MakeNotification(_("id_card_shown", shownTo), "linear-gradient(to right, #ff5f6d, #ffc371)")
+    CallEvent('KNotify:Send', _("id_card_shown", shownTo), "#0f0")
 end)
 
 AddEvent("HideIdCard", function()

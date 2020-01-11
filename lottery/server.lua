@@ -7,7 +7,7 @@ AddRemoteEvent("joinLotto", function(player, number)
         local queryid = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open';")
         mariadb_async_query(sql, queryid, OnLoadedLotteriesCheckPlayer, player, number)
     else
-        CallRemoteEvent(player, "MakeNotification", _("not_enough_cash_for_lottery"), "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', _("not_enough_cash_for_lottery"), "#f00")
     end
 end)
 
@@ -19,7 +19,7 @@ end
 
 function OnLoadedCheckForEntryNumber(player, lottery, number)
     if (mariadb_get_row_count() ~= 0) then   
-        CallRemoteEvent(player, "MakeNotification", _("lotto_number_taken"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("lotto_number_taken"), "#f00")
     else
         local query = mariadb_prepare(sql, "SELECT * FROM lottery_entries WHERE lottery_id = '?' AND accountid = '?';", lottery['id'], PlayerData[player].accountid)
         mariadb_async_query(sql, query , OnLoadInsertEntry, player, number, lottery)
@@ -28,7 +28,7 @@ end
 
 function OnLoadInsertEntry(player, number, lottery)
     if (mariadb_get_row_count() ~= 0) then   
-        CallRemoteEvent(player, "MakeNotification", _("already_entered_lottery"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("already_entered_lottery"), "#f00")
     else
         local entry = mariadb_get_assoc(1)
         local query = mariadb_prepare(sql, "INSERT INTO lottery_entries SET accountid = '?', lotto_number = '?', lottery_id = '?';",
@@ -37,7 +37,7 @@ function OnLoadInsertEntry(player, number, lottery)
             tostring(lottery['id'])
         )
         mariadb_query(sql, query)
-        CallRemoteEvent(player, "MakeNotification", _("entered_lottery"), "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', _("entered_lottery"), "#0f0")
     end
 end
 

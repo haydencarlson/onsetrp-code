@@ -117,11 +117,11 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
     local animation = ""
     local attached_item = 0
     if GetPlayerInventorySpace(player) == 0 then
-        return CallRemoteEvent(player, "MakeNotification", _("inventory_not_enough_space"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        return CallRemoteEvent(player, 'KNotify:Send', _("inventory_not_enough_space"), "#f00")
     end
     if gatherTable[gather].gather_tool ~= nil then
         if PlayerData[player].inventory[gatherTable[gather].gather_tool] == nil then
-            return CallRemoteEvent(player, "MakeNotification", _("need_tool"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            return CallRemoteEvent(player, 'KNotify:Send', _("need_tool"), "#f00")
         end
     end
     if GetPlayerVehicle(player) ~= 0 then
@@ -156,7 +156,7 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
             Delay(8000, function()
                 SetPlayerPropertyValue(player, "actionInProgress", 'false', true)
                 AddInventory(player, gatherTable[gather].gather_item, 1)
-                CallRemoteEvent(player, "MakeNotification", _("gather_success", _(gatherTable[gather].gather_item)), "linear-gradient(to right, #00b09b, #96c93d)")
+                CallRemoteEvent(player, 'KNotify:Send', _("gather_success", _(gatherTable[gather].gather_item)), "#0f0")
                 SetPlayerAnimation(player, "STOP")
                 CallRemoteEvent(player, "LockControlMove", false)
                 SetAttachedItem(player, "hand_r", 0)
@@ -177,11 +177,11 @@ AddRemoteEvent("StartProcessing", function(player, processzone)
             SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
             if PlayerData[player].inventory[unprocessed_item] == nil then	
                 SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
-                return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")	
+                return CallRemoteEvent(player, 'KNotify:Send', _("not_enough_item"), "#f00")
             end
             if tonumber(PlayerData[player].inventory[unprocessed_item]) < 1 then
                 SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
-                return CallRemoteEvent(player, "MakeNotification", _("not_enough_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                return CallRemoteEvent(player, 'KNotify:Send', _("not_enough_item"), "#f00")
             else
                 CallRemoteEvent(player, "LockControlMove", true)
                 RemoveInventory(player, unprocessed_item, 1)
@@ -192,7 +192,7 @@ AddRemoteEvent("StartProcessing", function(player, processzone)
                 Delay(8000, function()
                     SetPlayerPropertyValue(player, "actionInProgress", 'false', true)
                     AddInventory(player, gatherTable[gather].process_item, 1)
-                    CallRemoteEvent(player, "MakeNotification", _("process_success", _(gatherTable[gather].process_item)), "linear-gradient(to right, #00b09b, #96c93d)")
+                    CallRemoteEvent(player, 'KNotify:Send', _("process_success", _(gatherTable[gather].process_item)), "#0f0")
                     CallRemoteEvent(player, "LockControlMove", false)
                     SetPlayerAnimation(player, "STOP")
                 end)
