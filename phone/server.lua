@@ -1,38 +1,29 @@
-local kes = ImportPackage('kuz_Essentials')
-
+local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local numbers = {}
 
 local contacts = {}
 
-function RoleSelected(player)
-	Delay(3000, function()
-		GetPhoneNumber(player)
-	end)
-end
-AddEvent("Kuzkay:RoleSelected", RoleSelected)
+AddRemoteEvent("Kuzkay:GetPhoneNumber", function(player)
+	GetPhoneNumber(player)
+end)
 
 AddEvent("OnPlayerQuit", function(player)
 	numbers[player] = nil
 end)
 
 function GetPhoneNumber(player)
-	local role = kes.getPlayerRole(player)
-	if role ~= nil and role ~= "" then
-	local query = mariadb_prepare(sql, "SELECT `phone` FROM `profiles` WHERE `steamid` = '?' AND `role` = '?' LIMIT 1;",
-		tostring(GetPlayerSteamId(player)),
-		role)
-
-		mariadb_query(sql, query, PhoneNumberLoaded, player)
-	end
+	local query = mariadb_prepare(sql, "SELECT `phone_number` FROM `accounts` WHERE `steamid` = '?' LIMIT 1;",
+		tostring(GetPlayerSteamId(player))
+	)
+	mariadb_query(sql, query, PhoneNumberLoaded, player)
 end
 
 function PhoneNumberLoaded(player)
 	if mariadb_get_row_count() ~= 0 then
-		
 		local result = mariadb_get_assoc(1)
-		if result.phone ~= nil then
-			numbers[player] = tonumber(result.phone)
-			CallRemoteEvent(player, "Kuzkay:PhoneSetClientNumber", tonumber(result.phone))
+		if result['phone_number'] ~= nil then
+			numbers[player] = tonumber(result['phone_number'])
+			CallRemoteEvent(player, "Kuzkay:PhoneSetClientNumber", tonumber(result['phone_number']))
 			GetPlayerContacts(player)
 		else
 			CreateNewNumber(player)
@@ -44,18 +35,15 @@ function PhoneNumberLoaded(player)
 end
 
 function CreateNewNumber(player)
-
 	local number = GenerateNumber()
-
-	local role = kes.getPlayerRole(player)
-	local query = mariadb_prepare(sql, "UPDATE `profiles` SET `phone` = '?' WHERE `steamid` = '?' and `role` = '?';",
-			number,
-
-			tostring(GetPlayerSteamId(player)),
-			role)
+	local query = mariadb_prepare(sql, "UPDATE `accounts` SET `phone_number` = '?' WHERE `steamid` = '?';",
+		number,
+		tostring(GetPlayerSteamId(player))
+	)
 			
-			mariadb_query(sql, query, PhoneNumberCreated, player, number)
+	mariadb_query(sql, query, PhoneNumberCreated, player, number)
 end
+
 function PhoneNumberCreated(player, number)
 	numbers[player] = tonumber(number)
 	CallRemoteEvent(player, "Kuzkay:PhoneSetClientNumber", number)
@@ -84,22 +72,16 @@ end
 
 
 function AddContact(player, number, name)
-	local role = kes.getPlayerRole(player)
-
-	if role ~= nil and role ~= "" then
-		if #contacts[player] <= 20 then
-			local query = mariadb_prepare(sql, "INSERT INTO `phone_contacts` (`steamid`, `role`, `number`, `name`) VALUES ('?', '?', '?', '?');",
-				tostring(GetPlayerSteamId(player)),
-				role,
-				tonumber(number),
-				name)
-
-
-				mariadb_query(sql, query, OnContactAdded, player)
-				CallRemoteEvent(player, "KNotify:Send", "Contact has been added", "#0f0");
-		else
-			CallRemoteEvent(player, "KNotify:Send", "Contact limit reached(20) Contact won't be saved after relog", "#f00")
-		end
+	if #contacts[player] <= 20 then
+		local query = mariadb_prepare(sql, "INSERT INTO `phone_contacts` (`steamid`, `number`, `name`) VALUES ('?', '?', '?');",
+			tostring(GetPlayerSteamId(player)),
+			tonumber(number),
+			name
+		)
+		mariadb_query(sql, query, OnContactAdded, player)
+		CallRemoteEvent(player, "MakeNotification", _("contact_added"), "linear-gradient(to right, #00b09b, #96c93d)")
+	else
+		CallRemoteEvent(player, "MakeNotification", _("contact_limit_reached"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 	end
 end
 AddRemoteEvent("Kuzkay:PhoneAddContact", AddContact, player, number, name)
@@ -112,40 +94,35 @@ function OnContactAdded(player, number, name)
 end
 
 function CheckNumberFree(number)
-	local query = mariadb_prepare(sql, "SELECT phone FROM `profiles` WHERE `phone` = '?';",
-		number)
-			mariadb_query(sql, query, function()
-				if mariadb_get_row_count() == 0 then
-					return true
-				else
-					return false
-				end
-			end)
+	local query = mariadb_prepare(sql, "SELECT phone_number FROM `accounts` WHERE `phone_number` = '?';", number)
+	mariadb_query(sql, query, function()
+		if mariadb_get_row_count() == 0 then
+			return true
+		else
+			return false
+		end
+	end)
 end
 
 function GetPlayerContacts(player)
-	local role = kes.getPlayerRole(player)
+	local query = mariadb_prepare(sql, "SELECT * FROM `phone_contacts` WHERE `steamid` = '?';",
+		tostring(GetPlayerSteamId(player))
+	)
 
-	local query = mariadb_prepare(sql, "SELECT * FROM `phone_contacts` WHERE `steamid` = '?' AND `role` = '?';",
-		tostring(GetPlayerSteamId(player)),
-		role)
-			mariadb_query(sql, query, function()
-				
-				contacts[player] = {}
+	mariadb_query(sql, query, function()
+		contacts[player] = {}
 
-				for i = 1, mariadb_get_row_count() do
-					local result = mariadb_get_assoc(i)
-
+		for i = 1, mariadb_get_row_count() do
+			local result = mariadb_get_assoc(i)
 					
-					contacts[player][i] = {}
-					contacts[player][i].name = result.name
-					contacts[player][i].number = result.number
-					CallRemoteEvent(player, "Kuzkay:PhoneInsertContact", result.number, result.name)
+			contacts[player][i] = {}
+			contacts[player][i].name = result.name
+			contacts[player][i].number = result.number
+			CallRemoteEvent(player, "Kuzkay:PhoneInsertContact", result.number, result.name)
 
-					i = i + 1
-				end
-
-			end)
+			i = i + 1
+		end
+	end)
 end
 
 
@@ -156,11 +133,8 @@ AddRemoteEvent("Kuzkay:PhoneSendTweet", function(player, text)
 	end
 end)
 
-
-
 function SendPlayerMessage(player, number, text)
 	for _, v in pairs(GetAllPlayers()) do
-
 		if number == "107113" or number == "104202" then
 			BotMessage(player, number, text, "dealer")
 			return
@@ -168,7 +142,7 @@ function SendPlayerMessage(player, number, text)
 
 		local senderNumber = numbers[player]
 		local x,y,z = GetPlayerLocation(v)
-		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", player, senderNumber, number, text, x,y,z)
+		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", player, senderNumber, number, text, PlayerData[v].job)
 	end
 end
 
@@ -178,7 +152,7 @@ function SendCustomPlayerMessage(player , sender, number, text)
 	for _, v in pairs(GetAllPlayers()) do
 		local senderNumber = tonumber(sender)
 		local x,y,z = GetPlayerLocation(v)
-		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", -1, senderNumber, tonumber(number), text)
+		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", -1, senderNumber, tonumber(number), text, PlayerData[v].job)
 	end
 end
 AddCommand("message", SendCustomPlayerMessage)
@@ -188,29 +162,26 @@ AddRemoteEvent("Kuzkay:PhoneSendLocationMessage", function(player , number)
 	for _, v in pairs(GetAllPlayers()) do
 		local senderNumber = numbers[player]
 		
-		CallRemoteEvent(v, "Kuzkay:PhoneRecieveLocationMessage", player, senderNumber, number, x,y,z)
+		CallRemoteEvent(v, "Kuzkay:PhoneRecieveLocationMessage", player, senderNumber, number, x,y,z, PlayerData[v].job)
 	end
 end)
 
 AddRemoteEvent("Kuzkay:PhoneDeleteContact", function(player, number)
-	local role = kes.getPlayerRole(player)
-
-	local query = mariadb_prepare(sql, "DELETE FROM `phone_contacts` WHERE `steamid` = '?' AND `role` = '?' AND number = '?';",
+	local query = mariadb_prepare(sql, "DELETE FROM `phone_contacts` WHERE `steamid` = '?' AND number = '?';",
 			tostring(GetPlayerSteamId(player)),
-			role,
-			tonumber(number))
+			tonumber(number)
+	)
 
-
-			mariadb_query(sql, query, OnContactDeleted, player)
+	mariadb_query(sql, query, OnContactDeleted, player)
 end)
 
 function OnContactDeleted(player)
-	CallRemoteEvent(player, "KNotify:Send", "Contact has been deleted", "#0f0")
+	CallRemoteEvent(player, "MakeNotification", _("contact_deleted"), "linear-gradient(to right, #00b09b, #96c93d)")
 end
 
-AddEvent("Kuzkay:PhoneSendToJob", function(job, text,x,y,z)
+AddEvent("Kuzkay:PhoneSendToJob", function(job, text, x, y, z)
 	for v, v in pairs(GetAllPlayers()) do
-		if kes.getPlayerJob(v) == job then
+		if PlayerData[player].job == job then
 			local pNumber = tonumber(numbers[v])
 			CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", -1, "999", pNumber, text, x,y,z)
 			Delay(300, function()

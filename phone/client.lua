@@ -1,3 +1,4 @@
+local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local GPSlocations = {
 	{name="Cocaine farm", show=false, locations={
 		{x=-220692,y=-85078,z=187}
@@ -85,13 +86,8 @@ function OnPackageStart()
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
-local myJob = ""
-
-AddRemoteEvent("OnJobChange", function(job, grade)
-	myJob = job
-end)
-
 AddEvent("Kuzkay:PhoneLoaded", function()
+	CallRemoteEvent("Kuzkay:GetPhoneNumber")
 	ExecuteWebJS(ui, "ClearTweets();")
 
 	for k,v in pairs(GPSlocations) do
@@ -106,13 +102,14 @@ local cooldown = false
 local cooldown2 = false
 
 function OnKeyPress(key)
-	if key == "K" and not GetPlayerPropertyValue(GetPlayerId(), 'cuffed') then
+	if key == "K" and not GetPlayerPropertyValue(GetPlayerId(), 'cuffed') and (not UIOpen or open == true) then
 		TogglePhone()
 		cooldown = false
 		cooldown2 = false
 	end
 	if key == "Escape" then
 		if open then
+			UIOpen = false
 			open = false
 			SetWebVisibility(ui, WEB_HIDDEN)
 			SetIgnoreLookInput(false)
@@ -165,11 +162,9 @@ AddRemoteEvent("Kuzkay:PhoneSetClientNumber", SetPlayerNumber)
 
 local waypoints = {}
 function SetLocationWaypoint(name,x,y,z)
-
 	if name ~= "Location" then
 		local nearest = 0
 		local nearestDist = 9999999
-
 
 		local px,py,pz = GetPlayerLocation()
 		for k,v in pairs(GPSlocations[tonumber(x)].locations) do
@@ -219,7 +214,7 @@ function AddContact(number, name)
 		CallRemoteEvent("Kuzkay:PhoneAddContact", number, name)
 		SetCooldown()
 	else
-		CallEvent("KNotify:Send", "Wait before doing this again", "#f00")
+		MakeNotification(_("wait_before_doing_again"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 	end
 end
 AddEvent("Kuzkay:PhoneAddContact", AddContact)
@@ -234,7 +229,7 @@ function SendTweet(text)
 		CallRemoteEvent("Kuzkay:PhoneSendTweet", text)
 		SetCooldown()
 	else
-		CallEvent("KNotify:Send", "Wait before doing this again", "#f00")
+		MakeNotification(_("wait_before_adding_again"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 	end
 end
 AddEvent("Kuzkay:PhoneTweet", SendTweet)
@@ -250,13 +245,13 @@ function SendMessage(number, text)
 		CallRemoteEvent("Kuzkay:PhoneSendMessage", number, text)
 		SetCooldown()
 	else
-		CallEvent("KNotify:Send", "Wait before doing this again", "#f00")
+		MakeNotification(_("wait_before_doing_again"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 	end
 end
 AddEvent("Kuzkay:PhoneMessage", SendMessage)
 
 
-function RecieveMessage(sender, senderNumber, number, text)
+function RecieveMessage(sender, senderNumber, number, text, job)
 	number = math.floor(tonumber(number))
 	if text == nil then
 		return
@@ -279,7 +274,7 @@ function RecieveMessage(sender, senderNumber, number, text)
 
 		
 	else
-		if (number == 999 and myJob == "police") or (number == 998 and myJob == "ems") or (number == 911 and (myJob == "police" or myJob == "ems")) then
+		if (number == 999 and job == "police") or (number == 998 and job == "medic") or (number == 911 and (job == "police" or job == "ems")) then
 			ExecuteWebJS(ui, "AddMessage("..number..",'"..text.."','job');")
 
 			if GetWebVisibility(ui) == WEB_HIDDEN then
@@ -310,7 +305,7 @@ function SendLocationMessage(number)
 end
 AddEvent("Kuzkay:PhoneLocationMessage", SendLocationMessage)
 
-function RecieveLocationMessage(sender, senderNumber, number, x, y, z)
+function RecieveLocationMessage(sender, senderNumber, number, x, y, z, job)
 	number = math.floor(tonumber(number))
 	if tonumber(number) == tonumber(myNumber) or sender == GetPlayerId() then
 		if sender == GetPlayerId() then
@@ -319,7 +314,7 @@ function RecieveLocationMessage(sender, senderNumber, number, x, y, z)
 			ExecuteWebJS(ui, "AddLocationMessage("..senderNumber..","..x..","..y..","..z..");")
 		end
 	else
-		if ((number == 999 and myJob == "police") or (number == 998 and myJob == "ems") or (number == 911 and (myJob == "police" or myJob == "ems"))) then
+		if ((number == 999 and job == "police") or (number == 998 and job == "medic") or (number == 911 and (job == "police" or job == "medic"))) then
 			ExecuteWebJS(ui, "AddLocationMessage("..number..","..x..","..y..","..z..");")
 		end
 	end
