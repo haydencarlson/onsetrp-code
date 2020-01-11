@@ -70,9 +70,9 @@ end)
 
 function SetupUpdateMedicUniform(player)
     for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
-	if(PlayerData[v] ~= nil and PlayerData[player].job == "medic" and player ~= v) then
-	    CallRemoteEvent(v, "UpdateMedicUniform", player)
-	end
+		if(PlayerData[v] ~= nil and PlayerData[player].job == "medic" and player ~= v) then
+			CallRemoteEvent(v, "UpdateMedicUniform", player)
+		end
     end
 end
 AddRemoteEvent("SetupUpdateMedicUniform", SetupUpdateMedicUniform)
