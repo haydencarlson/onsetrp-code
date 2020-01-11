@@ -23,7 +23,20 @@ end
 AddRemoteEvent("SeeIdCard", function(player)
     -- Coming soon: job and jobTitle
     -- CallRemoteEvent(player, "OnCardDataLoaded", PlayerData[player].name, playerInfo['company']['name'], playerInfo['job'])
-    CallRemoteEvent(player, "OnCardDataLoaded", PlayerData[player].accountid, PlayerData[player].name, PlayerData[player].driver_license == 1, PlayerData[player].gun_license == 1, PlayerData[player].helicopter_license == 1)
+    local job = PlayerData[player].job
+    if job == "" then
+        job = "Citizen"
+    end
+    CallRemoteEvent(
+        player, 
+        "OnCardDataLoaded", 
+        PlayerData[player].accountid, 
+        PlayerData[player].name,
+        PlayerData[player].driver_license == 1, 
+        PlayerData[player].gun_license == 1, 
+        PlayerData[player].helicopter_license == 1,
+        job
+    )
 end)
 
 AddRemoteEvent("ShowIdCard", function(player)

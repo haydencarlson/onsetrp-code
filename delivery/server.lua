@@ -125,7 +125,6 @@ AddRemoteEvent("StopDelivery", function()
     end
     PlayerData[player].job = ""
     playerDelivery[player] = nil
-    CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
 end)
 
 AddRemoteEvent("OpenDeliveryMenu", function(player)
@@ -136,6 +135,7 @@ end)
 
 AddRemoteEvent("NextDelivery", function(player)
     if playerDelivery[player] ~= nil then
+        CallRemoteEvent(player, "ClientCreateWaypoint", _("delivery"), deliveryPoint[playerDelivery[player]][1], deliveryPoint[playerDelivery[player]][2], deliveryPoint[playerDelivery[player]][3])
         return CallRemoteEvent(player, 'KNotify:Send', _("finish_your_delivery"), "#f00")
     end
     delivery = Random(1, #deliveryPoint)
