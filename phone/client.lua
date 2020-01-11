@@ -256,7 +256,7 @@ function RecieveMessage(sender, senderNumber, number, text, job)
 	if text == nil then
 		return
 	end
-
+	
 	if number == tonumber(myNumber) or sender == GetPlayerId() then
 
 		if sender == GetPlayerId() then
@@ -271,8 +271,6 @@ function RecieveMessage(sender, senderNumber, number, text, job)
 				end)
 			end
 		end
-
-		
 	else
 		if (number == 999 and job == "police") or (number == 998 and job == "medic") or (number == 911 and (job == "police" or job == "ems")) then
 			ExecuteWebJS(ui, "AddMessage("..number..",'"..text.."','job');")

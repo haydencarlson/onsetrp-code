@@ -29,7 +29,7 @@
     "contact_added": "Phone contact added.",
     "contact_limit_reached": "Contact Limit Reached (20)",
     "contact_deleted": "Contact has been deleted",
-    "wait_before_adding_again": "Please wait before doing this again",
+    "wait_before_doing_again": "Please wait before doing this again",
     "cant_picklock_here": "You cant picklock here",
     "thief_menu": "Thief Menu",
     "picklock": "Picklock",

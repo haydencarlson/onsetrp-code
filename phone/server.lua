@@ -40,6 +40,7 @@ function CreateNewNumber(player)
 		number,
 		tostring(GetPlayerSteamId(player))
 	)
+	contacts[player] = {}
 			
 	mariadb_query(sql, query, PhoneNumberCreated, player, number)
 end
@@ -84,7 +85,7 @@ function AddContact(player, number, name)
 		CallRemoteEvent(player, "MakeNotification", _("contact_limit_reached"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 	end
 end
-AddRemoteEvent("Kuzkay:PhoneAddContact", AddContact, player, number, name)
+AddRemoteEvent("Kuzkay:PhoneAddContact", AddContact)
 
 function OnContactAdded(player, number, name)
 	local i = #contacts[player] + 1
@@ -108,10 +109,8 @@ function GetPlayerContacts(player)
 	local query = mariadb_prepare(sql, "SELECT * FROM `phone_contacts` WHERE `steamid` = '?';",
 		tostring(GetPlayerSteamId(player))
 	)
-
+	contacts[player] = {}
 	mariadb_query(sql, query, function()
-		contacts[player] = {}
-
 		for i = 1, mariadb_get_row_count() do
 			local result = mariadb_get_assoc(i)
 					
@@ -125,8 +124,6 @@ function GetPlayerContacts(player)
 	end)
 end
 
-
-
 AddRemoteEvent("Kuzkay:PhoneSendTweet", function(player, text)
 	for _, v in pairs(GetAllPlayers()) do
 		CallRemoteEvent(v, "Kuzkay:PhoneRecieveTweet", GetPlayerName(player), text)
@@ -139,7 +136,6 @@ function SendPlayerMessage(player, number, text)
 			BotMessage(player, number, text, "dealer")
 			return
 		end
-
 		local senderNumber = numbers[player]
 		local x,y,z = GetPlayerLocation(v)
 		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", player, senderNumber, number, text, PlayerData[v].job)
@@ -148,7 +144,7 @@ end
 
 AddRemoteEvent("Kuzkay:PhoneSendMessage", SendPlayerMessage)
 
-function SendCustomPlayerMessage(player , sender, number, text)
+function SendCustomPlayerMessage(player, sender, number, text)
 	for _, v in pairs(GetAllPlayers()) do
 		local senderNumber = tonumber(sender)
 		local x,y,z = GetPlayerLocation(v)
