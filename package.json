@@ -53,7 +53,9 @@
         "transport/s_busstop.lua",
         "vehicle_radio/server.lua",
         "lottery/server.lua",
-        "phone/utils/json.lua"
+        "phone/utils/json.lua",
+        "robbery/config.lua",
+		"robbery/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -95,7 +97,9 @@
         "medic/client.lua",
         "essentials/undermap/client.lua",
         "vehicle_radio/client.lua",
-        "lottery/client.lua"
+        "lottery/client.lua",
+        "robbery/config.lua",
+		"robbery/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -155,6 +159,6 @@
 		"phone/gui/img/contacts.png",
 		"phone/gui/img/background.jpg",
 		"phone/gui/img/location.png",
-		"phone/gui/img/garlic.png"
+        "phone/gui/img/garlic.png"
     ]
 }

@@ -214,7 +214,7 @@ function AddContact(number, name)
 		CallRemoteEvent("Kuzkay:PhoneAddContact", number, name)
 		SetCooldown()
 	else
-		MakeNotification(_("wait_before_doing_again"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		CallRemoteEvent(player, 'KNotify:Send', _("wait_before_doing_again"), "#f00")
 	end
 end
 AddEvent("Kuzkay:PhoneAddContact", AddContact)
@@ -229,7 +229,7 @@ function SendTweet(text)
 		CallRemoteEvent("Kuzkay:PhoneSendTweet", text)
 		SetCooldown()
 	else
-		MakeNotification(_("wait_before_adding_again"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		CallRemoteEvent(player, 'KNotify:Send', _("wait_before_doing_again"), "#f00")
 	end
 end
 AddEvent("Kuzkay:PhoneTweet", SendTweet)
@@ -245,7 +245,7 @@ function SendMessage(number, text)
 		CallRemoteEvent("Kuzkay:PhoneSendMessage", number, text)
 		SetCooldown()
 	else
-		MakeNotification(_("wait_before_doing_again"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		CallRemoteEvent(player, 'KNotify:Send', _("wait_before_doing_again"), "#f00")
 	end
 end
 AddEvent("Kuzkay:PhoneMessage", SendMessage)
