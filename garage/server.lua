@@ -158,7 +158,7 @@ function spawnCarServerLoaded(player)
         local nos_equipped = math.tointeger(result['nos_equipped'])
         local vehicle_durability = math.tointeger(result['vehicle_durability'])
         local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=0 WHERE `id` = ?;",
-        tostring(id)
+            tostring(id)
         )
 
         local x, y, z = GetPlayerLocation(player)
@@ -177,16 +177,16 @@ function spawnCarServerLoaded(player)
                     end
                 end
                 if isSpawnable then
-                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name)
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color)
                 else
-                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2] - 300, v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name)
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2] - 300, v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color)
                 end
             end
         end
 	end
 end
 
-function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id, name)
+function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id, name, query, player, color)
     local vehicle = CreateVehicle(modelid, x, y, z, h)
     if nos_equipped == 1 then
         AttachVehicleNitro(vehicle , true)
