@@ -1,3 +1,4 @@
+local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local numbers = {}
 
 local contacts = {}
@@ -34,10 +35,7 @@ function PhoneNumberLoaded(player)
 end
 
 function CreateNewNumber(player)
-
 	local number = GenerateNumber()
-	print("new number")
-	print(tostring(number))
 	local query = mariadb_prepare(sql, "UPDATE `accounts` SET `phone_number` = '?' WHERE `steamid` = '?';",
 		number,
 		tostring(GetPlayerSteamId(player))
@@ -75,16 +73,15 @@ end
 
 function AddContact(player, number, name)
 	if #contacts[player] <= 20 then
-		local query = mariadb_prepare(sql, "INSERT INTO `phone_contacts` (`steamid`, `number`, `name`) VALUES ('?', '?', '?', '?');",
+		local query = mariadb_prepare(sql, "INSERT INTO `phone_contacts` (`steamid`, `number`, `name`) VALUES ('?', '?', '?');",
 			tostring(GetPlayerSteamId(player)),
 			tonumber(number),
 			name
 		)
-
 		mariadb_query(sql, query, OnContactAdded, player)
-		CallRemoteEvent(player, "KNotify:Send", "Contact has been added", "#0f0");
+		CallRemoteEvent(player, "MakeNotification", _("contact_added"), "linear-gradient(to right, #00b09b, #96c93d)")
 	else
-		CallRemoteEvent(player, "KNotify:Send", "Contact limit reached(20) Contact won't be saved after relog", "#f00")
+		CallRemoteEvent(player, "MakeNotification", _("contact_limit_reached"), "linear-gradient(to right, #ff5f6d, #ffc371)")
 	end
 end
 AddRemoteEvent("Kuzkay:PhoneAddContact", AddContact, player, number, name)
@@ -136,11 +133,8 @@ AddRemoteEvent("Kuzkay:PhoneSendTweet", function(player, text)
 	end
 end)
 
-
-
 function SendPlayerMessage(player, number, text)
 	for _, v in pairs(GetAllPlayers()) do
-
 		if number == "107113" or number == "104202" then
 			BotMessage(player, number, text, "dealer")
 			return
@@ -148,7 +142,7 @@ function SendPlayerMessage(player, number, text)
 
 		local senderNumber = numbers[player]
 		local x,y,z = GetPlayerLocation(v)
-		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", player, senderNumber, number, text, x,y,z)
+		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", player, senderNumber, number, text, PlayerData[v].job)
 	end
 end
 
@@ -158,7 +152,7 @@ function SendCustomPlayerMessage(player , sender, number, text)
 	for _, v in pairs(GetAllPlayers()) do
 		local senderNumber = tonumber(sender)
 		local x,y,z = GetPlayerLocation(v)
-		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", -1, senderNumber, tonumber(number), text)
+		CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", -1, senderNumber, tonumber(number), text, PlayerData[v].job)
 	end
 end
 AddCommand("message", SendCustomPlayerMessage)
@@ -168,7 +162,7 @@ AddRemoteEvent("Kuzkay:PhoneSendLocationMessage", function(player , number)
 	for _, v in pairs(GetAllPlayers()) do
 		local senderNumber = numbers[player]
 		
-		CallRemoteEvent(v, "Kuzkay:PhoneRecieveLocationMessage", player, senderNumber, number, x,y,z)
+		CallRemoteEvent(v, "Kuzkay:PhoneRecieveLocationMessage", player, senderNumber, number, x,y,z, PlayerData[v].job)
 	end
 end)
 
@@ -182,10 +176,10 @@ AddRemoteEvent("Kuzkay:PhoneDeleteContact", function(player, number)
 end)
 
 function OnContactDeleted(player)
-	CallRemoteEvent(player, "KNotify:Send", "Contact has been deleted", "#0f0")
+	CallRemoteEvent(player, "MakeNotification", _("contact_deleted"), "linear-gradient(to right, #00b09b, #96c93d)")
 end
 
-AddEvent("Kuzkay:PhoneSendToJob", function(job, text,x,y,z)
+AddEvent("Kuzkay:PhoneSendToJob", function(job, text, x, y, z)
 	for v, v in pairs(GetAllPlayers()) do
 		if PlayerData[player].job == job then
 			local pNumber = tonumber(numbers[v])
