@@ -28,13 +28,17 @@ function Scoreboard_OnKeyRelease(key)
 end
 AddEvent('OnKeyRelease', Scoreboard_OnKeyRelease)
 
-function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers)
+function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, admin)
   if data == nil then return end
 
   ExecuteWebJS(ScoreboardUI, 'ResetScoreboard()')
   ExecuteWebJS(ScoreboardUI, 'SetInformation("' .. name .. '", ' .. players .. ', ' .. maxplayers .. ')')
   for _, v in pairs(data) do
-    ExecuteWebJS(ScoreboardUI, 'AddPlayer ("' .. v['name'] .. '", ' .. v['ping'] .. ')')
+    if admin == true then
+      ExecuteWebJS(ScoreboardUI, 'AddPlayer ("' .. v['name'] ..  ' ( ' .. v['id'] .. ' )' .. '", ' .. v['ping'] .. ')')
+    else
+      ExecuteWebJS(ScoreboardUI, 'AddPlayer ("' .. v['name'] .. '", ' .. v['ping'] .. ')')
+    end
   end
 end
 AddRemoteEvent('OnServerScoreboardUpdate', Scoreboard_OnServerScoreboardUpdate)

@@ -3,10 +3,11 @@ function Scoreboard_RequestUpdate(player)
   for _, v in ipairs(GetAllPlayers()) do
     _send[v] = {
       ['name'] = GetPlayerName(v),
-      ['ping'] = GetPlayerPing(v)
+      ['ping'] = GetPlayerPing(v),
+      ['id'] = player
     }
   end
-
-  CallRemoteEvent(player, 'OnServerScoreboardUpdate', _send, GetServerName(), #GetAllPlayers(), GetMaxPlayers())
+  local admin = PlayerData[player].admin == 1
+  CallRemoteEvent(player, 'OnServerScoreboardUpdate', _send, GetServerName(), #GetAllPlayers(), GetMaxPlayers(), admin)
 end
 AddRemoteEvent('RequestScoreboardUpdate', Scoreboard_RequestUpdate)

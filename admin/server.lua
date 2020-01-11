@@ -98,6 +98,18 @@ AddRemoteEvent("ServerAdminMenu", function(player)
     end
 end)
 
+AddCommand("jail", function(player, target)
+    if PlayerData[player].admin == 1 then
+        SetPlayerLocation(target, -175307.578125, 83121.9921875, 2000.1500244141)
+    end
+end)
+
+AddCommand("unjail", function(player, target)
+    if PlayerData[player].admin == 1 then
+        SetPlayerLocation(target, 212727.4375, 175845.5, 1500.1500244141)
+    end
+end)
+
 AddRemoteEvent("AdminTeleportToPlace", function(player, place)
     if tonumber(PlayerData[player].admin) ~= 1 then return end
     for k,v in pairs(teleportPlace) do
