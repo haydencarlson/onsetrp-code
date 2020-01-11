@@ -79,18 +79,17 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     end
 
     if dialog == policeFineMenu then
-	if button == 1 then
-	    if args[1] ~= "" then
-		if tonumber(args[1]) > 0 then
-		    CallRemoteEvent("GiveFineToPlayer", args[1], args[2], args[3])
-		else
-		    MakeNotification(_("enter_higher_number"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		if button == 1 then
+			if args[1] ~= "" then
+				if tonumber(args[1]) > 0 then
+					CallRemoteEvent("GiveFineToPlayer", args[1], args[2], args[3])
+				else
+					CallEvent('KNotify:Send', _("enter_higher_number"), "#f00")
+				end
+			else
+				CallEvent('KNotify:Send', _("valid_number"), "#f00")
+			end
 		end
-	    else
-		MakeNotification(_("valid_number"), "linear-gradient(to right, #ff5f6d, #ffc371)")
-	    end
-
-	end
     end
 
     if dialog == policeReceiveFineMenu then

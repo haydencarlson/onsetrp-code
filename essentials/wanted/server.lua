@@ -23,11 +23,11 @@ AddEvent("makeWanted", function(player)
         name = '(Criminal) '..playername
         SetPlayerName(player, name)
         SetPlayerPropertyValue(player, "isWanted", 1, true)
-        CallRemoteEvent(player, "MakeNotification", _("make_wanted"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("make_wanted"), "#f00")
 
     Delay(80000, function()
         SetPlayerPropertyValue(player, "isWanted", 0, true)
-        CallRemoteEvent(player, "MakeNotification", _("bank_rob"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("bank_rob"), "#f00")
         SetPlayerName(player, PlayerData[player].name)
         end)
     end

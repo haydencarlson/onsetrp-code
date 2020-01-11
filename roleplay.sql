@@ -128,19 +128,6 @@ INSERT INTO `items` (`id`, `name`, `category`, `price`, `weight`, `hunger`, `thi
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `messages`
---
-
-CREATE TABLE `messages` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `from` varchar(255) NOT NULL DEFAULT '0',
-  `to` varchar(255) NOT NULL DEFAULT '0',
-  `content` text NOT NULL,
-  `created_at` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 CREATE TABLE IF NOT EXISTS `phone_contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `steamid` longtext,

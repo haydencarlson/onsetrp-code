@@ -30,8 +30,8 @@ AddRemoteEvent("ShowIdCard", function(player)
     local nearestPlayer = GetNearestPlayer(player, 115)
     if(nearestPlayer ~= nil) then
 	    CallRemoteEvent(nearestPlayer[1], "OnCardDataLoaded", PlayerData[player].accountid, PlayerData[player].name)
-	else
-	    CallRemoteEvent(player, "MakeNotification", _("no_players_around"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+    else
+        CallRemoteEvent(player, 'KNotify:Send', _("no_players_around"), "#f00")
 	end
     -- Coming soon: job and jobTitle
     -- CallRemoteEvent(player, "OnCardDataLoaded", PlayerData[player].name, playerInfo['company']['name'], playerInfo['job'])

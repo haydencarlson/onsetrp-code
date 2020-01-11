@@ -30,7 +30,7 @@ AddRemoteEvent("ApplyVehicleMod", function(player, mod, color_name)
     local vehicle = GetPlayerVehicle(player)
     if vehicle ~= 0 then
         if VehicleData[vehicle].player == player then
-            return CallRemoteEvent(player, "MakeNotification", "You cant modify your own vehicle", "linear-gradient(to right, #ff5f6d, #ffc371)")
+            return CallRemoteEvent(player, 'KNotify:Send', "You cant modify your own vehicle", "#f00")
         end
         local upgrade_action = {
             vehicle_color = function(player, vehicle, color_name) 
@@ -55,9 +55,9 @@ function ApplyNos(player, vehicle)
         local update_query = mariadb_prepare(sql, "UPDATE player_garage set nos_equipped = 1 WHERE id = '?';", VehicleData[vehicle].garageid)
         mariadb_query(sql, update_query)
         StartVehicleEngine(vehicle)
-        CallRemoteEvent(player, "MakeNotification", "NOS has been added to this vehicle", "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', "NOS has been added to this vehicle", "#0f0")
     else
-        CallRemoteEvent(player, "MakeNotification", "You dont have enough to add NOS", "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', "You dont have enough to add NOS", "#f00")
     end
 end
 
@@ -69,9 +69,9 @@ function ApplyColorChange(player, vehicle, color_name)
         local update_query = mariadb_prepare(sql, "UPDATE player_garage set color = '?' WHERE id = '?';", vehicleColors[color_name], VehicleData[vehicle].garageid)
         mariadb_query(sql, update_query)
         StartVehicleEngine(vehicle)
-        CallRemoteEvent(player, "MakeNotification", "The color has been changed on this vehicle", "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', "The color has been changed on this vehicle", "#0f0")
     else
-        CallRemoteEvent(player, "MakeNotification", "You dont have enough to respray", "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', "You dont have enough to respray", "#f00")
     end
 end
 
@@ -83,9 +83,9 @@ function ApplyVehicleDurability(player, vehicle)
         local update_query = mariadb_prepare(sql, "UPDATE player_garage set vehicle_durability = '?' WHERE id = '?';", '1', VehicleData[vehicle].garageid)
         mariadb_query(sql, update_query)
         StartVehicleEngine(vehicle)
-        CallRemoteEvent(player, "MakeNotification", "Vehicle durability increased", "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', "Vehicle durability increased", "#0f0")
     else
-        CallRemoteEvent(player, "MakeNotification", "You dont have enough to upgrade vehicle durability", "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', "You dont have enough to upgrade vehicle durability", "#f00")
     end
 end
 
@@ -95,7 +95,7 @@ AddEvent("OnPlayerPickupHit", function(player, pickup)
         if player_vehicle ~= 0 then
             if PlayerData[player].job == 'mechanic' then
                 if VehicleData[player_vehicle].player == player then
-                    return CallRemoteEvent(player, "MakeNotification", "You cant modify your own vehicle", "linear-gradient(to right, #ff5f6d, #ffc371)")
+                    return CallRemoteEvent(player, 'KNotify:Send', "You cant modify your own vehicle", "#f00")
                 end
                 StopVehicleEngine(player_vehicle)
                 SetVehicleLocation(player_vehicle, 211144.015625, 175584.203125, 1307.1500244141)
@@ -111,16 +111,16 @@ AddRemoteEvent("RepairPlayerVehicle", function(player)
     if nearest_vehicle then
         local vehicle_health = GetVehicleHealth(nearest_vehicle)
         if vehicle_health ~= 5000 then
-            CallRemoteEvent(player, "MakeNotification", "Vehicle has been repaired", "linear-gradient(to right, #00b09b, #96c93d)")
+            CallRemoteEvent(player, 'KNotify:Send', "Vehicle has been repaired", "#0f0")
             SetVehicleHealth(nearest_vehicle, 5000)
             for i=1,8 do
                 SetVehicleDamage(nearest_vehicle, i, 0)
             end
         else
-            CallRemoteEvent(player, "MakeNotification", "Vehicle is in perfect shape", "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallRemoteEvent(player, 'KNotify:Send', "Vehicle is in perfect shape", "#f00")
         end
     else
-        CallRemoteEvent(player, "MakeNotification", "No vehicle near you", "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', "No vehicle near you", "#f00")
     end
 end)
 

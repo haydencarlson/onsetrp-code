@@ -23,7 +23,7 @@ end)
 
 function OnPlayerStartEnterVehicle(vehicle)
     if GetVehiclePropertyValue(vehicle, "locked") then 
-        MakeNotification(_("this_vehicle_locked"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallEvent('KNotify:Send', _("this_vehicle_locked"), "#f00")
         return false 
     end 
 end
@@ -31,7 +31,7 @@ AddEvent("OnPlayerStartEnterVehicle", OnPlayerStartEnterVehicle)
 
 function OnPlayerStartExitVehicle(vehicle)
     if GetVehiclePropertyValue(vehicle, "locked") then 
-        MakeNotification(_("this_vehicle_locked"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallEvent('KNotify:Send', _("this_vehicle_locked"), "#f00")
         return false 
     end 
 end
@@ -117,22 +117,22 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 
     if dialog == vehicleInventory then
         if button == 1 then
-			if args[1] == "" then
-				MakeNotification(_("select_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[1] == "" then
+                CallEvent('KNotify:Send', _("select_item"), "#f00")
 			else
-				if args[2] == "" then
-					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                if args[2] == "" then
+                    CallEvent('KNotify:Send', _("select_amount"), "#f00")
 				else
 					CallRemoteEvent("VehicleStore", args[1], args[2])
 				end
 			end
 		end
 		if button == 2 then
-			if args[3] == "" then
-				MakeNotification(_("select_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            if args[3] == "" then
+                CallEvent('KNotify:Send', _("select_item"), "#f00")
 			else
-				if args[4] == "" then
-					MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                if args[4] == "" then
+                    CallEvent('KNotify:Send', _("select_amount"), "#f00")
 				else
 					CallRemoteEvent("VehicleUnstore", args[3], args[4])
 				end
@@ -144,7 +144,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == vehicleKeys then
         if button == 1 then
             if args[2] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 CallRemoteEvent("VehicleGiveKey", args[2])
             end
@@ -152,7 +152,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 
         if button == 2 then
             if args[1] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 CallRemoteEvent("VehicleRemoveKey", args[1])
             end

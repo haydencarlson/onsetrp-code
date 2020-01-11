@@ -80,9 +80,9 @@ function AddContact(player, number, name)
 			name
 		)
 		mariadb_query(sql, query, OnContactAdded, player)
-		CallRemoteEvent(player, "MakeNotification", _("contact_added"), "linear-gradient(to right, #00b09b, #96c93d)")
+		CallRemoteEvent(player, 'KNotify:Send', _("contact_added"), "#0f0")
 	else
-		CallRemoteEvent(player, "MakeNotification", _("contact_limit_reached"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		CallRemoteEvent(player, 'KNotify:Send', _("contact_limit_reached"), "#f00")
 	end
 end
 AddRemoteEvent("Kuzkay:PhoneAddContact", AddContact)
@@ -172,12 +172,12 @@ AddRemoteEvent("Kuzkay:PhoneDeleteContact", function(player, number)
 end)
 
 function OnContactDeleted(player)
-	CallRemoteEvent(player, "MakeNotification", _("contact_deleted"), "linear-gradient(to right, #00b09b, #96c93d)")
+	CallRemoteEvent(player, 'KNotify:Send',_("contact_deleted"), "#f00")
 end
 
 AddEvent("Kuzkay:PhoneSendToJob", function(job, text, x, y, z)
 	for v, v in pairs(GetAllPlayers()) do
-		if PlayerData[player].job == job then
+		if PlayerData[v].job == job then
 			local pNumber = tonumber(numbers[v])
 			CallRemoteEvent(v, "Kuzkay:PhoneRecieveMessage", -1, "999", pNumber, text, x,y,z)
 			Delay(300, function()

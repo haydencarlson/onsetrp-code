@@ -127,7 +127,7 @@ function buyCarServer(player, modelid, color, cardealerobject)
 	local modelid = getVehicleId(modelid)
 
 	if tonumber(price) > GetPlayerCash(player) then
-        CallRemoteEvent(player, "MakeNotification",_("no_money_car"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		CallRemoteEvent(player, 'KNotify:Send', _("no_money_car"), "#f00")
     else
         local x, y, z = GetPlayerLocation(player)
 
@@ -152,10 +152,10 @@ function buyCarServer(player, modelid, color, cardealerobject)
                     CreateVehicleData(player, vehicle, modelid)
                     CreateVehicleDatabase(player, vehicle, modelid, color, price)
                     RemoveBalanceFromAccount(player, "cash", tonumber(price))
-                    CallRemoteEvent(player, "closeCarDealer")
-                    return CallRemoteEvent(player, "MakeNotification", _("car_buy_sucess", name, price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
-                else
-                    return CallRemoteEvent(player, "MakeNotification", _("cannot_spawn_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+					CallRemoteEvent(player, "closeCarDealer")
+					return CallRemoteEvent(player, 'KNotify:Send', _("car_buy_sucess", name, price, _("currency")), "#0f0")
+				else
+					return CallRemoteEvent(player, 'KNotify:Send', _("cannot_spawn_vehicle"), "#f00")
                 end
             end
         end

@@ -109,11 +109,11 @@ AddRemoteEvent("StartDelivery", function(player)
                 PlayerData[player].job = "delivery"
                 return
             else
-                return CallRemoteEvent(player, "MakeNotification", _("cannot_spawn_work_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                return CallRemoteEvent(player, 'KNotify:Send', _("cannot_spawn_work_vehicle"), "#f00")
             end
         end
     else
-        return CallRemoteEvent(player, "MakeNotification", _("not_delivery_driver"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        return CallRemoteEvent(player, 'KNotify:Send', _("not_delivery_driver"), "#f00")
     end
 end)
 
@@ -136,19 +136,19 @@ end)
 
 AddRemoteEvent("NextDelivery", function(player)
     if playerDelivery[player] ~= nil then
-        return CallRemoteEvent(player, "MakeNotification", _("finish_your_delivery"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        return CallRemoteEvent(player, 'KNotify:Send', _("finish_your_delivery"), "#f00")
     end
     delivery = Random(1, #deliveryPoint)
     playerDelivery[player] = delivery
     CallRemoteEvent(player, "ClientCreateWaypoint", _("delivery"), deliveryPoint[delivery][1], deliveryPoint[delivery][2], deliveryPoint[delivery][3])
-    CallRemoteEvent(player, "MakeNotification", _("new_delivery"), "linear-gradient(to right, #00b09b, #96c93d)")
+    CallRemoteEvent(player, 'KNotify:Send', _("new_delivery"), "#0f0")
 end)
 
 AddRemoteEvent("FinishDelivery", function(player)
     delivery = playerDelivery[player]
 
     if delivery == nil then
-        CallRemoteEvent(player, "MakeNotification", _("no_delivery"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("no_delivery"), "#f00")
     end
 
     local x, y, z = GetPlayerLocation(player)
@@ -157,14 +157,12 @@ AddRemoteEvent("FinishDelivery", function(player)
 
     if dist < 150.0 then
         local reward = Random(1111, 2222)
-
-        CallRemoteEvent(player, "MakeNotification", _("finished_delivery", reward, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
-        
+        CallRemoteEvent(player, 'KNotify:Send', _("finished_delivery", reward, _("currency")), "#0f0")
         AddBalanceToAccount(player, "cash", reward)
         playerDelivery[player] = nil
         CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
     else
-        CallRemoteEvent(player, "MakeNotification", _("no_delivery_point"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("no_delivery_point", reward, _("currency")), "#f00")
     end
 end)
 

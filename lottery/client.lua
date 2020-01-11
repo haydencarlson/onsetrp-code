@@ -19,7 +19,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 		local args = { ... }
         if button == 1 then
             if args[1] == ""  or math.floor(args[1]) < 1 or math.floor(args[1]) > 150 then
-                MakeNotification(_("lotto_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallEvent('KNotify:Send', _("lotto_amount"), "#f00")
             else
                 CallRemoteEvent("joinLotto", math.floor(args[1]))
             end

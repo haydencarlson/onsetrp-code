@@ -75,7 +75,7 @@ function JobSelected(player, selection)
         CallRemoteEvent(player, "CUI:Close", "job_selection", true)
         CallRemoteEvent(player, "SelectedJob", selection, PlayerData[player].job)
         if selection ~= "police" then
-            CallRemoteEvent(player, "MakeNotification", "Your new job: " .. selection, "linear-gradient(to right, #00b09b, #96c93d)")
+            CallRemoteEvent(player, 'KNotify:Send', "Your new job: " .. selection, "#0f0")
         end
         CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
         CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
@@ -83,7 +83,7 @@ function JobSelected(player, selection)
         CallRemoteEvent(player, "RPNotify:HUDEvent", "job", selection)
         CallRemoteEvent(player, "RPNotify:CameraTutorial", selection)
     else
-        CallRemoteEvent(player, "MakeNotification", "Your job is already: " .. selection, "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', "Your job is already: " .. selection, "#f00")
     end
 end
 
@@ -91,7 +91,7 @@ AddRemoteEvent("StartDeliveryJob", function(player)
     if PlayerData[player].job ~= "delivery" then
         PlayerData[player].job = "delivery"
     else
-        CallRemoteEvent(player, "MakeNotification", _("already_delivery_driver"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("already_delivery_driver"), "#f00")
     end
 end)
 

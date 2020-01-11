@@ -73,7 +73,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == teleportPlaceMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("select_place"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_place"), "#f00")
             else
                 CallRemoteEvent("AdminTeleportToPlace", args[1])
             end
@@ -82,7 +82,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == teleportToPlayereMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 CallRemoteEvent("AdminTeleportToPlayer", args[1])
             end
@@ -91,7 +91,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == teleportPlayerMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 CallRemoteEvent("AdminTeleportPlayer", args[1])
             end
@@ -100,7 +100,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == weaponMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("select_weapon"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_weapon"), "#f00")
             else
                 CallRemoteEvent("AdminGiveWeapon", args[1])
             end
@@ -109,7 +109,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == vehicleMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("select_vehicle"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallEvent('KNotify:Send', _("select_vehicle"), "#f00")
             else
                 CallRemoteEvent("AdminSpawnVehicle", args[1])
             end
@@ -118,10 +118,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == moneyMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 if args[2] == "" then
-                    MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                    CallEvent('KNotify:Send', _("select_amount"), "#f00")
                 else
                     CallRemoteEvent("AdminGiveMoney", args[1], "Bank", args[2])
                 end
@@ -129,10 +129,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
         end
         if button == 2 then
             if args[1] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 if args[2] == "" then
-                    MakeNotification(_("select_amount"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                     CallEvent('KNotify:Send', _("select_amount"), "#f00")
                 else
                     CallRemoteEvent("AdminGiveMoney", args[1], "Cash", args[2])
                 end
@@ -142,10 +142,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == banMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 if args[2] == "" then
-                    MakeNotification("Please enter a reason", "linear-gradient(to right, #ff5f6d, #ffc371)")
+                     CallEvent('KNotify:Send', "Please enter a reason", "#f00")
                 else
                     CallRemoteEvent("AdminKickBan", args[1], "Ban", args[2])
                 end
@@ -153,10 +153,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
         end
         if button == 2 then
             if args[1] == "" then
-                MakeNotification(_("select_player"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                 CallEvent('KNotify:Send', _("select_player"), "#f00")
             else
                 if args[2] == "" then
-                    MakeNotification(_("enter_reason"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                     CallEvent('KNotify:Send', _("enter_reason"), "#f00")
                 else
                     CallRemoteEvent("AdminKickBan", args[1], "Kick", args[2])
                 end

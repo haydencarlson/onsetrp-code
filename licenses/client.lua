@@ -29,7 +29,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == licenseNpcMenu then
         local args = { ... }
         if args[1] == "" then
-            MakeNotification(_("select_item"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallEvent('KNotify:Send', _("select_item"), "#f00")
         else
             CallRemoteEvent("BuyLicense", args[1])
         end

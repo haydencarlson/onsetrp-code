@@ -30,13 +30,13 @@ function UpdateOrCreatePlayerStock(existingstock, player, stockid, price, quanti
         mariadb_async_query(sql, insertquery)
     end
     RemoveBalanceFromAccount(player, "cash", price * quantity)
-    CallRemoteEvent(player, "MakeNotification", _("bought_stock") .. quantity .. " " .. name, "linear-gradient(to right, #00b09b, #96c93d)")
+    CallRemoteEvent(player, 'KNotify:Send', _("bought_stock") .. quantity .. " " .. name, "#0f0")
 end
 
 function UpdateStockAmountLoaded(player, quantity, stock)
     local balance = GetPlayerCash(player)
     AddBalanceToAccount(player, "cash", (quantity * stock['price']))
-    CallRemoteEvent(player, "MakeNotification", _("sold_stock") .. quantity .. " " .. stock['name'], "linear-gradient(to right, #00b09b, #96c93d)")
+    CallRemoteEvent(player, 'KNotify:Send', _("sold_stock") .. quantity .. " " .. stock['name'], "#0f0")
 end
 
 function LookForExistingStockLoaded(player, stockid, price, quantity, name)
@@ -47,7 +47,7 @@ end
 function SingleStockDataLoaded(player, quantity, side)
     local stock = mariadb_get_assoc(1) 
     if tonumber(quantity) <= 0 then
-        return CallRemoteEvent(player, "MakeNotification", _("less_then_zero"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        return CallRemoteEvent(player, 'KNotify:Send', _("less_then_zero"), "#f00")
     end
     if side == "buy" then
         local price = stock['price']
@@ -56,7 +56,7 @@ function SingleStockDataLoaded(player, quantity, side)
             local existingstock = mariadb_prepare(sql, "SELECT * FROM player_stocks WHERE stock_id = '?' AND player_id = '?';", stockid, PlayerData[player].accountid)
             mariadb_async_query(sql, existingstock, LookForExistingStockLoaded, player, stockid, price, quantity, stock['name'])
         else
-            CallRemoteEvent(player, "MakeNotification", _("not_enought_cash"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallRemoteEvent(player, 'KNotify:Send', _("not_enought_cash"), "#f00")
         end
     else
         local balance = tonumber(stock['amount'])
@@ -72,7 +72,7 @@ function SingleStockDataLoaded(player, quantity, side)
                 mariadb_async_query(sql, updatebalance, UpdateStockAmountLoaded, player, quantity, stock)
             end
         else
-            CallRemoteEvent(player, "MakeNotification", _("not_enough_stock"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallRemoteEvent(player, 'KNotify:Send', _("not_enough_stock"), "#f00")
         end
     end
 end

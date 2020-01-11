@@ -60,7 +60,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == transportMenu then
         if button == 1 then
             if args[1] == "" then
-                MakeNotification(_("transport_choose_stop"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                CallEvent('KNotify:Send', _("transport_choose_stop"), "#f00")
             else                
                 CallRemoteEvent("TransportMenuSTeleportPlayer", args[1])
             end
@@ -69,9 +69,9 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 end)
 
 AddRemoteEvent("TransportMenuCPresentToastSuccess", function(transportMenuListe)
-    MakeNotification(_("transport_bus_incoming"), "linear-gradient(to right, #00b09b, #96c93d)")
+    CallEvent('KNotify:Send', _("transport_bus_incoming"), "#0f0")
 end)
 
 AddRemoteEvent("TransportMenuCPresentNotEnoughMoney", function(transportMenuListe)
-    MakeNotification(_("transport_not_enough_money"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+    CallEvent('KNotify:Send', _("transport_not_enough_money"), "#f00")
 end)

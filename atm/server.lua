@@ -71,27 +71,27 @@ end
 function withdrawAtm(player, amount)
 	if tonumber(amount) <= 0 then return end
 	if tonumber(amount) > PlayerData[player].bank_balance then
-        CallRemoteEvent(player, "MakeNotification", _("withdraw_error"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		CallRemoteEvent(player, 'KNotify:Send', _("withdraw_error"), "#f00")
 	else
 		AddBalanceToAccount(player, 'cash', amount)
 		RemoveBalanceFromAccount(player, 'bank', amount)
 		CallRemoteEvent(player, 'RPNotify:HUDEvent', 'cash', GetPlayerCash(player))
 		CallRemoteEvent(player, 'RPNotify:HUDEvent', 'bank', PlayerData[player].bank_balance)
-        CallRemoteEvent(player, "MakeNotification",_("withdraw_success", amount, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
+		CallRemoteEvent(player, 'KNotify:Send', _("withdraw_success", amount, _("currency")), "#0f0")
 	end
 end
 AddRemoteEvent("withdrawAtm", withdrawAtm)
 
 function depositAtm(player, amount)
 	if tonumber(amount) <= 0 then return end
-    if tonumber(amount) > GetPlayerCash(player) then
-        CallRemoteEvent(player, "MakeNotification", _("deposit_error"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+	if tonumber(amount) > GetPlayerCash(player) then
+		CallRemoteEvent(player, 'KNotify:Send', _("deposit_error"), "#f00")
 	else
 		RemoveBalanceFromAccount(player, 'cash', amount)
 		AddBalanceToAccount(player, 'bank', amount)
 		CallRemoteEvent(player, 'RPNotify:HUDEvent', 'cash', GetPlayerCash(player))
 		CallRemoteEvent(player, 'RPNotify:HUDEvent', 'bank', PlayerData[player].bank_balance)
-        CallRemoteEvent(player, "MakeNotification", _("deposit_success", amount, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
+		CallRemoteEvent(player, 'KNotify:Send',  _("deposit_success", amount, _("currency")), "#0f0")
     end
 end
 AddRemoteEvent("depositAtm", depositAtm)
@@ -100,10 +100,10 @@ AddRemoteEvent("depositAtm", depositAtm)
 AddRemoteEvent("transferAtm", function(player, amount, toplayer)
 	if tonumber(amount) <= 0 then return end
 	if tonumber(amount) > PlayerData[player].bank_balance then
-        CallRemoteEvent(player, "MakeNotification", _("transfer_error"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send',  _("transfer_error"), "#f00")
 	else
         PlayerData[player].bank_balance = PlayerData[player].bank_balance - amount
-        PlayerData[tonumber(toplayer)].bank_balance = PlayerData[tonumber(toplayer)].bank_balance  + amount
-        CallRemoteEvent(player, "MakeNotification", _("transfer_success", amount, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
+		PlayerData[tonumber(toplayer)].bank_balance = PlayerData[tonumber(toplayer)].bank_balance  + amount
+		CallRemoteEvent(player, 'KNotify:Send',  _("transfer_success", amount, _("currency")), "#0f0")
     end
 end)

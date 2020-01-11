@@ -34,11 +34,11 @@ AddRemoteEvent("BuyLicense", function (player, license)
     local price = Licenses[license]
 
     if GetPlayerCash(player) < price then
-        CallRemoteEvent(player, "MakeNotification", _("not_enought_cash"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("not_enought_cash"), "#f00")
     else
         RemoveBalanceFromAccount(player, 'cash', price)
         PlayerData[player][license] = 1
-        CallRemoteEvent(player, "MakeNotification", _("shop_success_buy", "1",_("license").._(license), _("price_in_currency", price)), "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', _("shop_success_buy", "1",_("license").._(license), _("price_in_currency", price)), "#0f0")
     end
 end)
 

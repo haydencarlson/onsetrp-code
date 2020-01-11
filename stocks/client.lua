@@ -30,7 +30,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 
         -- Quantity is blank
         if args[2] == "" then
-            MakeNotification(_("quantity_blank"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+            CallEvent('KNotify:Send', _("quantity_blank"), "#f00")
         end
 
         -- Buy button

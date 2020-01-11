@@ -131,7 +131,7 @@ function OnPlayerPickupHit(player, pickup)
                         mariadb_async_query(sql, query)
                         DestroyVehicle(vehicle)
                         DestroyVehicleData(vehicle)
-                        return CallRemoteEvent(player, "MakeNotification", _("vehicle_stored"), "linear-gradient(to right, #00b09b, #96c93d)")
+                        return CallRemoteEvent(player, 'KNotify:Send', _("vehicle_stored"), "#0f0")
                     end
                 end
             end
@@ -201,7 +201,7 @@ function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id,
     VehicleData[vehicle].garageid = id
     mariadb_async_query(sql, query)
     CallRemoteEvent(player, "closeGarageDealer")
-    return CallRemoteEvent(player, "MakeNotification", _("spawn_vehicle_success", tostring(name)), "linear-gradient(to right, #00b09b, #96c93d)")
+    return CallRemoteEvent(player, 'KNotify:Send', _("spawn_vehicle_success", tostring(name)), "#0f0")
 end
 
 function sellCarServer(player, id)
@@ -224,6 +224,6 @@ function sellCarServerLoaded(player)
         local query = mariadb_prepare(sql, "DELETE FROM `player_garage` WHERE `id` = ?;", tostring(id))
         mariadb_async_query(sql, query)
         AddBalanceToAccount(player, "cash", tonumber(price))
-        return CallRemoteEvent(player, "MakeNotification", _("sell_vehicle_success", tostring(name), price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
+        return CallRemoteEvent(player, 'KNotify:Send', _("sell_vehicle_success", tostring(name), price, _("currency")), "#0f0")
 	end
 end

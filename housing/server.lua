@@ -2390,11 +2390,11 @@ end)
 
 AddRemoteEvent("BuyHouse", function(player, house)
     if GetPlayerCash(player) < houses[house].price then
-        return CallRemoteEvent(player, "MakeNotification", _("not_enought_cash"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        return CallRemoteEvent(player, 'KNotify:Send', _("not_enought_cash"), "#f00")
     end
 
     if getHouseOwner(player) ~= 0 then
-        CallRemoteEvent(player, "MakeNotification", _("already_house_owner"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        CallRemoteEvent(player, 'KNotify:Send', _("already_house_owner"), "#f00")
     else
         RemoveBalanceFromAccount(player, "cash", houses[house].price)
         houses[house].owner = tonumber(PlayerData[player].accountid)
@@ -2407,10 +2407,10 @@ AddRemoteEvent("UnlockHouse", function(player, house)
     if houses[house].owner == tonumber(PlayerData[player].accountid) then
         if houses[house].lock then
             houses[house].lock = false
-            CallRemoteEvent(player, "MakeNotification", _("unlock_house"), "linear-gradient(to right, #00b09b, #96c93d)")
+            CallRemoteEvent(player, 'KNotify:Send', _("unlock_house"), "#0f0")
         else
             houses[house].lock = true
-            CallRemoteEvent(player, "MakeNotification", _("lock_house"), "linear-gradient(to right, #00b09b, #96c93d)")
+            CallRemoteEvent(player, 'KNotify:Send', _("lock_house"), "#0f0")
         end
     end
 end)
@@ -2420,7 +2420,7 @@ AddRemoteEvent("SellHouse", function(player, house)
         price = math.ceil(houses[house].price * 0.25)
         AddBalanceToAccount(player, "cash", price)
         houses[house].owner = 0
-        CallRemoteEvent(player, "MakeNotification", _("house_sell", price, _("currency")), "linear-gradient(to right, #00b09b, #96c93d)")
+        CallRemoteEvent(player, 'KNotify:Send', _("house_sell", price, _("currency")), "#0f0")
         DestroyText3D(houses[house].txtentities[2])
         houses[house].txtentities[2] = CreateText3D( _("price").." "..houses[house].price.._("currency"), 10, houses[house].text[1] , houses[house].text[2], houses[house].text[3], 0, 0, 0 )
     end
@@ -2429,10 +2429,10 @@ end)
 AddRemoteEvent("SetHouseSpawn", function(player, house)
     if houses[house].owner == tonumber(PlayerData[player].accountid) then
         if houses[house].spawnable == 1 then
-            CallRemoteEvent(player, "MakeNotification", _("default_spawn"), "linear-gradient(to right, #00b09b, #96c93d)")
+            CallRemoteEvent(player, 'KNotify:Send', _("default_spawn"), "#0f0")
             houses[house].spawnable = 0
         else
-            CallRemoteEvent(player, "MakeNotification", _("house_spawn"), "linear-gradient(to right, #00b09b, #96c93d)")
+            CallRemoteEvent(player, 'KNotify:Send', _("house_spawn"), "#0f0")
             houses[house].spawnable = 1
         end
     end
