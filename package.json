@@ -52,7 +52,8 @@
         "essentials/anticheat.lua",
         "transport/s_busstop.lua",
         "vehicle_radio/server.lua",
-        "lottery/server.lua"
+        "lottery/server.lua",
+        "phone/utils/json.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -133,16 +134,27 @@
         "animation/web/scripts/index.js",
         "animation/web/styles/index.css",
         "animation/web/index.html",
-        "phone/ui/dist/index.html",
-        "phone/ui/dist/app.js",
-        "phone/ui/dist/chunk-vendors.js",
-        "phone/ui/dist/app.css",
         "client/files/carLock.mp3",
         "client/files/carUnlock.mp3",
         "idcard/id.html",
         "idcard/id.js",
         "idcard/id.css",
         "idcard/Cedarville-Cursive.ttf",
-        "essentials/models/lamboav/content/lamboav.pak"
+        "essentials/models/lamboav/content/lamboav.pak",
+        "phone/utils/jquery.js",
+		"phone/utils/jquery-ui.js",
+		"phone/utils/Yanone.ttf",
+		"phone/utils/Bebas.ttf",
+		"phone/utils/vibration.wav",
+		"phone/gui/_phone.html",
+		"phone/gui/img/message.png",
+		"phone/gui/img/send.png",
+		"phone/gui/img/plus.png",
+		"phone/gui/img/post.png",
+		"phone/gui/img/trash.png",
+		"phone/gui/img/contacts.png",
+		"phone/gui/img/background.jpg",
+		"phone/gui/img/location.png",
+		"phone/gui/img/garlic.png"
     ]
 }

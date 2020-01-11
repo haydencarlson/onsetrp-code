@@ -140,20 +140,30 @@ CREATE TABLE `messages` (
   `created_at` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `phone_contacts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `steamid` longtext,
+  `role` varchar(50) DEFAULT NULL,
+  `number` int(11) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
 
---
--- Table structure for table `phone_contacts`
---
+-- Dumping data for table full.phone_contacts: ~0 rows (approximately)
+/*!40000 ALTER TABLE `phone_contacts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phone_contacts` ENABLE KEYS */;
 
-CREATE TABLE `phone_contacts` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `owner_id` int(10) NOT NULL DEFAULT 0,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `phone` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- Dumping structure for table full.prison_time
+CREATE TABLE IF NOT EXISTS `prison_time` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `steamid` varchar(50) NOT NULL DEFAULT '0',
+  `role` varchar(50) NOT NULL DEFAULT '0',
+  `time` float NOT NULL DEFAULT '0',
+  `reason` varchar(50) NOT NULL DEFAULT '0',
+  `jailerid` varchar(50) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `player_garage`
