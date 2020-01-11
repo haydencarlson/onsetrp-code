@@ -71,8 +71,8 @@ footer {
 #hide {
     cursor: pointer;
     position: absolute;
-    font-size: 14px;
-    color: #444;
+    font-size: 15px;
+    color: #fff;
     right: 12px;
     top: 0;
 }

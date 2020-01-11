@@ -44,7 +44,7 @@ function LoadCardFromData(data) {
 
   for (var i = 0; i < keys.length; i++) {
     let key = keys[i]
-
+ 
     if (data[key] && data[key] != '') {
       cardInfoDiv.innerHTML = cardInfoDiv.innerHTML + `<tr class="one-info">
         <td class="info-title">${t(key)}</span>

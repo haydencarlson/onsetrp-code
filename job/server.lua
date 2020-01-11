@@ -25,8 +25,8 @@ text = {
         long_desc = "Press F3 to bring up the police officer menu. Travel to the police station to get your car (You can use GPS). As a police officer your job will require you to bring criminal activitiy to a halt. Using your tools provided help put a stop to robberies, shooting and other criminal activities."
     },
     thief = {
-        short_desc = "Mug and complete bank robberies to make your living",
-        long_desc = "Push F3 to open your thief menu. Use the tools of your trade to rob and collect cash. Get caught, go to jail. High risk, high reward. Using your thief menu you can set a waypoint to the big bank to rob the bank vault, use your picklock on the vault to crack it open. Exchange the silver bars at the buyer for some cash"
+        short_desc = "Rob stores, people and banks.",
+        long_desc = "Push F3 to open your thief menu. Use the tools of your trade to rob and collect cash. Get caught, go to jail. High risk, high reward. Using your thief menu you can set a waypoint to the big bank to rob the bank vault, use your picklock on the vault to crack it open. Exchange the silver bars at the buyer for some cash. You can also start a robbery at any store."
     },
     mechanic = {
         short_desc = "In charge of repairing vehicles",
