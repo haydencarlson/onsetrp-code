@@ -92,6 +92,7 @@ AddRemoteEvent("OnJobChange", function(job, grade)
 end)
 
 AddEvent("Kuzkay:PhoneLoaded", function()
+	CallRemoteEvent("Kuzkay:GetPhoneNumber")
 	ExecuteWebJS(ui, "ClearTweets();")
 
 	for k,v in pairs(GPSlocations) do
@@ -106,13 +107,14 @@ local cooldown = false
 local cooldown2 = false
 
 function OnKeyPress(key)
-	if key == "K" and not GetPlayerPropertyValue(GetPlayerId(), 'cuffed') then
+	if key == "K" and not GetPlayerPropertyValue(GetPlayerId(), 'cuffed') and (not UIOpen or open == true) then
 		TogglePhone()
 		cooldown = false
 		cooldown2 = false
 	end
 	if key == "Escape" then
 		if open then
+			UIOpen = false
 			open = false
 			SetWebVisibility(ui, WEB_HIDDEN)
 			SetIgnoreLookInput(false)
@@ -159,17 +161,17 @@ AddEvent("Kuzkay:PhoneInputFocus", SetInputFocus)
 
 function SetPlayerNumber(number)
 	myNumber = number
+	AddPlayerChat(number)
+	
 	ExecuteWebJS(ui, "SetMyNumber('"..number.."');")
 end
 AddRemoteEvent("Kuzkay:PhoneSetClientNumber", SetPlayerNumber)
 
 local waypoints = {}
 function SetLocationWaypoint(name,x,y,z)
-
 	if name ~= "Location" then
 		local nearest = 0
 		local nearestDist = 9999999
-
 
 		local px,py,pz = GetPlayerLocation()
 		for k,v in pairs(GPSlocations[tonumber(x)].locations) do

@@ -140,6 +140,7 @@ CREATE TABLE `messages` (
   `created_at` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 CREATE TABLE IF NOT EXISTS `phone_contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `steamid` longtext,
