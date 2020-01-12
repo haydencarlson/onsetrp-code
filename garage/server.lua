@@ -133,16 +133,15 @@ function spawnCarServerLoaded(player)
         )
 
         local x, y, z = GetPlayerLocation(player)
-
         for k,v in pairs(GarageDealerTable) do
-            local x2, y2, z2 = GetNPCLocation(v.npc)
+            local x2, y2, z2 = GetNPCLocation(v.npc['id'])
             local dist = GetDistance3D(x, y, z, x2, y2, z2)
             if dist < 150.0 then
                 local isSpawnable = true
                 for k,w in pairs(GetAllVehicles()) do
                     local x3, y3, z3 = GetVehicleLocation(w)
                     local dist2 = GetDistance3D(v.spawn[1], v.spawn[2], v.spawn[3], x3, y3, z3)
-                    if dist2 < 1000.0 then
+                    if dist2 < 1000 then
                         isSpawnable = false
                         break
                     end

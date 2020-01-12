@@ -1,7 +1,9 @@
 AddEvent("GetDeathPos", function(player)
-	local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = ?;",
-        PlayerData[player].accountid)
-    mariadb_async_query(sql, query, DeathPos, player)
+    if PlayerData[player] ~= nil and PlayerData[player].accountid ~= nil then
+        local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = ?;",
+            PlayerData[player].accountid)
+        mariadb_async_query(sql, query, DeathPos, player)
+    end
 end)
 
 function DeathPos(player)
@@ -13,7 +15,7 @@ function DeathPos(player)
         local z = pos['z']
         local x2, y2, z2 = GetPlayerLocation(player)
         local dist = GetDistance3D(x, y, z, x2, y2, z2)
-        if dist < 3000 and not IsPlayerDead(player) then
+        if dist < 6000 and not IsPlayerDead(player) then
             CallRemoteEvent(player, 'KNotify:Send', "Turn around you are breaking NLR!", "#f00")
         end
         if dist < 750 and not IsPlayerDead(player) then
@@ -31,9 +33,8 @@ CreateTimer(function(player)
     end
 end, 5000)
 
-medic = false
-
 function SetDeathPosition(player)
+    local medic = false
     for k,v in pairs(GetAllPlayers()) do
         if player ~= v and PlayerData[v].job == "medic" then
             medic = true
@@ -41,26 +42,30 @@ function SetDeathPosition(player)
         break
     end
     if (medic ~= true) then
-    local x, y, z = GetPlayerLocation(player)
-    PlayerData[player].death_pos = {x= x, y= y, z= z}
-    local query = mariadb_prepare(sql, "UPDATE accounts SET death_pos = '?' WHERE id = ?;", 
-    json_encode(PlayerData[player].death_pos),
-    PlayerData[player].accountid)
-    mariadb_query(sql, query)
-    SetPlayerPropertyValue(player, "nlr", 1, true)
-    CallRemoteEvent(player, 'KNotify:Send', "You are now under new life rule.", "#f00")
-    CallEvent(player, "RemoveNlr")
+        local x, y, z = GetPlayerLocation(player)
+        PlayerData[player].death_pos = {x= x, y= y, z= z}
+        local query = mariadb_prepare(sql, "UPDATE accounts SET death_pos = '?' WHERE id = ?;", 
+        json_encode(PlayerData[player].death_pos),
+        PlayerData[player].accountid)
+        mariadb_query(sql, query)
+        SetPlayerPropertyValue(player, "nlr", 1, true)
+        CallRemoteEvent(player, 'KNotify:Send', "You are now under new life rule.", "#f00")
+        CallEvent("RemoveNlr", player)
     end
 end
 AddEvent("OnPlayerDeath", SetDeathPosition)
 
 AddEvent("RemoveNlr", function(player)
-    delay(12000, function(player)
+    Delay(30000, function(player)
         SetPlayerPropertyValue(player, "nlr", 0, true)
+        PlayerData[player].death_pos = {}
         local query = mariadb_prepare(sql, "UPDATE accounts SET death_pos = '?' WHERE id = ?;", 
-        "[]",
+        "{}",
         PlayerData[player].accountid)
         mariadb_query(sql, query)
         CallRemoteEvent(player, 'KNotify:Send', "Your new life rule expired.", "#0f0")
-    end)
+    end, player)
+end)
+
+AddCommand("cars", function()
 end)

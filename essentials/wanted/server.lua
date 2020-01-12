@@ -14,25 +14,28 @@ local function GetNearestPlayer(player)
 	return 0
 end
 
-
-AddEvent("makeWanted", function(player)
+function makeWanted(player, copPlayer)
     local wanted = GetPlayerPropertyValue(player, "isWanted")
     local playername = GetPlayerName(player)
-    local police = PlayerData[instigator].job == "police"
-    if wanted == 1 and not police then
-    else
+    local police = nil
+    if copPlayer ~= nil then
+        police = PlayerData[copPlayer].job == "police"
+    end
+    
+    if wanted == 0 and (copPlayer ~= nil and police or copPlayer == nil) then
         name = '(Criminal) '..playername
         SetPlayerName(player, name)
         SetPlayerPropertyValue(player, "isWanted", 1, true)
         CallRemoteEvent(player, 'KNotify:Send', _("make_wanted"), "#f00")
 
-    Delay(80000, function()
-        SetPlayerPropertyValue(player, "isWanted", 0, true)
-        CallRemoteEvent(player, 'KNotify:Send', _("bank_rob"), "#f00")
-        SetPlayerName(player, PlayerData[player].name)
-        end)
+        Delay(80000, function(player)
+            SetPlayerPropertyValue(player, "isWanted", 0, true)
+            CallRemoteEvent(player, 'KNotify:Send', _("bank_rob"), "#f00")
+            SetPlayerName(player, PlayerData[player].name)
+        end, player)
     end
-end)
+end
+AddEvent("makeWanted", makeWanted)
 
 AddEvent("bankRob", function(player)
     local wanted = GetPlayerPropertyValue(player, "isWanted")
@@ -61,11 +64,11 @@ end
 
 AddCommand("want", function(player, instigator)
     local police = PlayerData[player].job == "police"
-    if police == 1 and not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
-    CallEvent("makewanted", instigator)
+    if police and not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
+        makeWanted(instigator, player)
     else
         AddPlayerChat(player, "You must be a police to do this.")
-        end
+    end
 end)
 
 AddEvent("arrest", function(player)
@@ -79,7 +82,7 @@ AddEvent("arrest", function(player)
         local arrestcrim = "You have been arrested by ".. PlayerData[instigator].name
         local wanted = GetPlayerPropertyValue(criminal, "isWanted")
         local release = "You have been released from jail."
-        local paypolice = "You have received 50$ for arresting".. PlayerData[criminal].name
+        local paypolice = "You have received 50$ for arresting ".. PlayerData[criminal].name
         if wanted == 0 then
             AddPlayerChat(instigator, "Player is not wanted")
         elseif wanted == 1 then

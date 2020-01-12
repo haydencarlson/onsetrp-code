@@ -31,10 +31,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 			if args[1] == "" or args[2] == "" then
 				CallEvent('KNotify:Send', _("select_car_to_buy"), "#f00")
 			else
-				AddPlayerChat(args[1])
-				AddPlayerChat(args[2])
-				
-				
 				CallRemoteEvent("buyCarServer", args[1], args[2], NearestCarDealer)
 			end
         end
