@@ -39,9 +39,7 @@ AddEvent("rape", function(player)
         local outcome = Random(1, 3)
         local rapehp = Random(25, 65)
         if outcome > 2 then
-            local current_health = GetPlayerHealth(victim)
             local x, y, z = GetPlayerLocation(instigator)
-            SetPlayerHealth(victim, current_health - rapehp) 
             SetPlayerHealth(instigator, 100)
             CallRemoteEvent(victim, "AidsOn")
             AddPlayerChat(victim, rapesucvic)
@@ -66,7 +64,15 @@ AddEvent("rape", function(player)
 end)
 
 AddCommand("rape", function(player, instigator)
+    if not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
       CallEvent("rape", player, instigator)
+    end
+end)
+AddRemoteEvent("rapedmg", function(player)
+     rapedmg = CreateTimer(function(player)
+        health = GetPlayerHealth(player)
+        SetPlayerHealth(player, health - 1)
+        end, 5000, player)
 end)
 
 AddCommand("rf", function(player)
@@ -116,5 +122,7 @@ AddEvent("rob", function(player)
 end)
 
 AddCommand("rob", function(player, instigator)
+    if not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
     CallEvent("rob", player, instigator)
+    end
 end)
