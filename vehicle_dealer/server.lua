@@ -1,71 +1,6 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
 CarDealerObjectsCached = { }
-CarDealerTable = {
-	{
-		vehicles = {
-				vehicle_1 = 3000,
-				vehicle_4 = 3000,
-				vehicle_5 = 3000,
-				vehicle_6 = 10000,
-				vehicle_7 = 10000,
-				vehicle_11 = 20000,
-				vehicle_12 = 15000,
-				vehicle_25 = 500
-		},
-		colors = {
-			black = "0000",
-			red = "FF0000",
-			blue = "0000FF",
-			green = "00FF00"
-
-		},
-		location = { -174924, -64183, 1151, 180 },
-		spawn = { -175442, -64850, 1130, 180 }
-    },
-    {
-		vehicles = {
-			vehicle_1 = 3000,
-			vehicle_4 = 3000,
-			vehicle_5 = 3000,
-			vehicle_6 = 10000,
-			vehicle_7 = 10000,
-			vehicle_11 = 20000,
-			vehicle_12 = 15000,
-			vehicle_25 = 500
-		},
-		colors = {
-			black = "0000",
-			red = "FF0000",
-			blue = "0000FF",
-			green = "00FF00"
-
-		},
-		location = { 205292, 168386, 1306, 180 },
-		spawn = { 204692, 168415, 1306, 180 }
-    },
-    {
-		vehicles = {
-			vehicle_1 = 3000,
-			vehicle_4 = 3000,
-			vehicle_5 = 3000,
-			vehicle_6 = 10000,
-			vehicle_7 = 10000,
-			vehicle_11 = 20000,
-			vehicle_12 = 15000,
-			vehicle_25 = 500
-		},
-		colors = {
-			black = "0000",
-			red = "FF0000",
-			blue = "0000FF",
-			green = "00FF00"
-
-		},
-		location = { -24737, -18052, 2087, -150 },
-		spawn = { -25060, -18800, 2062, -150 }
-	}
-}
 AddEvent("OnPackageStart", function()
 	for k,v in pairs(CarDealerTable) do
 		v.npc = CreateNPC(v.location[1], v.location[2], v.location[3], v.location[4])
@@ -105,14 +40,15 @@ function GetCarDealearByObject(cardealerobject)
 	return nil
 end
 
-function CreateVehicleDatabase(player, vehicle, modelid, color, price)
-    local query = mariadb_prepare(sql, "INSERT INTO player_garage (id, ownerid, modelid, color, garage, price) VALUES (NULL, '?', '?', '?', '0', '?');",
+function CreateVehicleDatabase(player, vehicle, modelid, color, price, aircraft)
+    local query = mariadb_prepare(sql, "INSERT INTO player_garage (id, ownerid, modelid, color, garage, price, aircraft) VALUES (NULL, '?', '?', '?', '0', '?', '?');",
         tostring(PlayerData[player].accountid),
         tostring(modelid),
         tostring(color),
-        tostring(price)
+		tostring(price),
+		aircraft
     )
-
+	print(query)
     mariadb_async_query(sql, query, onVehicleCreateDatabase, vehicle)
 end
 
@@ -125,7 +61,6 @@ function buyCarServer(player, modelid, color, cardealerobject)
 	local price = getVehiclePrice(modelid, cardealerobject)
 	local color = getVehicleColor(color, cardealerobject)
 	local modelid = getVehicleId(modelid)
-
 	if tonumber(price) > GetPlayerCash(player) then
 		CallRemoteEvent(player, 'KNotify:Send', _("no_money_car"), "#f00")
     else
@@ -144,13 +79,14 @@ function buyCarServer(player, modelid, color, cardealerobject)
                       break
                     end
                 end
-                if isSpawnable then
-                    local vehicle = CreateVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4])
+				if isSpawnable then
+					local aircraft = v['aircraft_dealer'] 
+					local vehicle = CreateVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4])
                     SetVehicleRespawnParams(vehicle, false)
                     SetVehicleColor(vehicle, "0x"..color)
-                    SetVehiclePropertyValue(vehicle, "locked", true, true)
+					SetVehiclePropertyValue(vehicle, "locked", true, true)
                     CreateVehicleData(player, vehicle, modelid)
-                    CreateVehicleDatabase(player, vehicle, modelid, color, price)
+                    CreateVehicleDatabase(player, vehicle, modelid, color, price, aircraft)
                     RemoveBalanceFromAccount(player, "cash", tonumber(price))
 					CallRemoteEvent(player, "closeCarDealer")
 					return CallRemoteEvent(player, 'KNotify:Send', _("car_buy_sucess", name, price, _("currency")), "#0f0")

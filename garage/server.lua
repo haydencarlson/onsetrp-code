@@ -1,47 +1,6 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
 GarageDealerObjectsCached = { }
-GarageDealerTable = {
-    {
-		location = { 22083, 146617, 1560, -90 },
-		spawn = { 22120, 145492 , 1560, -90 }
-    },
-    {
-        location = { -184007, -50877, 1146, -90 },
-        spawn = { -183649, -51499, 1146, -90 }
-    },
-    {
-        location = { 207126, 171157, 1330, -90 },
-        spawn = { 207090, 170725, 1306, -90 }
-    },
-    {
-        location = { -25135, -17097, 2062, -150 },
-        spawn = { -25576, -17300, 2062 , -150 }
-    }
- }
-
- GarageStoreTable = {
-    {
-        modelid = 2,
-        location = {
-            { 23432, 145697, 1550 },
-            { 20752, 168878, 1306 },
-            { 207516, 168554, 1306 },
-            { 207524, 168216, 1306 },
-            { 207514, 167867, 1306 },
-            { -184587, -51196, 1146 },
-            { -185403, -51170, 1146 },
-            { -185603, -51410, 1146 },
-            { 207520, 168878, 1306 },
-            { 207516, 168554, 1306 },
-            { 207524, 168216, 1306 },
-            { 207514, 167867, 1306 },
-            { -25189, -16824, 2077 }
-        },
-        object = {}
-    }
-}
-
 GarageStoreObjectsCached = {}
 
 AddEvent("database:connected", function()
@@ -49,19 +8,31 @@ AddEvent("database:connected", function()
 end)
 
  AddEvent("OnPackageStart", function()
-	for k,v in pairs(GarageDealerTable) do
-        v.npc = CreateNPC(v.location[1], v.location[2], v.location[3], v.location[4])
+    for k,v in pairs(GarageDealerTable) do
+        
+        -- Create NPC in location
+        
+        local npcid = CreateNPC(v.location[1], v.location[2], v.location[3], v.location[4])
 
-		CreateText3D(_("garage").."\n".._("press_e"), 18, v.location[1], v.location[2], v.location[3] + 120, 0, 0, 0)
-
-		table.insert(GarageDealerObjectsCached, v.npc)
+        local npc = {
+            aircraft = v.aircraft,
+            id = npcid
+        }
+        v.npc = npc
+        -- Create Text for NPC
+        CreateText3D(_("garage").."\n".._("press_e"), 18, v.location[1], v.location[2], v.location[3] + 120, 0, 0, 0)
+        
+        -- Cache NPC in table
+		table.insert(GarageDealerObjectsCached, npc)
     end
 
     for k,v in pairs(GarageStoreTable) do
         for i,j in pairs(v.location) do
             v.object[i] = CreatePickup(v.modelid , v.location[i][1], v.location[i][2], v.location[i][3])
-
-
+            CreateText3D(_("store_vehicle"), 18, v.location[i][1], v.location[i][2], v.location[i][3] + 120, 0, 0, 0)
+            if v.location[i][4] == true then
+                SetPickupScale(v.object[i], 8, 8, 1)
+            end
             table.insert(GarageStoreObjectsCached, v.object[i])
         end
 	end
@@ -73,37 +44,37 @@ end)
 
 AddRemoteEvent("garageDealerInteract", function(player, garagedealerobject)
     local garagedealer = GetGarageDealearByObject(garagedealerobject)
-	if garagedealer then
-		local x, y, z = GetNPCLocation(garagedealer.npc)
+    if garagedealer then
+		local x, y, z = GetNPCLocation(garagedealer.npc['id'])
 		local x2, y2, z2 = GetPlayerLocation(player)
         local dist = GetDistance3D(x, y, z, x2, y2, z2)
-		if dist < 150 then
-            sendGarageList(player)
+        if dist < 150 then
+            sendGarageList(player, garagedealer.npc['aircraft'])
 		end
 	end
 end)
 
 function GetGarageDealearByObject(garagedealerobject)
 	for k,v in pairs(GarageDealerTable) do
-		if v.npc == garagedealerobject then
+		if v.npc['id'] == garagedealerobject then
 			return v
 		end
 	end
 	return nil
 end
 
-function sendGarageList(player)
-    local query = mariadb_prepare(sql, "SELECT * FROM player_garage WHERE ownerid = ? AND garage = 1;",
-		PlayerData[player].accountid)
+function sendGarageList(player, aircraft)
+    local query = mariadb_prepare(sql, "SELECT * FROM player_garage WHERE ownerid = ? AND garage = 1 AND aircraft = '?';",
+        PlayerData[player].accountid,
+        aircraft)
 
-    mariadb_async_query(sql, query, OnGarageListLoaded, player)
+    mariadb_async_query(sql, query, OnGarageListLoaded, player, aircraft)
 end
 
 function OnGarageListLoaded(player)
     local lVehicle = {}
     for i=1,mariadb_get_row_count() do
         local result = mariadb_get_assoc(i)
-
         local id = tostring(result["id"])
         local modelid = math.tointeger(result["modelid"])
         local color = result["color"]

@@ -81,6 +81,7 @@ function SelectedJob(selection, playerjob)
             CallRemoteEvent("StartPoliceJob")
         end,
         thief = function()
+            SetPlayerClothingPreset(GetPlayerId(), 21) 
             CallRemoteEvent("StartThiefJob")
         end,
         mechanic = function()

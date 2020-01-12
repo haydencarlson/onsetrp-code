@@ -50,7 +50,9 @@ AddEvent("OnKeyPress", function(key)
 end)
 
 AddEvent("OnPlayerLeaveVehicle", function(player, vehicle, seat)
-    StopRadio()
+    if VehicleData[vehicle] then
+        StopRadio()
+    end
 end)
 
 AddEvent("OnPlayerEnterVehicle", function(player, vehicle, seat)
