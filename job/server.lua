@@ -39,14 +39,19 @@ AddEvent("OnPackageStart", function()
         for i,j in pairs(v.location) do
             v.npc[i] = CreateNPC(v.location[i][1], v.location[i][2], v.location[i][3], v.location[i][4])
             CreateText3D("Job Manager".."\n".._("press_e"), 18, v.location[i][1], v.location[i][2], v.location[i][3] + 120, 0, 0, 0)
-		    SetNPCAnimation(v.npc[i], "CHEER", true)
+            SetNPCAnimation(v.npc[i], "CHEER", true)
 		    table.insert(NpcID, v.npc[i])
         end
 	end
 end)
 
+AddEvent("OnNPCStreamIn", function(npc, player)
+    CallRemoteEvent(player, "ChangeJobManagerClothing", NpcID[1], 6)
+end)
+
 AddEvent("OnPlayerJoin", function(player)
     CallRemoteEvent(player, "JobGuySetup", NpcID)
+    CallRemoteEvent(player, "ChangeJobManagerClothing", NpcID[1], 6)
 end)
 
 

@@ -89,6 +89,9 @@ function SelectedJob(selection, playerjob)
     }   
     action[selection]()       
 end
+AddRemoteEvent("ChangeJobManagerClothing", function(npc, presetid)
+    SetNPCClothingPreset(npc, presetid)
+end)
 
 AddRemoteEvent("SelectedJob", SelectedJob)
 AddEvent("OnKeyPress", SelectingJob)
