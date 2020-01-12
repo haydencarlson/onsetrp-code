@@ -107,26 +107,27 @@ AddRemoteEvent("StartStopPolice", function(player)
 	if PlayerData[player].police == 0 then
 		return CallRemoteEvent(player, 'KNotify:Send', _("not_whitelisted"), "#f00")
     end
-    if PlayerData[player].job == "" then
+    if PlayerData[player].job ~= "police" then
         if PlayerData[player].job_vehicle ~= nil then
             DestroyVehicle(PlayerData[player].job_vehicle)
             DestroyVehicleData(PlayerData[player].job_vehicle)
             PlayerData[player].job_vehicle = nil
             CallRemoteEvent(player, "ClientDestroyCurrentWaypoint")
         else
-	    local jobCount = 0
-	    for k,v in pairs(PlayerData) do
-		if v.job == "police" then
-		    jobCount = jobCount + 1
-		end
+			local jobCount = 0
+			for k,v in pairs(PlayerData) do
+			if v.job == "police" then
+				jobCount = jobCount + 1
+			end
 	    end
 		if jobCount == 10 then
 			return CallRemoteEvent(player, 'KNotify:Send', _("job_full"), "#f00")
-	    end
-	PlayerData[player].job = "police"
-	GetUniformServer(player)
-	CallRemoteEvent(player, 'KNotify:Send', _("join_police"), "#0f0")
-	return
+		end
+		CallRemoteEvent(player, "RPNotify:HUDEvent", "job", "police")
+		PlayerData[player].job = "police"
+		GetUniformServer(player)
+		CallRemoteEvent(player, 'KNotify:Send', _("join_police"), "#0f0")
+		return
     end
     elseif PlayerData[player].job == "police" then
         if PlayerData[player].job_vehicle ~= nil then
@@ -135,8 +136,9 @@ AddRemoteEvent("StartStopPolice", function(player)
             PlayerData[player].job_vehicle = nil
 		end
 		CallRemoteEvent(player, 'KNotify:Send', _("quit_police"), "#0f0")
+		CallRemoteEvent(player, "RPNotify:HUDEvent", "job", "Citizen")
         PlayerData[player].job = ""
-	RemoveUniformServer(player)
+		RemoveUniformServer(player)
     end
 end)
 

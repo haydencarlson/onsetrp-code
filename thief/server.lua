@@ -10,7 +10,6 @@ AddEvent("OnPackageStart", function()
     bankleaveobject = CreateObject(340, 189914, 201541, 813)
     SetObjectPropertyValue(bankleaveobject, "action", "bankleave", true)
     CreateText3D(_("leave_bank").."\n".._("press_e"), 18, 189914, 201541, 813 + 120, 0, 0, 0)
-
     bankbars = CreateObject(1487, 183977, 202876, 50)
     CreateText3D(_("press_e"), 20, 183977, 202950, 250, 0, 0, 0)
     SetObjectPropertyValue(bankbars, "action", "stealbars", true)

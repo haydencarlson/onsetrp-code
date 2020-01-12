@@ -28,12 +28,6 @@ function OnPackageStart()
     SetTextBoxAnchors(VehicleFuelHud, 1.0, 0.0, 1.0, 0.0)
     SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
 
-    minimap = CreateWebUI(0, 0, 0, 0, 0, 32)
-    SetWebVisibility(minimap, WEB_HITINVISIBLE)
-    SetWebAnchors(minimap, 0, 0, 1, 1)
-    SetWebAlignment(minimap, 0, 0)
-    SetWebURL(minimap, "http://asset/onsetrp/hud/minimap/minimap.html")
-    
 	ShowHealthHUD(true)
     ShowWeaponHUD(true)
 end
@@ -62,22 +56,8 @@ AddEvent("OnGameTick", function()
         SetTextBoxText(VehicleSpeedHud, _("speed")..vehiclespeed.."KM/H")
         SetTextBoxText(VehicleHealthHud, _("vehicle_health")..vehiclehealth)
     end
-    -- Speaking icon check
-    local player = GetPlayerId()
-    --Minimap refresh
-    local x, y, z = GetCameraRotation()
-    local px,py,pz = GetPlayerLocation()
-    ExecuteWebJS(minimap, "SetHUDHeading("..(360-y)..");")
-    ExecuteWebJS(minimap, "SetMap("..px..","..py..","..y..");")
 end)
 
-function SetHUDMarker(name, h, r, g, b)
-    if h == nil then
-        ExecuteWebJS(minimap, "SetHUDMarker(\""..name.."\");");
-    else
-        ExecuteWebJS(minimap, "SetHUDMarker(\""..name.."\", "..h..", "..r..", "..g..", "..b..");");
-    end
-end
 AddRemoteEvent("SetHUDMarker", SetHUDMarker)
 
 function hideRPHud()
