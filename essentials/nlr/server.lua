@@ -29,7 +29,7 @@ end
 
 CreateTimer(function(player)
     for k, v in pairs(GetAllPlayers()) do  
-        CallEvent("GetDeathPos", v)	
+        CallEvent("GetDeathPos", v)
     end
 end, 5000)
 
