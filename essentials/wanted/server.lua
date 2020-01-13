@@ -61,11 +61,11 @@ end
 
 AddCommand("want", function(player, instigator)
     local police = PlayerData[player].job == "police"
-    if police == 1 and not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
-    CallEvent("makewanted", instigator)
+    if police and not IsPlayerDead(player) then
+    CallEvent(instigator, "makewanted")
     else
         AddPlayerChat(player, "You must be a police to do this.")
-        end
+    end
 end)
 
 AddEvent("arrest", function(player)

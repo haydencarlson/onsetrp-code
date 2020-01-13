@@ -27,7 +27,7 @@ end
 
 CreateTimer(function(player)
     for k, v in pairs(GetAllPlayers()) do  
-        CallEvent("GetDeathPos", v)	
+        CallEvent("GetDeathPos", v)
     end
 end, 5000)
 
@@ -49,7 +49,7 @@ function SetDeathPosition(player)
     mariadb_query(sql, query)
     SetPlayerPropertyValue(player, "nlr", 1, true)
     CallRemoteEvent(player, 'KNotify:Send', "You are now under new life rule.", "#f00")
-    CallEvent(player, "RemoveNlr")
+    CallEvent("RemoveNlr", player)
     end
 end
 AddEvent("OnPlayerDeath", SetDeathPosition)
