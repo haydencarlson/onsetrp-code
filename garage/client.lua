@@ -50,7 +50,7 @@ function GetNearestGarageDealer()
         local dist = GetDistance3D(x, y, z, x2, y2, z2)
 		if dist < 150.0 then
             for k,i in pairs(GarageDealerIds) do
-				if v == i then
+				if v == i['id'] then
 					return v
 				end
 			end

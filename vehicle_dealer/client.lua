@@ -4,7 +4,7 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 local cardealer
 local isCarDealer
 local StreamedCarDealerIds = { }
-local CarDealerIds = { }
+local VehicleDealers = { }
 local carRetrieved
 
 AddEvent("OnTranslationReady", function()
@@ -15,7 +15,7 @@ end)
 
 function OnKeyPress(key)
     if key == "E" and not onCharacterCreation then
-        local NearestCarDealer = GetNearestCarDealer()
+        local NearestCarDealer = GetNearestVehicleDealer()
         if NearestCarDealer ~= 0 then
             CallRemoteEvent("carDealerInteract", NearestCarDealer)
 		end
@@ -25,7 +25,7 @@ AddEvent("OnKeyPress", OnKeyPress)
 
 AddEvent("OnDialogSubmit", function(dialog, button, ...)
 	if dialog == cardealer then
-		local NearestCarDealer = GetNearestCarDealer()
+		local NearestCarDealer = GetNearestVehicleDealer()
 		local args = { ... }
 		if button == 1 then
 			if args[1] == "" or args[2] == "" then
@@ -38,10 +38,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 end)
 
 AddRemoteEvent("carDealerSetup", function(CarDealerObject)
-    CarDealerIds = CarDealerObject
+    VehicleDealers = CarDealerObject
 end)
 
-function GetNearestCarDealer()
+function GetNearestVehicleDealer()
 	local x, y, z = GetPlayerLocation()
 	
 	for k,v in pairs(GetStreamedNPC()) do
@@ -49,7 +49,7 @@ function GetNearestCarDealer()
 		local dist = GetDistance3D(x, y, z, x2, y2, z2)
 
 		if dist < 150.0 then
-			for k,i in pairs(CarDealerIds) do
+			for k,i in pairs(VehicleDealers) do
 				if v == i then
 					return v
 				end
