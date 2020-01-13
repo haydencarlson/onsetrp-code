@@ -103,5 +103,20 @@ CarDealerTable = {
 		},
 		location = { -184193, -51016, 1146, 270 },
 		spawn = { -184599, -51363, 1146, 270 }
-    }
+	},
+	{
+		vehicles = { 
+			vehicle_10 = 400000,
+		},
+		aircraft_dealer = 1,
+		colors = {
+			black = "0000",
+			red = "FF0000",
+			blue = "0000FF",
+			green = "00FF00"
+
+		},
+		location = { 158316, -143155, 1252, 90 },
+		spawn = { 158809, -141812, 1251, 180 }
+	}
 }

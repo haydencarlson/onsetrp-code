@@ -80,7 +80,8 @@ local vehicleList = {
     vehicle_22 = 22,
     vehicle_23 = 23,
     vehicle_24 = 24,
-    vehicle_25 = 25
+    vehicle_25 = 25,
+    vehicle_26 = 10
 }
 
 AddRemoteEvent("ServerAdminMenu", function(player)

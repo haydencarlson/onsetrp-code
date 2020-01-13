@@ -55,7 +55,8 @@
         "lottery/server.lua",
         "phone/utils/json.lua",
         "robbery/config.lua",
-		"robbery/server.lua"
+        "robbery/server.lua",
+        "essentials/nlr/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -98,7 +99,8 @@
         "vehicle_radio/client.lua",
         "lottery/client.lua",
         "robbery/config.lua",
-        "robbery/client.lua"
+        "robbery/client.lua",
+        "essentials/nlr/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",

@@ -34,6 +34,8 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
 
              if item == "hiv" then
                 CallRemoteEvent(player, "AidsOff")
+                DestroyTimer(rapedmg)
+                RemoveInventory(player, item, amount)
              end
 
             if item == "apple" then
