@@ -18,7 +18,8 @@ end
 AddEvent("makeWanted", function(player)
     local wanted = GetPlayerPropertyValue(player, "isWanted")
     local playername = GetPlayerName(player)
-    if wanted == 1 then
+    local police = PlayerData[instigator].job == "police"
+    if wanted == 1 and not police then
     else
         name = '(Criminal) '..playername
         SetPlayerName(player, name)
@@ -58,6 +59,15 @@ function IsCopInRdange(x, y, z)
 end
 
 
+AddCommand("want", function(player, instigator)
+    local police = PlayerData[player].job == "police"
+    if police == 1 and not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
+    CallEvent("makewanted", instigator)
+    else
+        AddPlayerChat(player, "You must be a police to do this.")
+        end
+end)
+
 AddEvent("arrest", function(player)
     local instigator = player
     local criminal = GetNearestPlayer(instigator)
@@ -69,6 +79,7 @@ AddEvent("arrest", function(player)
         local arrestcrim = "You have been arrested by ".. PlayerData[instigator].name
         local wanted = GetPlayerPropertyValue(criminal, "isWanted")
         local release = "You have been released from jail."
+        local paypolice = "You have received 50$ for arresting".. PlayerData[criminal].name
         if wanted == 0 then
             AddPlayerChat(instigator, "Player is not wanted")
         elseif wanted == 1 then
@@ -76,9 +87,11 @@ AddEvent("arrest", function(player)
             AddPlayerChat(criminal, arrestcrim)
             local playername = GetPlayerName(criminal)
             local name = '(In Jail) '..playername
+            AddBalanceToAccount(instigator, "cash", 50)
+            AddPlayerChat(instigator, paypolice) 
             SetPlayerPropertyValue(player, "isWanted", 0, true)
             SetPlayerName(criminal, name)
-            SetPlayerLocation(criminal, -175307.578125, 83121.9921875, 1628.1500244141)
+            SetPlayerLocation(criminal, -175307.578125, 83121.9921875, 1660.1500244141)
             Delay(120000, function(criminal)
                 local name = PlayerData[criminal].name
                 SetPlayerLocation(criminal, -171522.84375, 81275.1171875, 1628.1500244141)
@@ -90,5 +103,7 @@ AddEvent("arrest", function(player)
 end)
 
 AddCommand("arrest", function(player, instigator)
+    if not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
     CallEvent("arrest", player, instigator)
+    end
 end)
