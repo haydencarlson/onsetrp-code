@@ -66,6 +66,3 @@ AddEvent("RemoveNlr", function(player)
         CallRemoteEvent(player, 'KNotify:Send', "Your new life rule expired.", "#0f0")
     end, player)
 end)
-
-AddCommand("cars", function()
-end)
