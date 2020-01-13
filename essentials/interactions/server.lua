@@ -64,7 +64,7 @@ AddEvent("rape", function(player)
 end)
 
 AddCommand("rape", function(player, instigator)
-    if not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
+    if IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
       CallEvent("rape", player, instigator)
     end
 end)
@@ -122,7 +122,15 @@ AddEvent("rob", function(player)
 end)
 
 AddCommand("rob", function(player, instigator)
-    if not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
+    if IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
     CallEvent("rob", player, instigator)
     end
 end)
+
+function OnPlayerChatCommand(player, cmd, exists)
+    if not exists then
+        CallRemoteEvent(player, 'KNotify:Send', "Command '/"..cmd.."' not found!", "#f00")
+	end
+	return true
+end
+AddEvent("OnPlayerChatCommand", OnPlayerChatCommand)
