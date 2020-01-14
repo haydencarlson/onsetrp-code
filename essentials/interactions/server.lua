@@ -13,10 +13,10 @@ local function GetNearestPlayer(player)
 end
 
 
-local function IsCopInRange(x, y, z)
+local function IsCopInRange(player, x, y, z)
     local playersinrange = GetPlayersInRange3D(x, y, z, 1000)
     for key, p in pairs(playersinrange) do
-        if PlayerData[p].job == 'police' then
+        if PlayerData[p].job == 'police' and p ~= player then
             return true
         end
     end
@@ -28,7 +28,7 @@ AddEvent("rape", function(player)
     local nojob = PlayerData[player].job == ""
     local citizen = PlayerData[player].job == "citizen"
     local victim = GetNearestPlayer(instigator)
-    if victim == 0 and nojob or citizen then   
+    if victim == 0 and (nojob or citizen) then   
         AddPlayerChat(player, "No one is near you.")
     elseif victim ~= 0 then
         local rapefail = "You have failed to rape ".. PlayerData[victim].name
@@ -48,7 +48,7 @@ AddEvent("rape", function(player)
             SetPlayerAnimation(victim, "SIT01")
             CallRemoteEvent(instigator, "LockControlMove", true)
             CallRemoteEvent(victim, "LockControlMove", true)
-            if IsCopInRange(x,y,z) then
+            if IsCopInRange(player, x,y,z) then
                 CallEvent("makeWanted", instigator)
             end
             Delay(5000, function()
