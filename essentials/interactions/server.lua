@@ -68,12 +68,12 @@ AddCommand("rape", function(player, instigator)
       CallEvent("rape", player, instigator)
     end
 end)
-AddRemoteEvent("rapedmg", function(player)
-     rapedmg = CreateTimer(function(player)
-        health = GetPlayerHealth(player)
-        SetPlayerHealth(player, health - 1)
-        end, 5000, player)
-end)
+-- AddRemoteEvent("rapedmg", function(player)
+--      rapedmg = CreateTimer(function(player)
+--         health = GetPlayerHealth(player)
+--         SetPlayerHealth(player, health - 1)
+--     end, 5000, player)
+-- end)
 
 AddEvent("rob", function(player)
     local instigator = player
