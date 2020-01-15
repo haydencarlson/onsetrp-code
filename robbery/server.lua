@@ -39,7 +39,6 @@ function OnRobberyLaunch(player, robbery_id)
 			copsOnline = copsOnline + 1
 		end
 	end
-
 	if Stores[robbery_id].recent <= 0 then
 		if Stores[robbery_id].min_cops <= copsOnline then
 			if GetPlayerEquippedWeapon(player) ~= 0 then
