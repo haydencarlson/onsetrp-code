@@ -26,3 +26,10 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
         end
     end
 end)
+
+AddEvent("OnPackageStart", function(time)
+    CreateTimer(function(time)
+    local time = GetTime()
+    CallRemoteEvent("LotteryPayload", time)
+    end, 1000)
+end)
