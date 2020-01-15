@@ -239,8 +239,6 @@ function CreatePlayerData(player)
 	PlayerData[player].death_pos = {}
 	PlayerData[player].position = {}
 	PlayerData[player].lastinteract = ""
-
-
     print("Data created for : "..player)
 end
 

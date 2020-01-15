@@ -34,10 +34,13 @@ function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, ad
   ExecuteWebJS(ScoreboardUI, 'ResetScoreboard()')
   ExecuteWebJS(ScoreboardUI, 'SetInformation("' .. name .. '", ' .. players .. ', ' .. maxplayers .. ')')
   for _, v in pairs(data) do
+    if v['job'] == "" then
+      v['job'] = "Citizen"
+    end
     if admin == true then
-      ExecuteWebJS(ScoreboardUI, 'AddPlayer ("' .. v['name'] ..  ' ( ' .. v['id'] .. ' )' .. '", ' .. v['ping'] .. ')')
+      ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] ..  ' ( ' .. v['id'] .. ' )' .. '", ' .. v['ping'] .. ', "' .. v['job'] .. '", "'.. tostring(v['admin']) .. '")')
     else
-      ExecuteWebJS(ScoreboardUI, 'AddPlayer ("' .. v['name'] .. '", ' .. v['ping'] .. ')')
+      ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] .. '", ' .. v['ping'] .. ', "' .. v['job'] .. '", "'.. tostring(v['admin']) .. '")')
     end
   end
 end
