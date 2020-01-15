@@ -95,7 +95,6 @@ AddRemoteEvent("StopMedicJob", function(player,spawncar)
 			PlayerData[player].job_vehicle = nil
 		end
 		PlayerData[player].job = ""
-		CallRemoteEvent(player, 'KNotify:Send', _("quit_medic"), "#0f0")
 		RemoveUniformServer(player)
 		playerMedic[player] = nil
     end

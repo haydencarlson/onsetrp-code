@@ -47,7 +47,16 @@ AddEvent("OnKeyPress", function( key )
 			Dialog.show(gpsmain)
 			return 
 		end
-    end
+	end
+end)
+
+AddEvent("OnKeyPress", function( key )
+	if IsCtrlPressed() and key == "G" and not onSpawn and not onCharacterCreation then
+		if IsPlayerInVehicle() then
+			Dialog.show(gpsmain)
+			return 
+		end
+	end
 end)
 
 AddRemoteEvent("ClientCreateWaypoint", function(name, x, y, z)

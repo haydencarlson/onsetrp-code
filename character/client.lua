@@ -33,6 +33,11 @@ AddRemoteEvent("SetUIOpenStatusClient", function(isOpen)
     UIOpen = isOpen
 end) 
 
+
+AddRemoteEvent("SetPlayerClothingToPreset", function(playerToChange, preset)
+    SetPlayerClothingPreset(playerToChange, preset)
+end)
+
 AddEvent("OnKeyPress", function(key)
     if onCharacterCreation then
         if playerName == "" then

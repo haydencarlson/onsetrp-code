@@ -1,253 +1,304 @@
-local SERVER_ID = 1
+local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
-Items = {}
+local inventory_base_max_slots = 32
 
-Inventories = {}
+AddRemoteEvent("ServerPersonalMenu", function(player)
+    local x, y, z = GetPlayerLocation(player)
+    local nearestPlayers = GetPlayersInRange3D(x, y, z, 1000)
+    local playerList = {}
+    for k,v in pairs(nearestPlayers) do
+        if k ~= player then
+            if PlayerData[v] ~= nil then 
+                local name = PlayerData[v].name
+                if name ~= nil then
+                    playerList[tostring(v)] = name
+                end
+            end
+        end
+    end
+    local inventorySlots = GetPlayerUsedSlots(player).." / "..GetPlayerMaxSlots(player)
+    CallRemoteEvent(player, "OpenPersonalMenu", GetPlayerCash(player), PlayerData[player].bank_balance, PlayerData[player].inventory, playerList, GetPlayerBag(player), inventorySlots)
+end)
 
-Storages = {}
 
-local wep_loaded = {}
-
-function OnPackageStart()
-	Delay(1000, function()
-		local query = mariadb_prepare(sql, "SELECT * FROM items ORDER BY title;")
-		mariadb_query(sql, query, GetAllItems)
-
-		local query = mariadb_prepare(sql, "SELECT * FROM `storages` WHERE `server` = '?';", SERVER_ID)
-		mariadb_query(sql, query, GetStorages)
-	end)
-	
-end
-AddEvent("OnPackageStart", OnPackageStart)
-
-
-function OnRoleSelect(player, role)
-
-	SetPlayerPropertyValue(player, "playerName", GetPlayerName(player), true)
-	Inventories[player] = {}
-	Inventories[player].items = {}
-	Inventories[player].weapons = {}
-	local query = mariadb_prepare(sql, "SELECT inventory FROM profiles WHERE `steamid` = '?' AND `role` = '?'  LIMIT 1;", 
-		tostring(GetPlayerSteamId(player)), 
-		role)
-
-		
-		mariadb_query(sql, query, GetPlayerInventory, player)
-end
-AddEvent("Kuzkay:RoleSelected", OnRoleSelect)
-
-function GetAllItems()
-	local i = 1
-	for i = 1,mariadb_get_row_count() do
-		local result = mariadb_get_assoc(i)
-
-		Items[result.item] = {}
-
-		Items[result.item].item = result.item
-		Items[result.item].title = result.title
-		Items[result.item].plural = result.title_plural
-		Items[result.item].max = result.max
-		Items[result.item].order = i;
-		Items[result.item].model = result.model
-		Items[result.item].model_scale = result.model_scale
-		i = i + 1
-	end
+function getWeaponID(modelid)
+    if modelid:find("weapon_") then
+        return modelid:gsub("weapon_", "")
+    end
+    return 0
 end
 
-function GetPlayerInventory(player)
-	if mariadb_get_row_count() > 0 then
-		local result = mariadb_get_assoc(1)
-		if result.inventory ~= nil then
-			Inventories[player] = jsondecode(result.inventory)
+AddRemoteEvent("UseInventory", function(player, item, amount)
+    weapon = getWeaponID(item)
+    if tonumber(PlayerData[player].inventory[item]) < tonumber(amount) then
+        AddPlayerChat(player, _("not_enough_item"))
+    else
+        if weapon ~= 0 then
+            SetPlayerWeapon(player, tonumber(weapon), 1000, true, 1)
+        else
+            if item == "donut" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerHunger(player, 10*amount)
+            end
+            if item == "apple" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerHunger(player, 5*amount)
+            end
+            if item == "peach" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerHunger(player, 10*amount)
+                addPlayerThirst(player, 5*amount)
+            end
+            if item == "water_bottle" then
+                SetPlayerAnimation(player, "DRINKING")
+                RemoveInventory(player, item, amount)
+                addPlayerThirst(player, 25*amount)
+            end
+            if item == "health_kit" then
+                if GetPlayerHealth(player) == 100 then
+                    AddPlayerChat(player, _("already_full_health"))
+                else
+                    SetPlayerAnimation(player, "COMBINE")
+                    RemoveInventory(player, item, amount)
+                    SetPlayerHealth(player, 100)
+                end
+            end
+            if item == "repair_kit" then
+                local nearestCar = GetNearestCar(player)
+                if nearestCar ~= 0 then
+                    if GetVehicleHealth(nearestCar) > 4000 then
+                        AddPlayerChat(player, _("dont_need_repair"))
+                    else
+                        CallRemoteEvent(player, "LockControlMove", true)
+                        SetPlayerAnimation(player, "COMBINE")
+                        Delay(4000, function()
+                            RemoveInventory(player, item, amount)
+                            SetVehicleHealth(nearestCar, 5000)
+                            for i=1,8 do
+                                SetVehicleDamage(nearestCar, i, 0)
+                            end
+                            CallRemoteEvent(player, "LockControlMove", false)
+                            SetPlayerAnimation(player, "STOP")
+                        end)
+                    end
+                end
+            end
+            if item == "jerican" then
+                local nearestCar = GetNearestCar(player)
+                if nearestCar ~= 0 then
+                    if VehicleData[nearestCar].fuel >= 100 then
+                        AddPlayerChat(player, _("car_full"))
+                    else
+                        CallRemoteEvent(player, "LockControlMove", true)
+                        SetPlayerAnimation(player, "COMBINE")
+                        Delay(4000, function()
+                            RemoveInventory(player, item, amount)
+                            VehicleData[nearestCar].fuel = 100
+                            AddPlayerChat(player, _("car_refuelled"))
+                            CallRemoteEvent(player, "LockControlMove", false)
+                            SetPlayerAnimation(player, "STOP")
+                        end)
+                    end
+                end
+            end
+            if item == "lockpick" then
+                local nearestCar = GetNearestCar(player)
+                local nearestHouseDoor = GetNearestHouseDoor(player)
+                if nearestCar ~= 0 then
+                    if VehicleData[nearestCar] ~= nil then
+                        if GetVehiclePropertyValue(nearestCar, "locked") then
+                            CallRemoteEvent(player, "LockControlMove", true)
+                            SetPlayerAnimation(player, "LOCKDOOR")
+                            Delay(3000, function()
+                                SetPlayerAnimation(player, "LOCKDOOR")
+                            end)
+                            Delay(6000, function()
+                                SetPlayerAnimation(player, "LOCKDOOR")
+                            end)
+                            Delay(10000, function()
+                                SetVehiclePropertyValue( nearestCar, "locked", false, true)
+                                AddPlayerChat(player, _("car_unlocked"))
+                                RemoveInventory(player, item, amount)
+                                CallRemoteEvent(player, "LockControlMove", false)
+                                SetPlayerAnimation(player, "STOP")
+                            end)
+                        else
+                            AddPlayerChat(player, _("vehicle_already_unlocked"))
+                        end
+                    end
+                end
+                if nearestHouseDoor ~= 0 then
+                    nearestHouse = getHouseDoor(nearestHouseDoor)
+                    if nearestHouse ~= 0 then
+                        if houses[nearestHouse].lock then
+                            CallRemoteEvent(player, "LockControlMove", true)
+                            SetPlayerAnimation(player, "LOCKDOOR")
+                            Delay(3000, function()
+                                SetPlayerAnimation(player, "LOCKDOOR")
+                            end)
+                            Delay(6000, function()
+                                SetPlayerAnimation(player, "LOCKDOOR")
+                            end)
+                            Delay(10000, function()
+                                houses[nearestHouse].lock = false
+                                AddPlayerChat(player, _("unlock_house"))
+                                RemoveInventory(player, item, amount)
+                                CallRemoteEvent(player, "LockControlMove", false)
+                                SetPlayerAnimation(player, "STOP")
+                            end)
+                        else
+                            AddPlayerChat(player, _("house_already_unlock"))
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
 
-			if Inventories[player].items ~= nil then
-				local i = 1
-				for _ in pairs(Inventories[player].items) do
-					if Items[Inventories[player].items[i].item] == nil then
-						print("removed bugged item: " .. Inventories[player].items[i].item)
-						table.remove(Inventories[player].items, i)
-					end
-					i = i + 1
-				end
-			end
-			
-		end
-			wep_loaded[player] = false
-			if Inventories[player].items == nil then
-				Inventories[player].items = {}
-			end
-			Delay(8000, SetPlayerWeapons, player)
-			Delay(10500, SendPlayerInventory, player)
-	end
+AddRemoteEvent("TransferInventory", function(player, item, amount, toplayer)
+    if PlayerData[player].inventory[item] < tonumber(amount) then
+        CallRemoteEvent(player, 'KNotify:Send', _("not_enough_item"), "#f00")
+    else
+        AddInventory(tonumber(toplayer), item, tonumber(amount))
+        RemoveInventory(tonumber(player ), item, tonumber(amount))
+        CallRemoteEvent(player, 'KNotify:Send', _("successful_transfer", amount, item, GetPlayerName(tonumber(toplayer))), "#0f0")
+        CallRemoteEvent(tonumber(toplayer), 'KNotify:Send', _("received_transfer", amount, item, GetPlayerName(player)), "#0f0")
+    end
+end)
+
+
+function AddInventory(player, item, amount)
+    local slotsAvailables = tonumber(GetPlayerMaxSlots(player)) - tonumber(GetPlayerUsedSlots(player))
+     if tonumber(slotsAvailables) >= tonumber(amount) or item == "cash"then
+        if item == "item_backpack" and GetPlayerBag(player) == 1 then -- On ne peux pas acheter plusieurs sacs
+            return false
+        end
+        if PlayerData[player].inventory[item] == nil then
+            PlayerData[player].inventory[item] = amount            
+        else
+            PlayerData[player].inventory[item] = PlayerData[player].inventory[item] + amount
+        end
+        if item == "item_backpack" then -- Affichage du sac sur le perso
+            DisplayPlayerBackpack(player, 1)
+        end
+        return true
+    else
+        return false
+    end
 end
 
-
-
-function SendPlayerInventory(player)
-	CallRemoteEvent(player, "Kuzkay:ClearClientItems")
-
-	if Inventories[player].items ~= nil then
-		local i = 1
-		for _ in pairs(Inventories[player].items) do
-			CallRemoteEvent(player, "Kuzkay:AddClientItem", Inventories[player].items[i], i, Items[Inventories[player].items[i].item].title, Items[Inventories[player].items[i].item].order) 
-			i = i + 1
-		end
-	end
-	SavePlayerInventory(player)
+function RemoveInventory(player, item, amount)
+    if PlayerData[player].inventory[item] == nil then
+        return false
+    else
+        if PlayerData[player].inventory[item] - amount < 1 then
+            PlayerData[player].inventory[item] = nil
+        else
+            PlayerData[player].inventory[item] = PlayerData[player].inventory[item] - amount
+        end
+        if item == "item_backpack" then
+            DisplayPlayerBackpack(player, 1)
+        end
+        return true
+    end
 end
 
-function SetPlayerWeapons(player)
-	if Inventories[player] ~= nil then
-		if Inventories[player].weapons ~= nil then
-			if Inventories[player].weapons[1] ~= nil then
-				SetPlayerWeapon(player, Inventories[player].weapons[1].weapon, Inventories[player].weapons[1].ammo, true, 1)
-			else
-				SetPlayerWeapon(player, 1, 1, true, 1)			
-			end
-
-			if Inventories[player].weapons[2] ~= nil then
-				SetPlayerWeapon(player, Inventories[player].weapons[2].weapon, Inventories[player].weapons[2].ammo, false, 2)
-			else
-				SetPlayerWeapon(player, 1, 1, false, 2)		
-			end
-
-			if Inventories[player].weapons[3] ~= nil then
-				SetPlayerWeapon(player, Inventories[player].weapons[3].weapon, Inventories[player].weapons[3].ammo, false, 3)
-			else
-				SetPlayerWeapon(player, 1, 1, false, 3)		
-			end
-		end
-		
-	end
-
-	wep_loaded[player] = true
+function GetPlayerCash(player)
+    if PlayerData[player].inventory['cash'] then
+        return PlayerData[player].inventory['cash']
+    else
+        return 0
+    end
 end
 
-function SavePlayerInventory(player)
-	if loaded[player] and wep_loaded[player] then
-		Inventories[player].weapons = {}
-		local w, a= GetPlayerWeapon(player, 1)
-		Inventories[player].weapons[1] = {}
-		Inventories[player].weapons[1].weapon = w
-		Inventories[player].weapons[1].ammo = a
-		local w, a = GetPlayerWeapon(player, 2)
-		Inventories[player].weapons[2] = {}
-		Inventories[player].weapons[2].weapon = w
-		Inventories[player].weapons[2].ammo = a
-		local w, a= GetPlayerWeapon(player, 3)
-		Inventories[player].weapons[3] = {}
-		Inventories[player].weapons[3].weapon = w
-		Inventories[player].weapons[3].ammo = a
-
-
-		local query = mariadb_prepare(sql, "UPDATE `profiles` SET `inventory` = '?' WHERE `steamid` = '?' and `role` = '?';",
-		jsonencode(Inventories[player]),
-		
-
-		tostring(GetPlayerSteamId(player)),
-		PlayerData[player].role)
-		mariadb_query(sql, query)
-	end
+function SetPlayerCash(player, amount)
+    PlayerData[player].inventory['cash'] = math.max(amount, 0)
 end
 
-
-function OnPlayerQuit(player)
-	SavePlayerInventory(player)
-	Delay(50, function()
-		Inventories[player] = nil
-	end)
-	
-end
-AddEvent("OnPlayerQuit", OnPlayerQuit)
-
-
-
-function SendStorageInventory(player, storage, vehicle)
-	if Storages[storage] == nil and Storages ~= {} then
-		CreateStorageInventory(player, storage, vehicle)
-	else
-		if vehicle ~= nil then
-			CallRemoteEvent(player, "Kuzkay:ClearClientStorage", Config.VehicleSlots[GetVehicleModel(vehicle)])
-		else
-			CallRemoteEvent(player, "Kuzkay:ClearClientStorage", Storages[storage].slots)
-		end
-		if vehicle ~= nil then
-			Storages[storage].vehicle = vehicle
-		end
-		local i = 1
-		for _ in pairs(Storages[storage].items) do
-			if vehicle ~= nil then
-				Storages[storage].slots = Config.VehicleSlots[GetVehicleModel(vehicle)]
-			end
-			CallRemoteEvent(player, "Kuzkay:AddClientStorage", Storages[storage].items[i], i, Items[Storages[storage].items[i].item].title, Items[Storages[storage].items[i].item].order, storage, Storages[storage].slots)
-			i = i + 1
-		end
-		SaveStorageInventory(storage)
-		
-	end
-	
-end
-AddRemoteEvent("Kuzkay:StorageRequest", SendStorageInventory)
-AddEvent("Kuzkay:StorageRequest", SendStorageInventory)
-
-function GetStorages()
-	local i = 1
-	for i = 1,mariadb_get_row_count() do
-		local result = mariadb_get_assoc(i)
-
-		Storages[result.storage]			= {}
-		if result.inventory ~= nil then
-			Storages[result.storage]			= jsondecode(result.inventory)
-		end
-		Storages[result.storage].slots		= result.slots
-		Storages[result.storage].vehicle   = 0
-
-		i = i + 1
-
-	end
-	print("kuz_Essentials: Done loading all storages")
+function AddPlayerCash(player, amount)
+    AddInventory(player, 'cash', amount)
 end
 
-
-function SaveStorageInventory(storage)
-
-	local query = mariadb_prepare(sql, "UPDATE `storages` SET `inventory` = '?' WHERE `storage` = '?' AND `server` = '?';",
-	jsonencode(Storages[storage]),
-	
-
-	storage,
-	SERVER_ID)
-	mariadb_query(sql, query, OnSaveStorageInventory, storage)
-end
-function OnSaveStorageInventory(storage)
-	
+function RemovePlayerCash(player, amount)
+    RemoveInventory(player, 'cash', amount)
 end
 
-function CreateStorageInventory(player, storage, vehicle, slots_)
-	local slots = 12
-	if vehicle ~= nil then
-		slots = Config.VehicleSlots[GetVehicleModel(vehicle)]
-	end
-	if slots_ ~= nil then
-		slots = slots_
-	end
-
-	if Storages[storage] == nil and storage ~= nil then
-		Storages[storage] = {}
-		Storages[storage].items = {}
-		Storages[storage].slots = slots
-		local query = mariadb_prepare(sql, "INSERT INTO `storages` (`server`, `inventory`, `storage`, `slots`) VALUES ('?', '?', '?', '?');",
-		SERVER_ID,
-		jsonencode(Storages[storage]),
-		storage,
-		slots)
-		mariadb_query(sql, query, OnCreateStorageInventory, storage)
-
-		CallRemoteEvent(player, "Kuzkay:ClearClientStorage", Storages[storage].slots)
-	end
-end
-function OnCreateStorageInventory(storage)
-	print('Created storage save for ' .. storage)
+function GetPlayerBag(player)    
+    if PlayerData[player].inventory['item_backpack'] and math.tointeger(PlayerData[player].inventory['item_backpack']) > 0 then
+        return 1
+    else
+        return 0
+    end
 end
 
+function GetPlayerInventorySpace(player)
+    return tonumber(GetPlayerMaxSlots(player)) - tonumber(GetPlayerUsedSlots(player))
+end
+
+function GetPlayerMaxSlots(player)
+    if PlayerData[player].inventory['item_backpack'] and math.tointeger(PlayerData[player].inventory['item_backpack']) > 0 then
+        return math.floor(inventory_base_max_slots * 1.25)
+    else
+        return inventory_base_max_slots
+    end
+end
+
+function GetPlayerUsedSlots(player)
+    local usedSlots = 0
+    for k,v in pairs(PlayerData[player].inventory) do
+        if k == 'cash' then
+            usedSlots = usedSlots + 1
+        else
+            usedSlots = usedSlots + v
+        end
+    end
+    return usedSlots
+end
+
+function DisplayPlayerBackpack(player, anim)
+    -- items ids : 818,820,821,823
+    if GetPlayerBag(player) == 1 then
+        if PlayerData[player].backpack == nil then -- Pour vérifier s'il n'a pas déjà un sac
+            local x, y, z = GetPlayerLocation(player)
+            PlayerData[player].backpack = CreateObject(820, x, y, z)
+            SetObjectAttached(PlayerData[player].backpack, ATTACH_PLAYER, player, -30.0, -9.0, 0.0, -90.0, 0.0, 0.0, "spine_03")
+            if anim == 1 then BackpackPutOnAnim(player) end -- Petite animation RP
+        end
+    else
+        if PlayerData[player].backpack ~= nil then
+            if anim == 1 then BackpackPutOnAnim(player, 2500) end -- Petite animation RP
+            Delay(2500, function() 
+                DestroyObject(PlayerData[player].backpack)  
+            end)
+        end
+    end
+end
+
+function BackpackPutOnAnim(player, timer)
+    if timer == nil then timer = 5000 end
+    SetPlayerAnimation(player, "CHECK_EQUIPMENT3")
+    Delay(timer, function()
+        SetPlayerAnimation(player, "STOP")
+    end)
+end
+
+AddFunctionExport("AddInventory", AddInventory)
+AddFunctionExport("RemoveInventory", RemoveInventory)
+AddFunctionExport("GetPlayerCash", GetPlayerCash)
+AddFunctionExport("SetPlayerCash", SetPlayerCash)
+AddFunctionExport("AddPlayerCash", AddPlayerCash)
+AddFunctionExport("RemovePlayerCash", RemovePlayerCash)
+AddFunctionExport("GetPlayerBag", GetPlayerBag)
+AddFunctionExport("GetPlayerMaxSlots", GetPlayerMaxSlots)
+AddFunctionExport("GetPlayerUsedSlots", GetPlayerUsedSlots)
+AddFunctionExport("DisplayPlayerBackpack", DisplayPlayerBackpack)
+AddFunctionExport("GetPlayerInventorySpace", GetPlayerInventorySpace)
+
+AddEvent("OnPackageStart", function()
+
+end)
 
