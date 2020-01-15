@@ -4,11 +4,18 @@ function SetHUDMarker(player, name, heading, r, g, b)
 end
 
 AddRemoteEvent("GetInitialHud", function(player)
-    playername = GetPlayerName(player)
-    hunger = math.ceil(PlayerData[player].hunger)
-    thirst = math.ceil(PlayerData[player].thirst)
-    cash = GetPlayerCash(player)
-    bank = PlayerData[player].bank_balance
-    job = PlayerData[player].job
-    CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job)
+    local playername = GetPlayerName(player)
+    local hunger = math.ceil(PlayerData[player].hunger)
+    local thirst = math.ceil(PlayerData[player].thirst)
+    local cash = GetPlayerCash(player)
+    local bank = PlayerData[player].bank_balance
+    local job = PlayerData[player].job
+    local time = GetServerTimeString()
+    CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job, time)
+end)
+
+AddEvent("ServerTimeUpdated", function(serverTime)
+    for k, v in pairs(GetAllPlayers()) do
+        CallRemoteEvent(v, "RPNotify:HUDEvent", "time", serverTime)
+    end
 end)

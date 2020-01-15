@@ -1,6 +1,6 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 PlayerData = {}
-
+serverTimeSeconds = 720
 function OnPackageStart()
     -- Save all player data automatically 
     CreateTimer(function()
@@ -250,6 +250,23 @@ function AddBalanceToBankAccountSQL(accountid, amount)
 		print("updating bank balance")
 		mariadb_query(sql, update_query)
 	end
+end
+
+AddEvent("OnPackageStart", function()
+	CreateTimer(function()
+		if serverTimeSeconds + 1 == 1441 then
+			serverTimeSeconds = 0
+		end
+		serverTimeSeconds = serverTimeSeconds + 1
+		CallEvent("ServerTimeUpdated", GetServerTimeString())
+	end, 1000)
+end)
+
+function GetServerTimeString()
+	hours = string.format("%02.f", math.floor(serverTimeSeconds/3600));
+	mins = string.format("%02.f", math.floor(serverTimeSeconds/60 - (hours*60)));
+	seconds = string.format("%02.f", math.floor(serverTimeSeconds - hours*3600 - mins *60));
+	return mins .. ":" .. seconds
 end
 
 function DestroyPlayerData(player)
