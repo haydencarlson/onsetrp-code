@@ -238,6 +238,7 @@ function CreatePlayerData(player)
 	PlayerData[player].health_state = "alive"
 	PlayerData[player].death_pos = {}
 	PlayerData[player].position = {}
+	PlayerData[player].lastinteract = ""
 
 
     print("Data created for : "..player)

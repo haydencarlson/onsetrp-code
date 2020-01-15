@@ -29,7 +29,7 @@ function getWeaponID(modelid)
 end
 
 AddRemoteEvent("UseInventory", function(player, item, amount)
-    weapon = getWeaponID(item)
+     weapon = getWeaponID(item)
     if tonumber(PlayerData[player].inventory[item]) < tonumber(amount) then
         AddPlayerChat(player, _("not_enough_item"))
     else

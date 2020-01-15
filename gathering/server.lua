@@ -141,11 +141,12 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
         animation = "PICKUP_LOWER"
     end
     function DoGathering(player, animation, gather, attached_item)
-        if GetPlayerPropertyValue(player, 'actionInProgress') == 'false' then
+        cop = PlayerData[player].job == "police"
+        if GetPlayerPropertyValue(player, 'actionInProgress') == 'false' and not cop then
             SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
-            if gatherTable[gather].process_item == "processed_meth" or gatherTable[gather].process_item == "processed_coke" or gatherTable[gather].process_item == "processed_heroin" or gatherTable[gather].process_item == "processed_weed" then
-                CallEvent("makeWanted", player)
-            end 
+            if gatherTable[gather].process_item == "processed_meth" or gatherTable[gather].process_item == "processed_coke" or gatherTable[gather].process_item == "processed_heroin" or gatherTable[gather].process_item == "processed_weed" and not cop then
+                makeWanted(player)
+            end
             CallRemoteEvent(player, "LockControlMove", true)
             PlayerData[player].isActioned = true
             SetPlayerAnimation(player, animation)
@@ -161,6 +162,8 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
                 CallRemoteEvent(player, "LockControlMove", false)
                 SetAttachedItem(player, "hand_r", 0)
             end)
+        else
+            AddPlayerChat(player, "You cannot gather illegal items as an officer of the law.")
         end
     end  
     DoGathering(player, animation, gather, attached_item)
