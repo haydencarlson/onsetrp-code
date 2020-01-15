@@ -57,6 +57,7 @@ AddRemoteEvent("PickOpenDoor", function(player)
                     SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
                     SetText3DText(vaultProgressText, "Picklock Progress: 100 %")
                     globaldoors[nearestdoor].locked = false
+                    SetDoorOpen(nearestdoor, true)
                     CallRemoteEvent(player, 'KNotify:Send', _("door_picklocked"), "#0f0")
                     Delay(60000, function()
                         SetText3DText(vaultProgressText, "Picklock Progress: 0 %")

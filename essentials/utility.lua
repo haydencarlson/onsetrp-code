@@ -1,10 +1,10 @@
 local frozen = {}
 local freezeTimer = 0
 
-local function IsCopInRange(x, y, z)
+local function IsCopInRange(player, x, y, z)
 	local playersinrange = GetPlayersInRange3D(x, y, z, 250)
 	for key, p in pairs(playersinrange) do
-        if PlayerData[p].job == 'police' then
+        if PlayerData[p].job == 'police' and p ~= player then
 			return true
         end
     end
@@ -17,7 +17,7 @@ function OnPlayerDeath(player, instigator)
     local x, y, z = GetPlayerLocation(instigator)
 	if player == instigator then 
 		AddPlayerChat(player,  death)
-	elseif IsCopInRange(x, y, z) then
+	elseif IsCopInRange(player, x, y, z) then
         CallEvent("makeWanted", instigator)
     else
         AddPlayerChat(player,  message)
@@ -34,10 +34,10 @@ AddCommand("tips", function(player)
 		'<span color="#00E307"> Press F1 near your vehicle for options </>',
 		'<span color="#00DCE3"> Press G for GPS </>',
 		'<span color="#D100FF"> Respect each others gameplay. </>',
-		'<span color="#FF6800"> Type /g [message] to enter global chat</>',
-		'<span color="#FF00F0"> You can use animations, type /dance etc. </>',
+		'<span color="#FF6800"> Type /g [message] to send a message in global</>',
+		'<span color="#FF00F0"> You can use animations push F2 </>',
 		'<span color="#7B061B"> Press U to unlock your vehicle </>',
-		'<span color="#B94F00"> Visit restaurants to quench your hunger/thirst </>',
+		'<span color="#B94F00"> Visit restaurants/shops to quench your hunger/thirst </>',
 		'<span color="#00B99A"> If you find stuff to harvest, you can sell it! </>',
 		'<span color="#3D4EF3"> We are open to suggestions. </>'
 	}
@@ -47,7 +47,8 @@ AddCommand("tips", function(player)
 end)
 
 local tips = { 
-		'<span color="#ccc"> Type /tips for some quick tips. </>',	
+		'<span color="#ccc"> Type /tips for some quick tips. </>',
+		'<span color="#ff0000">Discord: https://discord.balancerp.com Website: https://balancerp.com</>'
 	}
 	
 	for i in pairs(tips) do
