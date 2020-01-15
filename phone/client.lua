@@ -188,6 +188,7 @@ function SetLocationWaypoint(name,x,y,z)
 		if nearest ~= 0 then
 			waypoints[name] = CreateWaypoint(x,y,z,name)
 		end
+		CallEvent('KNotify:Send', _("gps_location_set"), "#0f0")
 	end
 end
 AddEvent("Kuzkay:PhoneSetLocation", SetLocationWaypoint)
