@@ -13,7 +13,7 @@ local function GetNearestPlayer(player)
 end
 
 
-local function IsCopInRange(player, x, y, z)
+local function IsCopInRange(x, y, z, player)
     local playersinrange = GetPlayersInRange3D(x, y, z, 1000)
     for key, p in pairs(playersinrange) do
         if PlayerData[p].job == 'police' and p ~= player then
@@ -48,8 +48,8 @@ AddEvent("rape", function(player)
             SetPlayerAnimation(victim, "SIT01")
             CallRemoteEvent(instigator, "LockControlMove", true)
             CallRemoteEvent(victim, "LockControlMove", true)
-            if IsCopInRange(player, x,y,z) then
-                CallEvent("makeWanted", instigator)
+            if IsCopInRange(x,y,z, player) then
+                makeWanted(instigator, player)
             end
             Delay(5000, function()
                 SetPlayerAnimation(victim, 'STOP')
@@ -64,7 +64,7 @@ AddEvent("rape", function(player)
 end)
 
 AddCommand("rape", function(player, instigator)
-    if IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
+    if not IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
       CallEvent("rape", player, instigator)
     end
 end)
@@ -73,16 +73,6 @@ AddRemoteEvent("rapedmg", function(player)
         health = GetPlayerHealth(player)
         SetPlayerHealth(player, health - 1)
         end, 5000, player)
-end)
-
-AddCommand("rf", function(player)
-        
-    CallRemoteEvent(player, "AidsOn")
-
-end)
-
-AddCommand("rfo", function(player)
-    CallRemoteEvent(player, "AidsOff")
 end)
 
 AddEvent("rob", function(player)
@@ -108,8 +98,8 @@ AddEvent("rob", function(player)
             AddPlayerChat(instigator, robsuc)
             SetPlayerAnimation(instigator, "HANDSHAKE")
             CallRemoteEvent(instigator, "LockControlMove", true)
-            if IsCopInRange(x,y,z) and job then
-                CallEvent("makeWanted", instigator)
+            if IsCopInRange(x, y, z, player) and job then
+                makeWanted(instigator, player)
             end
             Delay(2500, function()
                 CallRemoteEvent(instigator, "LockControlMove", false)
@@ -122,10 +112,11 @@ AddEvent("rob", function(player)
 end)
 
 AddCommand("rob", function(player, instigator)
-    if IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
+    if not IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
     CallEvent("rob", player, instigator)
     end
 end)
+
 
 function OnPlayerChatCommand(player, cmd, exists)
     if not exists then
@@ -134,3 +125,29 @@ function OnPlayerChatCommand(player, cmd, exists)
 	return true
 end
 AddEvent("OnPlayerChatCommand", OnPlayerChatCommand)
+--[[ 
+
+    \=\ cooldown wont work /=/
+
+function OnPlayerChatCommand(player, cmd, exists)
+    PlayerData[player].cmd_cooldown = GetTimeSeconds()
+    print("bottom time: "..PlayerData[player].cmd_cooldown.."")
+    if cmd then
+      local cooldowntime = GetTimeSeconds()
+        print("cooldown time: "..cooldowntime.."")
+        print("mid time: "..PlayerData[player].cmd_cooldown.."")
+        if cmd ==  "jh" or cmd == "jobhelp" and exists == false then
+        AddPlayerChat(player, "hello")
+        elseif not exists then  
+        CallRemoteEvent(player, 'KNotify:Send', "Command '/"..cmd.."' not found!", "#f00")
+        end
+            resultss = cooldowntime - PlayerData[player].cmd_cooldown
+    end
+    print("Result : "..resultss.."")
+      if (resultss < 0.5) then
+          print("undercheck time: "..PlayerData[player].cmd_cooldown.."")
+          AddPlayerChat(player, "Slow down with your commands")
+      end
+    return true
+end
+AddEvent("OnPlayerChatCommand", OnPlayerChatCommand)]]

@@ -1,5 +1,6 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
+
 -- Joining lottery
 AddRemoteEvent("joinLotto", function(player, number)
     if GetPlayerCash(player) >= 50 then
@@ -55,13 +56,12 @@ AddCommand("lottery", function(player)
 end)
 
 -- Code for finding lottery winner
-function OnPackageStart(player)
-    CreateTimer(function()
+AddEvent("ServerTimeUpdated", function(serverTime)
+    if serverTime == "18:00" then
         local query = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open'; ORDER BY 'id' DESC")
         mariadb_async_query(sql, query, OnLoadedOpenLottery, player)
-    end, 300000)
-end
-AddEvent("OnPackageStart", OnPackageStart)
+    end
+end)
 
 function OnLoadedOpenLottery(player)
     local lottery = mariadb_get_assoc(1)

@@ -47,8 +47,7 @@ function CreateVehicleDatabase(player, vehicle, modelid, color, price, aircraft)
         tostring(color),
 		tostring(price),
 		aircraft
-    )
-	print(query)
+	)
     mariadb_async_query(sql, query, onVehicleCreateDatabase, vehicle)
 end
 

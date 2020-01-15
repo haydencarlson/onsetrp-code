@@ -115,6 +115,41 @@ function OnPackageStart(player)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
+AddCommand("freeze", function(player, instigator)
+	if tonumber(PlayerData[player].admin) == 1 and IsValidPlayer(instigator) then
+		local adminname = GetPlayerName(player)
+		local playername = GetPlayerName(instigator)
+		local afmsg = "You have frozen: "..playername..""	
+		local freezemsg = "You have been frozen by: "..adminname..""
+		local _x, _y, _z = GetPlayerLocation(instigator)
+
+		CallRemoteEvent(instigator, 'KNotify:Send', freezemsg, "#f00")
+		CallRemoteEvent(player, 'KNotify:Send', afmsg, "#0f0")
+    	HandcuffPlayer(instigator, instigator, _x, _y, _z)
+		CallRemoteEvent(instigator, "LockControlMove", true)
+		else
+			AddPlayerChat(player, "Enter a valid player ID")
+			return false
+		end
+end)
+
+AddCommand("unfreeze", function(player, instigator)
+	if tonumber(PlayerData[player].admin) == 1 and IsValidPlayer(instigator) then
+		local adminname = GetPlayerName(player)
+		local unfreezemsg = "You have been unfrozen by: "..adminname..""
+		local playername = GetPlayerName(instigator)
+		local aufmsg = "You have unfrozen: "..playername..""
+
+        FreeHandcuffPlayer(instigator)
+        CallRemoteEvent(instigator, "LockControlMove", false)
+		CallRemoteEvent(instigator, 'KNotify:Send', unfreezemsg, "#f00")
+		CallRemoteEvent(player, 'KNotify:Send', aufmsg, "#0f0")
+		else
+			AddPlayerChat(player, "Enter a valid player ID")
+			return false
+      	end
+end)
+
 --[[
 function SetPlayerOnline(player)
 		local query = mariadb_prepare(sql, "UPDATE accounts SET online = '?' WHERE steamid = '?';",

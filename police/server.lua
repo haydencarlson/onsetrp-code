@@ -86,13 +86,11 @@ AddRemoteEvent("StartPoliceJob", function(player)
 end)
 
 AddRemoteEvent("StopPoliceJob", function(player) 
-	print("called")
 	if PlayerData[player].job_vehicle ~= nil then
 		DestroyVehicle(PlayerData[player].job_vehicle)
 		DestroyVehicleData(PlayerData[player].job_vehicle)
 		PlayerData[player].job_vehicle = nil
 	end
-	CallRemoteEvent(player, 'KNotify:Send', _("quit_police"), "#0f0")
 	PlayerData[player].job = ""
 	RemoveUniformServer(player)
 end)
