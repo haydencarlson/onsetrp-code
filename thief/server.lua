@@ -133,7 +133,12 @@ AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
                 Delay(1500, function() 
                     local thief = GetPlayerName(player)
                     math.randomseed(os.time())
-                    random_bar_amount = math.random(10, GetPlayerInventorySpace(player))
+                    local playerInvSpace = GetPlayerInventorySpace(player)
+                    minimumBars = 10
+                    if playerInvSpace < 10 then
+                        minimumBars = 1
+                    end
+                    random_bar_amount = math.random(minimumBars, GetPlayerInventorySpace(player))
                     AddPlayerChatAll('<span color="#ff0000">' .. thief .. ' has hit the bank vault. They have stolen ' .. random_bar_amount .. ' silver bars.' .. '</>')
                     AddInventory(player, "dirty_silver_bar", random_bar_amount)
                     CallRemoteEvent(player, 'KNotify:Send', _("stolen_bars"), "#0f0")

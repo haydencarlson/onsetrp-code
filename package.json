@@ -56,7 +56,8 @@
         "phone/utils/json.lua",
         "robbery/config.lua",
         "robbery/server.lua",
-        "essentials/nlr/server.lua"
+        "essentials/nlr/server.lua",
+        "bitcoinminer/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -89,7 +90,8 @@
         "thief/client.lua",
         "idcard/client.lua",
 	    "essentials/wanted/client.lua",
-	    "essentials/interactions/effects.lua",
+        "essentials/interactions/effects.lua",
+        "essentials/cinematicui_config.lua",
         "stylist/client.lua",
         "licenses/client.lua",
         "transport/c_busstop.lua",
@@ -100,7 +102,8 @@
         "lottery/client.lua",
         "robbery/config.lua",
         "robbery/client.lua",
-        "essentials/nlr/client.lua"
+        "essentials/nlr/client.lua",
+        "bitcoinminer/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -141,7 +144,6 @@
         "idcard/id.js",
         "idcard/id.css",
         "idcard/Cedarville-Cursive.ttf",
-        "essentials/models/lamboav/content/lamboav.pak",
         "phone/utils/jquery.js",
 		"phone/utils/jquery-ui.js",
 		"phone/utils/Yanone.ttf",
@@ -156,6 +158,8 @@
 		"phone/gui/img/contacts.png",
 		"phone/gui/img/background.jpg",
 		"phone/gui/img/location.png",
-        "phone/gui/img/garlic.png"
+        "phone/gui/img/garlic.png",
+        "bitcoinminer/gamingcomputer.pak",
+        "client/files/bitcoinminerfan.mp3"
     ]
 }

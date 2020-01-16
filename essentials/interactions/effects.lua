@@ -11,12 +11,11 @@ function AidsOn(player)
 		SetCameraShakeFOV(2.0, 2.0)
         PlayCameraShake(50000.0, 2.0, 1.0, 1.1)
         CallEvent("clientdmg", player)
-        -- CallRemoteEvent("rapedmg", player)
     end
 end
 AddRemoteEvent("AidsOn", AidsOn, player)
 
-function AidsOff()
+function AidsOff(player)
 if (AidsOn) then
     AidsOn = false
     rapeon = false
@@ -30,7 +29,7 @@ if (AidsOn) then
     DestroyTimer(rapefct)
     end
 end
-AddRemoteEvent("AidsOff", AidsOff)
+AddRemoteEvent("AidsOff", AidsOff, player)
 
 function Playerdmg(player)
     StartCameraFade(0.1, 0, 4.5, RGB(255, 0, 0))

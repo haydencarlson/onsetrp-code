@@ -56,24 +56,8 @@ end)
 
 
 AddRemoteEvent("JobGuyInteract", function(player, jobguyid)
-	if jobguyid then
-		local x, y, z = GetNPCLocation(jobguyid)
-		local x2, y2, z2 = GetPlayerLocation(player)
-        local dist = GetDistance3D(x, y, z, x2, y2, z2)
-		if dist < 250 then
-            ShowSelectJob(player)
-		end
-	end
+    ShowSelectJob(player)
 end)
-
-function GetJobGuyByObject(jobguyobject)
-	for k,v in pairs(JobsTable) do
-		if v.npc == jobguyobject then
-			return v
-		end
-	end
-	return nil
-end
 
 function JobSelected(player, selection)
     if selection ~= PlayerData[player].job then
