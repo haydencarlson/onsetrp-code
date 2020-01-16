@@ -30,7 +30,7 @@ AddEvent("rape", function(player)
     local victim = GetNearestPlayer(instigator)
     local lastInteract = PlayerData[player].lastinteract == victim
     if lastInteract then
-        CallRemoteEvent(instigator, 'KNotify:Send', "You cannot interact with the same player twice.", "#f00")
+        return CallRemoteEvent(instigator, 'KNotify:Send', "You cannot interact with the same player twice.", "#f00")
     end
     if victim == 0 and (nojob or citizen) and not lastInteract then   
         AddPlayerChat(player, "No one is near you.")
@@ -65,7 +65,6 @@ AddEvent("rape", function(player)
         else
             AddPlayerChat(instigator, rapefail)
             AddPlayerChat(victim, rapefailvic)
-            PlayerData[player].lastinteract = victim
         end
     end
 end)
@@ -106,6 +105,9 @@ AddEvent("rob", function(player)
     local victim = GetNearestPlayer(instigator)
     local job = PlayerData[instigator].job == "thief"
     local lastInteract = PlayerData[player].lastinteract == victim
+    if lastInteract then
+        return CallRemoteEvent(instigator, 'KNotify:Send', "You cannot interact with the same player twice.", "#f00")
+    end
     if victim == 0 and job and not lastInteract then  
         AddPlayerChat(player, "No one is near you.")
     elseif victim ~= 0 and job then
@@ -135,7 +137,6 @@ AddEvent("rob", function(player)
         else
             AddPlayerChat(instigator, robfail)
             AddPlayerChat(victim, robfailvic)
-            PlayerData[player].lastinteract = victim
         end
     end
 end)
