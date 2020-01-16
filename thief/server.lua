@@ -122,10 +122,6 @@ AddRemoteEvent("RPNotify:ObjectInteract_trade_silver_bars", function(player, obj
     end
 end)
 
-AddCommand("thief", function(player)
-    PlayerData[player].job = 'thief'
-end)
-
 AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
     if PlayerData[player].job == "thief" then
         local ox, oy, oz = GetObjectLocation(object)
