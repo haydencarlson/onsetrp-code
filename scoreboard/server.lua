@@ -4,7 +4,9 @@ function Scoreboard_RequestUpdate(player)
     _send[v] = {
       ['name'] = GetPlayerName(v),
       ['ping'] = GetPlayerPing(v),
-      ['id'] = v
+      ['id'] = v,
+      ['job'] = PlayerData[v].job,
+      ['admin'] = PlayerData[v].admin == 1
     }
   end
   local admin = PlayerData[player].admin == 1

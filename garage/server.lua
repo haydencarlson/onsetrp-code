@@ -127,6 +127,7 @@ function spawnCarServerLoaded(player)
         local color = tostring(result["color"])
         local name = _("vehicle_"..modelid)
         local nos_equipped = math.tointeger(result['nos_equipped'])
+        local inventory = json_decode(result['inventory'])
         local vehicle_durability = math.tointeger(result['vehicle_durability'])
         local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=0 WHERE `id` = ?;",
             tostring(id)
@@ -147,16 +148,16 @@ function spawnCarServerLoaded(player)
                     end
                 end
                 if isSpawnable then
-                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color)
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color, inventory)
                 else
-                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2] - 300, v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color)
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2] - 300, v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color, inventory)
                 end
             end
         end
 	end
 end
 
-function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id, name, query, player, color)
+function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id, name, query, player, color, inventory)
     local vehicle = CreateVehicle(modelid, x, y, z, h)
     if nos_equipped == 1 then
         AttachVehicleNitro(vehicle , true)
@@ -169,6 +170,7 @@ function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id,
     SetVehiclePropertyValue(vehicle, "locked", true, true)
     CreateVehicleData(player, vehicle, modelid)
     VehicleData[vehicle].garageid = id
+    VehicleData[vehicle].inventory = inventory
     mariadb_async_query(sql, query)
     CallRemoteEvent(player, "closeGarageDealer")
     return CallRemoteEvent(player, 'KNotify:Send', _("spawn_vehicle_success", tostring(name)), "#0f0")

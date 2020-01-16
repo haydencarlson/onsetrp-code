@@ -17,7 +17,7 @@ end
 function makeWanted(player)
     local wanted = GetPlayerPropertyValue(player, "isWanted")
     local playername = GetPlayerName(player)
-    local police = PlayerData[player].police == 1
+    local police = PlayerData[player].job == 'police'
     if wanted == 0 and not police then
         name = '(Criminal) '..playername
         SetPlayerName(player, name)
@@ -25,9 +25,12 @@ function makeWanted(player)
         CallRemoteEvent(player, 'KNotify:Send', _("make_wanted"), "#f00")
 
         Delay(120000, function(player)
-            SetPlayerPropertyValue(player, "isWanted", 0, true)
-            CallRemoteEvent(player, 'KNotify:Send', _("bank_rob"), "#f00")
-            SetPlayerName(player, PlayerData[player].name)
+            local wanted = GetPlayerPropertyValue(player, "isWanted")
+            if wanted == 1 then
+                SetPlayerPropertyValue(player, "isWanted", 0, true)
+                CallRemoteEvent(player, 'KNotify:Send', _("bank_rob"), "#f00")
+                SetPlayerName(player, PlayerData[player].name)
+            end
         end, player)
     end
 end
@@ -47,7 +50,7 @@ AddEvent("bankRob", function(player)
   end
 end)
 
-function IsCopInRdange(x, y, z)
+function IsCopInRange(x, y, z)
     local playersinrange = GetPlayersInRange3D(x, y, z, 250)
     for key, p in pairs(playersinrange) do
         if PlayerData[p].job == 'police' then
@@ -60,9 +63,12 @@ end
 
 AddCommand("want", function(player, instigator)
     local instigator = player
-    local criminal = GetNearestPlayer(instigator)
-    local police = PlayerData[instigator].job == "police"
+    local criminal = GetNearestPlayer(player)
+    local police = PlayerData[player].job == "police"
     local copname = GetPlayerName(instigator)
+    if PlayerData[criminal].job == 'police' then
+       return AddPlayerChat(player, "You cant make a police officer wanted")
+    end
     if criminal == 0 and police then  
         AddPlayerChat(player, "No one is near you.")
     elseif criminal ~= 0 and police then
@@ -108,13 +114,16 @@ end)
 
 AddCommand("arrest", function(player, instigator)
     if not IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
-    CallEvent("arrest", player, instigator) 
+        CallEvent("arrest", player, instigator) 
     end
 end)
 
 AddEvent("OnPlayerArrest", function(player)
-SetPlayerWeapon(player, 1, 0, true, 1, false)
-SetPlayerWeapon(player, 1, 0, true, 2, false)
-SetPlayerWeapon(player, 1, 0, true, 3, false)
-FreeHandcuffPlayer(player)
+    SetPlayerPropertyValue(player, "isWanted", 0, true)
+    CallRemoteEvent(player, 'KNotify:Send', _("bank_rob"), "#f00")
+    SetPlayerName(player, PlayerData[player].name)
+    SetPlayerWeapon(player, 1, 0, true, 1, false)
+    SetPlayerWeapon(player, 1, 0, true, 2, false)
+    SetPlayerWeapon(player, 1, 0, true, 3, false)
+    FreeHandcuffPlayer(player)
 end)

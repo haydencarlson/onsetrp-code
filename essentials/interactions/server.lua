@@ -13,7 +13,7 @@ local function GetNearestPlayer(player)
 end
 
 
-local function IsCopInRange(player, x, y, z)
+local function IsCopInRange(x, y, z, player)
     local playersinrange = GetPlayersInRange3D(x, y, z, 1000)
     for key, p in pairs(playersinrange) do
         if PlayerData[p].job == 'police' and p ~= player then
@@ -28,7 +28,11 @@ AddEvent("rape", function(player)
     local nojob = PlayerData[player].job == ""
     local citizen = PlayerData[player].job == "citizen"
     local victim = GetNearestPlayer(instigator)
-    if victim == 0 and (nojob or citizen) then   
+    local lastInteract = PlayerData[player].lastinteract == victim
+    if lastInteract then
+        CallRemoteEvent(instigator, 'KNotify:Send', "You cannot interact with the same player twice.", "#f00")
+    end
+    if victim == 0 and (nojob or citizen) and not lastInteract then   
         AddPlayerChat(player, "No one is near you.")
     elseif victim ~= 0 then
         local rapefail = "You have failed to rape ".. PlayerData[victim].name
@@ -38,7 +42,8 @@ AddEvent("rape", function(player)
 
         local outcome = Random(1, 3)
         local rapehp = Random(25, 65)
-        if outcome > 2 then
+        if outcome > 2 and not lastInteract then
+            SetPlayerPropertyValue(victim, "isRaped", 1, true)
             local x, y, z = GetPlayerLocation(instigator)
             SetPlayerHealth(instigator, 100)
             CallRemoteEvent(victim, "AidsOn")
@@ -48,7 +53,8 @@ AddEvent("rape", function(player)
             SetPlayerAnimation(victim, "SIT01")
             CallRemoteEvent(instigator, "LockControlMove", true)
             CallRemoteEvent(victim, "LockControlMove", true)
-            if IsCopInRange(x,y,z) then
+            PlayerData[player].lastinteract = victim
+            if IsCopInRange(x,y,z, player) then
                 makeWanted(instigator, player)
             end
             Delay(5000, function()
@@ -59,38 +65,59 @@ AddEvent("rape", function(player)
         else
             AddPlayerChat(instigator, rapefail)
             AddPlayerChat(victim, rapefailvic)
+            PlayerData[player].lastinteract = victim
         end
     end
 end)
+
+function OnPlayerDeath(player)
+    local isRaped = GetPlayerPropertyValue(player, "isRaped")
+    if isRaped == 1 then
+        CallRemoteEvent(player, "AidsOff")
+        SetPlayerPropertyValue(player, "isRaped", 0, true)
+    end
+end
+AddEvent("OnPlayerDeath", OnPlayerDeath)
 
 AddCommand("rape", function(player, instigator)
     if not IsPlayerDead(player) and not GetPlayerPropertyValue(player, 'cuffed') then
       CallEvent("rape", player, instigator)
     end
 end)
-AddRemoteEvent("rapedmg", function(player)
-     rapedmg = CreateTimer(function(player)
-        health = GetPlayerHealth(player)
-        SetPlayerHealth(player, health - 1)
-        end, 5000, player)
-end)
+
+function OnPackageStart()
+    CreateTimer(function()
+        for _, v in pairs(GetAllPlayers()) do
+            local isRaped = GetPlayerPropertyValue(v, "isRaped")
+            if isRaped == 1 then
+            local health = GetPlayerHealth(v)
+            SetPlayerHealth(v, health - 1)
+            end
+            if isRaped == 0 then
+                return false
+            end
+        end
+    end, 1000)
+end
+AddEvent("OnPackageStart", OnPackageStart)
 
 AddEvent("rob", function(player)
     local instigator = player
     local victim = GetNearestPlayer(instigator)
     local job = PlayerData[instigator].job == "thief"
-    if victim == 0 and job then  
+    local lastInteract = PlayerData[player].lastinteract == victim
+    if victim == 0 and job and not lastInteract then  
         AddPlayerChat(player, "No one is near you.")
     elseif victim ~= 0 and job then
         local outcome = Random(1, 3)
         local current_money_victim = GetPlayerCash(victim)
         local current_money = GetPlayerCash(instigator)
-        local money = Random(1, 2500)
+        local money = Rdandom(1, 2500)
         local robfail = "You have failed to rob ".. PlayerData[victim].name
         local robfailvic = "You feel your pockets move slightly.."
         local robsuc = "You have robbed $"..money.." from ".. PlayerData[victim].name
         local robsucvic = "Your pockets feel lighter."
-        if outcome > 2 then
+        if outcome > 2 and not lastInteract then
             local x, y, z = GetPlayerLocation(instigator)
             RemoveBalanceFromAccount(victim, "cash", money)
             AddBalanceToAccount(instigator, "cash", money) 
@@ -98,7 +125,8 @@ AddEvent("rob", function(player)
             AddPlayerChat(instigator, robsuc)
             SetPlayerAnimation(instigator, "HANDSHAKE")
             CallRemoteEvent(instigator, "LockControlMove", true)
-            if IsCopInRange(x,y,z) and job then
+            PlayerData[player].lastinteract = victim
+            if IsCopInRange(x, y, z, player) and job then
                 makeWanted(instigator, player)
             end
             Delay(2500, function()
@@ -107,6 +135,7 @@ AddEvent("rob", function(player)
         else
             AddPlayerChat(instigator, robfail)
             AddPlayerChat(victim, robfailvic)
+            PlayerData[player].lastinteract = victim
         end
     end
 end)

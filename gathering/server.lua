@@ -145,6 +145,7 @@ AddRemoteEvent("StartGathering", function(player, gatherzone)
         if GetPlayerPropertyValue(player, 'actionInProgress') == 'false' and not cop then
             SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
             if gatherTable[gather].process_item == "processed_meth" or gatherTable[gather].process_item == "processed_coke" or gatherTable[gather].process_item == "processed_heroin" or gatherTable[gather].process_item == "processed_weed" and not cop then
+                print("making wanted")
                 makeWanted(player)
             end
             CallRemoteEvent(player, "LockControlMove", true)

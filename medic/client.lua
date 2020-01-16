@@ -90,6 +90,7 @@ end
 function UpdateMedicUniform(playerToUpdate)
     SetPlayerClothingPreset(playerToUpdate, 17)
 end
+
 AddRemoteEvent("UpdateMedicUniform", UpdateMedicUniform)
 
 AddEvent("OnPlayerStreamIn", function(player, otherplayer)

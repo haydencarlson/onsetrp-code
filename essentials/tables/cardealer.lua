@@ -10,6 +10,7 @@ CarDealerTable = {
                     vehicle_12 = 23000,
                     vehicle_25 = 10000
 		},
+		aircraft_dealer = 0,
 		colors = {
 			black = "0000",
 			red = "FF0000",
@@ -31,6 +32,7 @@ CarDealerTable = {
                     vehicle_12 = 23000,
                     vehicle_25 = 10000
 		},
+		aircraft_dealer = 0,
 		colors = {
 			black = "0000",
 			red = "FF0000",
@@ -52,6 +54,7 @@ CarDealerTable = {
                     vehicle_12 = 23000,
                     vehicle_25 = 10000
 		},
+		aircraft_dealer = 0,
 		colors = {
 			black = "0000",
 			red = "FF0000",
@@ -73,6 +76,7 @@ CarDealerTable = {
                     vehicle_12 = 23000,
                     vehicle_25 = 10000
 		},
+		aircraft_dealer = 0,
 		colors = {
 			black = "0000",
 			red = "FF0000",
@@ -94,6 +98,7 @@ CarDealerTable = {
                     vehicle_12 = 23000,
                     vehicle_25 = 10000
 		},
+		aircraft_dealer = 0,
 		colors = {
 			black = "0000",
 			red = "FF0000",

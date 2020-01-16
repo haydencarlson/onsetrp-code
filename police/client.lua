@@ -130,7 +130,9 @@ end
 AddRemoteEvent("ChangeUniformClient", function(playerToChange, pieceName, part)
     if(pieceName ~= nil and pieceName ~= '') then
     	local SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(playerToChange, "Clothing"..part)
-    	SkeletalMeshComponent:SetSkeletalMesh(USkeletalMesh.LoadFromAsset(pieceName))
+		SkeletalMeshComponent:SetSkeletalMesh(USkeletalMesh.LoadFromAsset(pieceName))
+		local body = GetPlayerSkeletalMeshComponent(playerToChange, "Body")
+		body:SetSkeletalMesh(USkeletalMesh.LoadFromAsset("/Game/CharacterModels/SkeletalMesh/BodyMerged/HZN_CH3D_Pimp_LPR"))
 end
 end)
 
@@ -146,19 +148,19 @@ end)
 
 AddEvent("OnPlayerDeath", function(player, instigator)
     if(GetPlayerPropertyValue(GetPlayerId(), "cuffed")) then
-	CallRemoteEvent("FreeHandcuffPlayer")
+		CallRemoteEvent("FreeHandcuffPlayer")
     end
 end)
 
 AddEvent("OnPlayerStartExitVehicle", function(vehicle)
     if(GetPlayerPropertyValue(GetPlayerId(), "cuffed")) then
-	return false
+		return false
     end
 end)
 
 AddEvent("OnPlayerStartEnterVehicle", function(vehicle)
     if(GetPlayerPropertyValue(GetPlayerId(), "cuffed")) then
-	return false
+		return false
     end
 end)
 

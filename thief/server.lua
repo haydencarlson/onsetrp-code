@@ -28,8 +28,26 @@ AddEvent("OnPlayerInteractDoor", function( player, door, bWantsOpen )
     end
 end)
 
+function ChangeToThiefClothing(player)
+    CallRemoteEvent(player, "SetPlayerClothingToPreset", player, 10)
+    for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
+        CallRemoteEvent(v, "SetPlayerClothingToPreset", player, 10)
+    end
+end
+
+AddRemoteEvent("SetupThiefUniformOnStreamIn", function(player, otherplayer)
+    if PlayerData[otherplayer] == nil then
+        return
+    end
+    if(PlayerData[otherplayer].job ~= "thief") then
+        return
+    end
+    CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 10)
+end)
+
 AddRemoteEvent("StartThiefJob", function(player)
     PlayerData[player].job = "thief"
+    ChangeToThiefClothing(player)
 end)
 
 AddRemoteEvent("StopThiefJob", function(player)
