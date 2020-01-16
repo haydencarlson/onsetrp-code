@@ -236,6 +236,8 @@ function GetPlayerBag(player)
 end
 
 function GetPlayerInventorySpace(player)
+    print(tonumber(GetPlayerMaxSlots(player)))
+    print(tonumber(GetPlayerUsedSlots(player)))
     return tonumber(GetPlayerMaxSlots(player)) - tonumber(GetPlayerUsedSlots(player))
 end
 

@@ -6,10 +6,9 @@ AddEvent("OnPackageStart", function()
 end)
 
 
--- AddRemoteEvent("CreateSoundIn3D", function(filename, x, y, z, radius)
---     sound = CreateSound3D(filename, x, y, z, radius)
---     LoopSounds[sound] = true
--- end)
+AddRemoteEvent("CreateSoundIn3D", function(filename, x, y, z, radius)
+    sound = CreateSound3D(filename, x, y, z, radius)
+end)
 
 -- AddEvent("OnSoundFinished", function(sound)
 --     AddPlayerChat("here")

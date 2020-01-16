@@ -2,6 +2,7 @@ local Dialog = ImportPackage("dialogui")
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local Camera = ImportPackage('camera')
 local jobMenu
+local CUI = ImportPackage("cinematicui")
 local cameraPaths = {
     delivery = {
         hasCamera = true,
@@ -39,14 +40,37 @@ local cameraPaths = {
         }
     }
 }
+
+local function GetNearestNpc()
+	local x, y, z = GetPlayerLocation()
+    for k,v in pairs(GetStreamedNPC()) do
+        local x2, y2, z2 = GetNPCLocation(v)
+		local dist = GetDistance3D(x, y, z, x2, y2, z2)
+        if dist < 250.0 then
+            for k,i in pairs(JobNpcIds) do
+				if v == i then
+					return v
+				end
+			end
+		end
+	end
+	return 0
+end
+
+
 function SelectingJob(key)
     if key == "E" and not onCharacterCreation then
         local NearestNpc = GetNearestNpc()
         if NearestNpc ~= 0 then
-	        CallRemoteEvent("JobGuyInteract", NearestNpc)
+            CUI.startCinematic(cinematicUIConfig['jobManager'], NearestNpc)
 		end
     end
 end
+
+AddEvent("ContinueJobManagerInteract", function()
+    CallRemoteEvent("JobGuyInteract")
+end)
+
 
 function SelectedJob(selection, playerjob)
     if playerjob ~= "" then
@@ -123,20 +147,4 @@ function IsJobCameraDone()
         SetInputMode(INPUT_GAME)
         CallRemoteEvent("ShowJobInformation")
     end
-end
-
-function GetNearestNpc()
-	local x, y, z = GetPlayerLocation()
-    for k,v in pairs(GetStreamedNPC()) do
-        local x2, y2, z2 = GetNPCLocation(v)
-		local dist = GetDistance3D(x, y, z, x2, y2, z2)
-        if dist < 250.0 then
-            for k,i in pairs(JobNpcIds) do
-				if v == i then
-					return v
-				end
-			end
-		end
-	end
-	return 0
 end
