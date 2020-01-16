@@ -112,7 +112,7 @@ AddEvent("rob", function(player)
         local outcome = Random(1, 3)
         local current_money_victim = GetPlayerCash(victim)
         local current_money = GetPlayerCash(instigator)
-        local money = Rdandom(1, 2500)
+        local money = Random(1, 2500)
         local robfail = "You have failed to rob ".. PlayerData[victim].name
         local robfailvic = "You feel your pockets move slightly.."
         local robsuc = "You have robbed $"..money.." from ".. PlayerData[victim].name
