@@ -29,7 +29,7 @@ end)
 
 AddEvent("OnPackageStart", function(time)
     CreateTimer(function(time)
-    local time = GetTime()
+    local time = math.round(GetTime())
     CallRemoteEvent("LotteryPayload", time)
     end, 1000)
 end)

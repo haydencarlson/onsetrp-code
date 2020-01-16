@@ -56,6 +56,7 @@ end)
 
 -- Code for finding lottery winner
 AddRemoteEvent("LotteryPayload", function(player, time)
+    print(time)
     if time == 18.00 then
         local query = mariadb_prepare(sql, "SELECT * from lotteries WHERE status = 'open'; ORDER BY 'id' DESC")
         mariadb_async_query(sql, query, OnLoadedOpenLottery, player)
