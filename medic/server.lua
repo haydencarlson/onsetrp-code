@@ -129,19 +129,19 @@ end)
 
 function NotifyConnectedMedics(player)
     for k,v in pairs(GetAllPlayers()) do
-	if PlayerData[k] == nil then
+	if PlayerData[v] == nil then
 	    goto continue
 	end
-	if PlayerData[k].name == nil then
+	if PlayerData[v].name == nil then
 	    goto continue
 	end
-	if PlayerData[k].steamname == nil then
+	if PlayerData[v].steamname == nil then
 	    goto continue
 	end
 	if player == v or PlayerData[v].job ~= "medic" then
 	    goto continue
 	end
-	CallRemoteEvent(k, 'KNotify:Send', _("medic_notification_on_death"), "#0f0")
+	CallRemoteEvent(v, 'KNotify:Send', _("medic_notification_on_death"), "#0f0")
 	::continue::
     end
 end
@@ -199,16 +199,16 @@ AddRemoteEvent("OpenMedicMenu", function(player)
 
 	for k,v in pairs(playersIds) do
 	    if PlayerData[k] == nil then
-		goto continue
+			goto continue
 	    end
 	    if PlayerData[k].name == nil then
-		goto continue
+			goto continue
 	    end
 	    if PlayerData[k].steamname == nil then
-		goto continue
+			goto continue
 	    end
 	    if player == k then
-		goto continue
+			goto continue
 	    end
 
 	    if(PlayerData[k].health_state == "dead") then

@@ -21,22 +21,81 @@ end
 
 AddEvent("OnTranslationReady", function()
     -- Create or Join Menu
-    createJoinCompany = Dialog.create(_("create_join_company"), nil, _("create_company"),_("join_company"), _("cancel"))
+    createJoinCompany = Dialog.create(_("create_join_company"), nil, _("create_company"), _("cancel"))
 
     -- Upgrade Menu
     upgradeCompany = Dialog.create(_("upgrade_company"), nil, _("purchase_company_upgrade"),_("cancel"))
     Dialog.addSelect(upgradeCompany, 1, _("company_upgrades_available"), 5)
 
     -- Manage Menu
-    manageCompany = Dialog.create(_("manage_your_company"), nil, _("upgrade_company"),_("company_employee_request"), _("cancel"))
+    manageCompany = Dialog.create(_("manage_your_company"), nil, _("upgrade_company"), _("cancel"))
 
     -- Create new Company Menu
     createCompany = Dialog.create(_("create_new_company"), nil, _("create_company"), _("cancel"))
     Dialog.addTextInput(createCompany, 1, _("company_name"))
+
+    -- Leave company
+    leaveCompany = Dialog.create("Leave Company", nil, _("yes_leave"), _("cancel"))
+
+    -- Company Menu
+    companyMenu = Dialog.create(_("company_name"), nil, _("hire_player"),_("fire_player"),_("cancel"))
+
+    -- Hire menu
+    hireMenu = Dialog.create(_("hire_player"), nil, _("hire_player"),_("cancel"))
+    Dialog.addSelect(hireMenu, 1, _("close_players"), 5)
+
+    -- Fire Menu
+    fireMenu = Dialog.create(_("fire_player"), nil, _("fire_player"),_("cancel"))
+    Dialog.addSelect(fireMenu, 1, _("company_employees"), 5)
+end)
+
+
+AddEvent("OnKeyPress", function(key)
+    if key == "F6" and not onCharacterCreation then
+        CallRemoteEvent("OpenCompanyMenu")
+    end
+end)
+
+AddRemoteEvent("ShowCompanyMenu", function(playerList)
+    Dialog.setSelectLabeledOptions(hireMenu, 1, 1, playerList)
+    Dialog.show(companyMenu)
+end)
+
+AddRemoteEvent("ShowFireMenu", function(employeeList)
+    Dialog.setSelectLabeledOptions(fireMenu, 1, 1, employeeList)
+    Dialog.show(fireMenu)
 end)
 
 AddEvent("OnDialogSubmit", function(dialog, button, ...)
     local args = { ... }
+    if dialog == fireMenu then
+        if button == 1 then
+            local employee = args[1]
+            if employee == "" then
+                CallEvent('KNotify:Send', _("select_a_player"), "#f00")
+            else
+                CallRemoteEvent("FirePlayer", employee)
+            end
+        end
+    end
+    if dialog == companyMenu then
+        if button == 1 then
+            Dialog.show(hireMenu)
+        end
+        if button == 2 then
+            CallRemoteEvent("OpenFireMenu")
+        end
+    end
+    if dialog == hireMenu then
+        if button == 1 then
+            local player = args[1]
+            if player == "" then
+                CallEvent('KNotify:Send', _("select_a_player"), "#f00")
+            else 
+                CallRemoteEvent("HirePlayer", player)
+            end
+        end
+    end
     if dialog == createJoinCompany then
         if button == 1 then
             Dialog.show(createCompany)
@@ -58,11 +117,18 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
         end
     end
     if dialog == upgradeCompany then
-        local upgrade = args[1]
-        if upgrade == "" then
-            CallEvent('KNotify:Send', _("choose_company_upgrade"), "#f00")
-        else
-            CallRemoteEvent("UpgradeCompany", upgrade)
+        if button == 1 then
+            local upgrade = args[1]
+            if upgrade == "" then
+                CallEvent('KNotify:Send', _("choose_company_upgrade"), "#f00")
+            else
+                CallRemoteEvent("UpgradeCompany", upgrade)
+            end
+        end
+    end
+    if dialog == leaveCompany then
+        if button == 1 then
+            CallRemoteEvent("LeaveCompany")
         end
     end
 end)
@@ -90,6 +156,10 @@ end)
 
 AddRemoteEvent("ShowManageCompany", function()
     Dialog.show(manageCompany)
+end)
+
+AddRemoteEvent("ShowLeaveCompany", function()
+    Dialog.show(leaveCompany)
 end)
 
 AddRemoteEvent("ShowUpgradeCompany", function(upgradesAvailable)

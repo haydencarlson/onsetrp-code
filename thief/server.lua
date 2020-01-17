@@ -128,7 +128,7 @@ AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
         local x, y, z = GetPlayerLocation(player)
         if vaultTimer <= 0 then
             if GetDistance3D(x, y, z, ox, oy, oz) <= 250.00 then
-                vaultTimer = 300000
+                vaultTimer = 600000
                 SetPlayerAnimation(player, "PICKUP_MIDDLE")
                 Delay(1500, function() 
                     local thief = GetPlayerName(player)

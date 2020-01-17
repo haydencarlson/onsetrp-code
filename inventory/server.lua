@@ -7,7 +7,7 @@ AddRemoteEvent("ServerPersonalMenu", function(player)
     local nearestPlayers = GetPlayersInRange3D(x, y, z, 1000)
     local playerList = {}
     for k,v in pairs(nearestPlayers) do
-        if k ~= player then
+        if v ~= player then
             if PlayerData[v] ~= nil then 
                 local name = PlayerData[v].name
                 if name ~= nil then
