@@ -24,10 +24,11 @@ function OnPackageStart()
             
         end
         print("All vehicle have been saved !")
-    end, 30000)
+    end, 15000)
     
 
     CreateTimer(function()
+        local vehicleToDelete = nil
         for k,v in pairs(GetAllVehicles()) do
             local hasOwner = false
             for w,z in pairs(GetAllPlayers()) do
@@ -43,13 +44,12 @@ function OnPackageStart()
                 end
                 if VehicleData[v].owner == PlayerData[z].accountid then
                     hasOwner = true
-                    print(VehicleData[v].owner)
-                    print(PlayerData[z].accountid )
                     break
                 end
                 ::continue::
             end
             if not hasOwner then
+                vehicleToDelete = {}
                 table.insert(vehicleToDelete, v)
             end
         end
@@ -87,16 +87,16 @@ function OnPackageStart()
             end
         end
         print("All vehicle have been cleaned up !")
-    end, 900000)
+    end, 300000)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
 
 function SaveVehicleData(vehicle) 
     local query = mariadb_prepare(sql, "UPDATE player_garage SET ownerid = '?', inventory = '?' WHERE id = '?' LIMIT 1;",
-    VehicleData[vehicle].owner,
-    json_encode(VehicleData[vehicle].inventory),
-    VehicleData[vehicle].garageid
+        VehicleData[vehicle].owner,
+        json_encode(VehicleData[vehicle].inventory),
+        VehicleData[vehicle].garageid
     )
     
     mariadb_query(sql, query)

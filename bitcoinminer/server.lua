@@ -1,16 +1,14 @@
+local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 PlayerBitcoinMiners = {}
-AddCommand("miner", function(player)
-    local x, y, z = GetPlayerLocation(player)
-    newminer = CreateObject(110, x, y, z)
-    SetObjectPropertyValue(newminer, "ownerid", PlayerData[player].accountid, true)
-    SetObjectPropertyValue(newminer, "mining", true, true)
+BitcoinMinerNpcXYZ = { -1414, 141106, 1851}
+BitcoinMinerNpc = nil
+AddEvent("OnPackageStart", function()
+    CreateText3D("Bitcoin Manager".."\n".._("press_e"), 18, BitcoinMinerNpcXYZ[1], BitcoinMinerNpcXYZ[2], BitcoinMinerNpcXYZ[3] + 120, 0, 0, 0)
+    BitcoinMinerNpc = CreateNPC(BitcoinMinerNpcXYZ[1], BitcoinMinerNpcXYZ[2], BitcoinMinerNpcXYZ[3], 180)
+end)
 
-    --- OnSoundFinished event broken atm cant loop sound
-    -- CallRemoteEvent(player, "CreateSoundIn3D", "client/files/bitcoinminerfan.mp3", x, y, z, 1000)
-
-    PlayerBitcoinMiners[player] = {}
-    local newMinerTable = {id = newminer, location = {x=x, y=y, z=z}}
-    table.insert(PlayerBitcoinMiners[player], newMinerTable)
+AddEvent("OnPlayerJoin", function(player)
+    CallRemoteEvent(player, "SetupBitcoinMinerGuy", BitcoinMinerNpc)
 end)
 
 CreateTimer(function()

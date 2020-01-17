@@ -36,7 +36,8 @@ local teleportPlace = {
 	stock_trader = { 214434, 190802, 1309 },
 	gun_seller = { 205888, 192905, 1357 },
 	dirty_bar_buyer = { 151547, 203757, 363 },
-	aircraft_dealer = { 158307, -143100, 1252 }
+	aircraft_dealer = { 158307, -143100, 1252 },
+	bitcoin_warehouse = { -3092, 141416, 1856 }
 
 }
 
