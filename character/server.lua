@@ -86,8 +86,17 @@ AddEvent("OnPlayerSpawn", function( player )
         return
     end
     if PlayerData[player].job == "police" then
-	GetUniformServer(player)
-	return
+	    GetUniformServer(player)
+	    return
+    end
+    if PlayerData[player].job == "thief" then
+	    ChangeToThiefClothing(player)
+	    return
+    end
+    if PlayerData[player].job == "medic" then
+        CallRemoteEvent(player, "UpdateMedicUniform", player)
+        SetupUpdateMedicUniform(player)
+	    return
     end
     playerhairscolor = getHairsColor(PlayerData[player].clothing[2])
     CallRemoteEvent(player, "ClientChangeClothing", player, 0, PlayerData[player].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])

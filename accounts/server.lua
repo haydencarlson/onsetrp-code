@@ -218,7 +218,7 @@ function CreatePlayerData(player)
 	PlayerData[player].clothing_police = {}
 	PlayerData[player].police = 1
 	PlayerData[player].medic = 0
-	PlayerData[player].inventory = { cash = 100 }
+	PlayerData[player].inventory = { cash = 1000 }
 	PlayerData[player].driver_license = 0
 	PlayerData[player].gun_license = 0
 	PlayerData[player].helicopter_license = 0
