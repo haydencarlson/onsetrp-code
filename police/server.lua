@@ -188,7 +188,7 @@ end
 AddRemoteEvent("OpenSearchInventoryMenu", function(player)
 	local nearestPlayer = GetNearestPlayer(player, 150)
 	if nearestPlayer then
-		local inventory = PlayerData[nearestPlayer].inventory
+		local inventory = PlayerData[nearestPlayer[1]].inventory
 		local inventoryItems = {}
 		for k,v in pairs(inventory) do
 			inventoryItems[k] = _(k) .. ' x ' .. v
