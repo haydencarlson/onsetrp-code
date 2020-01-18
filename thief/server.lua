@@ -10,6 +10,7 @@ AddEvent("OnPackageStart", function()
     bankleaveobject = CreateObject(340, 189914, 201541, 813)
     SetObjectPropertyValue(bankleaveobject, "action", "bankleave", true)
     CreateText3D(_("leave_bank").."\n".._("press_e"), 18, 189914, 201541, 813 + 120, 0, 0, 0)
+
     bankbars = CreateObject(1487, 183977, 202876, 50)
     CreateText3D(_("press_e"), 20, 183977, 202950, 250, 0, 0, 0)
     SetObjectPropertyValue(bankbars, "action", "stealbars", true)
@@ -56,41 +57,45 @@ end)
 
 AddRemoteEvent("PickOpenDoor", function(player)
     if PlayerData[player].job == "thief" and GetPlayerPropertyValue(player, "actionInProgress") == 'false' then
-        if vaultTimer <= 0 then
-            local nearestdoor = GetNearestDoor(player)
-            if globaldoors[nearestdoor] ~= nil then
-                if vaultLockProgress == 0 then
-                    AddPlayerChatAll('<span color="#ff0000">' .. GetPlayerName(player) .. ' is hitting the bank vault. Stop them from stealing the banks money</>')
-                end
-                SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
-                LockPickAnimation(player)
-                CallEvent("bankRob", player)
-                if vaultLockProgress + 5 < 100 then
-                    Delay(2000, function()
-                        vaultLockProgress = vaultLockProgress + 5
-                        SetText3DText(vaultProgressText, "Picklock Progress: " .. vaultLockProgress .. " %")
+        if GetPlayerEquippedWeapon(player) ~= 0 then
+            if vaultTimer <= 0 then
+                local nearestdoor = GetNearestDoor(player)
+                if globaldoors[nearestdoor] ~= nil then
+                    if vaultLockProgress == 0 then
+                        AddPlayerChatAll('<span color="#ff0000">' .. GetPlayerName(player) .. ' is hitting the bank vault. Stop them from stealing the banks money</>')
+                    end
+                    SetPlayerPropertyValue(player, 'actionInProgress', 'true', true)
+                    LockPickAnimation(player)
+                    CallEvent("bankRob", player)
+                    if vaultLockProgress + 5 < 100 then
+                        Delay(2000, function()
+                            vaultLockProgress = vaultLockProgress + 5
+                            SetText3DText(vaultProgressText, "Picklock Progress: " .. vaultLockProgress .. " %")
+                            SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
+                        end)
+                    else
                         SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
-                    end)
+                        SetText3DText(vaultProgressText, "Picklock Progress: 100 %")
+                        globaldoors[nearestdoor].locked = false
+                        SetDoorOpen(nearestdoor, true)
+                        CallRemoteEvent(player, 'KNotify:Send', _("door_picklocked"), "#0f0")
+                        Delay(60000, function()
+                            SetText3DText(vaultProgressText, "Picklock Progress: 0 %")
+                            vaultLockProgress = 0
+                            if IsDoorOpen(nearestdoor) then
+                                SetDoorOpen(nearestdoor, false)
+                            end
+                            globaldoors[nearestdoor].locked = true
+                        end)
+                    end
                 else
-                    SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
-                    SetText3DText(vaultProgressText, "Picklock Progress: 100 %")
-                    globaldoors[nearestdoor].locked = false
-                    SetDoorOpen(nearestdoor, true)
-                    CallRemoteEvent(player, 'KNotify:Send', _("door_picklocked"), "#0f0")
-                    Delay(60000, function()
-                        SetText3DText(vaultProgressText, "Picklock Progress: 0 %")
-                        vaultLockProgress = 0
-                        if IsDoorOpen(nearestdoor) then
-                            SetDoorOpen(nearestdoor, false)
-                        end
-                        globaldoors[nearestdoor].locked = true
-                    end)
+                    CallRemoteEvent(player, 'KNotify:Send', _("cant_picklock_here"), "#f00")
                 end
             else
-                CallRemoteEvent(player, 'KNotify:Send', _("cant_picklock_here"), "#f00")
+                CallRemoteEvent(player, 'KNotify:Send', _("cant_steal_bars_now"), "#f00")
             end
         else
-            CallRemoteEvent(player, 'KNotify:Send', _("cant_steal_bars_now"), "#f00")
+            CallRemoteEvent(player, 'KNotify:Send', "You need a weapon", "#f00")
         end
     end
 end)

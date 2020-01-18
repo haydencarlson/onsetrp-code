@@ -56,8 +56,7 @@
         "phone/utils/json.lua",
         "robbery/config.lua",
         "robbery/server.lua",
-        "essentials/nlr/server.lua",
-        "bitcoinminer/server.lua"
+        "essentials/nlr/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -102,8 +101,7 @@
         "lottery/client.lua",
         "robbery/config.lua",
         "robbery/client.lua",
-        "essentials/nlr/client.lua",
-        "bitcoinminer/client.lua"
+        "essentials/nlr/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
