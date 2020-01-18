@@ -264,7 +264,7 @@ function RecieveMessage(sender, senderNumber, number, text, job)
 			ExecuteWebJS(ui, "AddMessage("..number..",'"..text.."','sent');")
 		else
 			ExecuteWebJS(ui, "AddMessage("..senderNumber..",'"..text.."','recieved');")
-
+			CallEvent('KNotify:Send', _("message_received", senderNumber), "#0f0")
 			if GetWebVisibility(ui) == WEB_HIDDEN then
 				local sound = CreateSound("utils/vibration.wav")
 				Delay(1000, function()
@@ -275,7 +275,7 @@ function RecieveMessage(sender, senderNumber, number, text, job)
 	else
 		if (number == 999 and job == "police") or (number == 998 and job == "medic") or (number == 911 and (job == "police" or job == "ems")) then
 			ExecuteWebJS(ui, "AddMessage("..number..",'"..text.."','job');")
-
+			CallEvent('KNotify:Send', _("emergency_received", senderNumber, number), "#0f0")
 			if GetWebVisibility(ui) == WEB_HIDDEN then
 				local sound = CreateSound("utils/vibration.wav")
 				Delay(1000, function()
