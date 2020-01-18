@@ -1,4 +1,6 @@
 {
+    "emergency_received": "Emergency SMS From {1} To {2}",
+    "message_received": "SMS Received From {1}",
     "enter_higher_number": "Please enter a higher number",
     "stock_trader_menu": "Buy/Sell Stocks",
     "buy_stocks": "Buy",
@@ -285,7 +287,6 @@
     "vehicle_3": "Police",
     "vehicle_8": "Ambulance",
     "vehicle_9": "Garbage Truck",
-    "vehicle_10": "Helicopter",
     "vehicle_13": "SWAT Truck",
     "vehicle_14": "Camo Military Van",
     "vehicle_15": "Armored Rescue",
