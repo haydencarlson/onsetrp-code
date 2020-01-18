@@ -170,7 +170,6 @@ end)
 
 function GetNearestPolice(player)
 	local x, y, z = GetPlayerLocation(player)
-
 	for k,v in pairs(GetAllNPC()) do
         local x2, y2, z2 = GetNPCLocation(v)
 		local dist = GetDistance3D(x, y, z, x2, y2, z2)
@@ -183,9 +182,42 @@ function GetNearestPolice(player)
 			end
 		end
 	end
-
 	return 0
 end
+
+AddRemoteEvent("OpenSearchInventoryMenu", function(player)
+	-- local nearestPlayer = GetNearestPlayer(player, 150)
+	-- if nearestPlayer then
+		local inventory = PlayerData[player].inventory
+		local inventoryItems = {}
+		for k,v in pairs(inventory) do
+			inventoryItems[k] = _(k) .. ' x ' .. v
+		end
+		CallRemoteEvent(player, "ShowSearchInventoryMenu", inventoryItems, player)
+	-- else
+	-- 	CallRemoteEvent(player, 'KNotify:Send', "No one is near or not close enough", "#f00")
+	-- end
+end)
+
+AddRemoteEvent("RemoveIllegalItems", function(player, playerToRemove)
+	local playerInventory = PlayerData[playerToRemove].inventory
+	local illegalItems = { "dirty_silver_bar" }
+	local itemsRemoved = false
+	for k,v in pairs(playerInventory) do
+		for key,value in pairs(illegalItems) do
+			if k == value then
+				itemsRemoved = true
+				PlayerData[playerToRemove].inventory[value] = nil
+			end
+		end
+	end
+	if itemsRemoved then
+		CallRemoteEvent(playerToRemove, 'KNotify:Send', "Your illegal belongings have been confiscated", "#f00")
+		CallRemoteEvent(player, 'KNotify:Send', "Illegal items sent to evidence", "#0f0")
+	else
+		CallRemoteEvent(player, 'KNotify:Send', "Player doesnt have anything illegal", "#f00")
+	end
+end)
 
 function GetUniformServer(player)
     CallRemoteEvent(player, "SetPlayerClothingToPreset", player, 13)

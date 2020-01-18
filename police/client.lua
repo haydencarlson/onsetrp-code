@@ -4,20 +4,24 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 local policeNPC
 local policeNpcMenu
 local policeMenu
-
+local policeSearchPlayerInv
+local nearestPlayer
 AddRemoteEvent("SetupPolice", function(policenpc) 
     policeNPC = policenpc
 end)
 
 AddEvent("OnTranslationReady", function()
     policeNpcMenu = Dialog.create(_("police_menu"), nil, _("start_stop_police") ,_("cancel"))
-    policeMenu = Dialog.create(_("police_menu"), nil, _("handcuff_player"), _("put_player_in_vehicle"), _("remove_player_from_vehicle"), _("remove_all_weapons"),_("give_player_fine"), _("cancel"))
+    policeMenu = Dialog.create(_("police_menu"), nil, _("handcuff_player"), _("put_player_in_vehicle"), _("remove_player_from_vehicle"), _("remove_all_weapons"),_("give_player_fine"), _("search_player_inventory"), _("cancel"))
     
     policeNpcGarageMenu = Dialog.create(_("police_garage_menu"), nil,  _("spawn_despawn_patrol_car"), _("cancel"))
     policeNpcArmoryMenu = Dialog.create(_("police_armory"), nil,  _("get_equipped"), _("cancel"))
 
     policeReceiveFineMenu = Dialog.create(_("fine"), _("fine_price").." : {fine_price} ".._("currency").." | ".._("reason").." : {reason}", _("pay"))
-    
+	
+	policeSearchPlayerInv = Dialog.create(_("players_inventory"), nil, "Remove Illegal Items", "Exit")
+	Dialog.addSelect(policeSearchPlayerInv, 1, _("players_inventory"), 5)
+
     policeFineMenu = Dialog.create(_("finePolice"), nil, _("give_fine"), _("cancel"))
     Dialog.addTextInput(policeFineMenu, 1, _("amount").." :")
     Dialog.addSelect(policeFineMenu, 1, _("player"), 3)
@@ -43,39 +47,53 @@ AddEvent("OnKeyPress", function( key )
 end)
 
 
+AddRemoteEvent("ShowSearchInventoryMenu", function(inventoryItems, player)
+	Dialog.setSelectLabeledOptions(policeSearchPlayerInv, 1, 1, inventoryItems)
+	nearestPlayer = player
+	Dialog.show(policeSearchPlayerInv)
+end)
+
 AddEvent("OnDialogSubmit", function(dialog, button, ...)
-    local args = { ... }
-    if dialog == policeNpcMenu then
-	if button == 1 then
-	    CallRemoteEvent("StartStopPolice")
+	local args = { ... }
+	if dialog == policeSearchPlayerInv then
+		if button == 1 then
+			CallRemoteEvent("RemoveIllegalItems", nearestPlayer)
+		end
 	end
+    if dialog == policeNpcMenu then
+		if button == 1 then
+			CallRemoteEvent("StartStopPolice")
+		end
     end
     if dialog == policeNpcGarageMenu then
-	if button == 1 then
-	    CallRemoteEvent("GetPatrolCar")
-	end
+		if button == 1 then
+			CallRemoteEvent("GetPatrolCar")
+		end
     end
     if dialog == policeNpcArmoryMenu then
-	if button == 1 then
-	    CallRemoteEvent("GetEquipped")
-	end
+		if button == 1 then
+			CallRemoteEvent("GetEquipped")
+		end
     end
     if dialog == policeMenu then
-	if button == 1 then
-	    CallRemoteEvent("HandcuffPlayerSetup")
-	end
-	if button == 2 then
-	    CallRemoteEvent("PutPlayerInVehicle")
-	end
-	if button == 3 then
-	    CallRemoteEvent("RemovePlayerOfVehicle")
-	end
-	if button == 4 then
-	    CallRemoteEvent("RemoveAllWeaponsOfPlayer")
-	end
-	if button == 5 then
-	    CallRemoteEvent("OpenPoliceFineMenu")
-	end
+		if button == 1 then
+			CallRemoteEvent("HandcuffPlayerSetup")
+		end
+		if button == 2 then
+			CallRemoteEvent("PutPlayerInVehicle")
+		end
+		if button == 3 then
+			CallRemoteEvent("RemovePlayerOfVehicle")
+		end
+		if button == 4 then
+			CallRemoteEvent("RemoveAllWeaponsOfPlayer")
+		end
+		if button == 5 then
+			CallRemoteEvent("OpenPoliceFineMenu")
+		end
+		if button == 6 then
+			CallRemoteEvent("OpenSearchInventoryMenu")
+		end
     end
 
     if dialog == policeFineMenu then
@@ -93,9 +111,9 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     end
 
     if dialog == policeReceiveFineMenu then
-	if button == 1 then
-	    CallRemoteEvent("PayFine")
-	end
+		if button == 1 then
+			CallRemoteEvent("PayFine")
+		end
     end
 end)
 
