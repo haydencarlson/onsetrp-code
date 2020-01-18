@@ -186,17 +186,17 @@ function GetNearestPolice(player)
 end
 
 AddRemoteEvent("OpenSearchInventoryMenu", function(player)
-	-- local nearestPlayer = GetNearestPlayer(player, 150)
-	-- if nearestPlayer then
-		local inventory = PlayerData[player].inventory
+	local nearestPlayer = GetNearestPlayer(player, 150)
+	if nearestPlayer then
+		local inventory = PlayerData[nearestPlayer].inventory
 		local inventoryItems = {}
 		for k,v in pairs(inventory) do
 			inventoryItems[k] = _(k) .. ' x ' .. v
 		end
 		CallRemoteEvent(player, "ShowSearchInventoryMenu", inventoryItems, player)
-	-- else
-	-- 	CallRemoteEvent(player, 'KNotify:Send', "No one is near or not close enough", "#f00")
-	-- end
+	else
+		CallRemoteEvent(player, 'KNotify:Send', "No one is near or not close enough", "#f00")
+	end
 end)
 
 AddRemoteEvent("RemoveIllegalItems", function(player, playerToRemove)
