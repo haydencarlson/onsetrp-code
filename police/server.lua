@@ -193,7 +193,7 @@ AddRemoteEvent("OpenSearchInventoryMenu", function(player)
 		for k,v in pairs(inventory) do
 			inventoryItems[k] = _(k) .. ' x ' .. v
 		end
-		CallRemoteEvent(player, "ShowSearchInventoryMenu", inventoryItems, player)
+		CallRemoteEvent(player, "ShowSearchInventoryMenu", inventoryItems, nearestPlayer[1])
 	else
 		CallRemoteEvent(player, 'KNotify:Send', "No one is near or not close enough", "#f00")
 	end
