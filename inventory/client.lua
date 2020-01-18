@@ -8,7 +8,7 @@ AddEvent("OnTranslationReady", function()
         _("bank_balance").." : {bank} ".._("currency").." | ".._("cash").." : {cash} ".._("currency").." | ".._("item_backpack").." : {backpack}",
         _("transfer") ,_("use"), _("cancel"))
     Dialog.addSelect(personalMenu, 1, _("inventory").."  {inventory_slots}", 5)
-    Dialog.addTextInput(personalMenu, 1, _("quantity"))
+    Dialog.addTextInput(personalMenu, 1, _("quantity"), "1")
     Dialog.addSelect(personalMenu, 1, _("player"), 3)
 end)
 
