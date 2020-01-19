@@ -71,7 +71,7 @@ end
 function openGarageDealer(lVehicles)
     local cars = {}
     for k,v in pairs(lVehicles) do
-        cars[k] = _(v.name)
+        cars[k] = _(v.name).." ".._("license_plate")..": "..v.license_plate
 	end
     Dialog.setSelectLabeledOptions(garageDealer, 1, 1, cars)
     Dialog.show(garageDealer)

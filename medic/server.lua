@@ -57,7 +57,7 @@ AddRemoteEvent("StartMedicJob", function(player)
         else
             local vehicle = CreateVehicle(8, 212758.125, 173967.53125, 1291.8017578125, -90)
             PlayerData[player].job_vehicle = vehicle
-            CreateVehicleData(player, vehicle, 8)
+            CreateVehicleData(player, vehicle, 8, "MEDIC")
             SetVehiclePropertyValue(vehicle, "locked", true, true)
 			PlayerData[player].job = "medic"
 			CallRemoteEvent(player, 'KNotify:Send', _("join_medic"), "#0f0")

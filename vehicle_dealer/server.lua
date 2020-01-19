@@ -40,13 +40,14 @@ function GetCarDealearByObject(cardealerobject)
 	return nil
 end
 
-function CreateVehicleDatabase(player, vehicle, modelid, color, price, aircraft)
-    local query = mariadb_prepare(sql, "INSERT INTO player_garage (id, ownerid, modelid, color, garage, price, aircraft) VALUES (NULL, '?', '?', '?', '0', '?', '?');",
+function CreateVehicleDatabase(player, vehicle, modelid, color, price, aircraft, license_plate)
+    local query = mariadb_prepare(sql, "INSERT INTO player_garage (id, ownerid, modelid, color, garage, price, aircraft, license_plate) VALUES (NULL, '?', '?', '?', '0', '?', '?', '?');",
         tostring(PlayerData[player].accountid),
         tostring(modelid),
         tostring(color),
 		tostring(price),
-		aircraft
+		aircraft,
+		license_plate
 	)
     mariadb_async_query(sql, query, onVehicleCreateDatabase, vehicle)
 end
@@ -55,7 +56,7 @@ function onVehicleCreateDatabase(vehicle)
     VehicleData[vehicle].garageid = mariadb_get_insert_id()
 end
 
-function buyCarServer(player, modelid, color, cardealerobject)
+function buyCarServer(player, modelid, color, cardealerobject, license_plate)
 	local name = _(modelid)
 	local price = getVehiclePrice(modelid, cardealerobject)
 	local color = getVehicleColor(color, cardealerobject)
@@ -84,8 +85,8 @@ function buyCarServer(player, modelid, color, cardealerobject)
                     SetVehicleRespawnParams(vehicle, false)
                     SetVehicleColor(vehicle, "0x"..color)
 					SetVehiclePropertyValue(vehicle, "locked", true, true)
-                    CreateVehicleData(player, vehicle, modelid)
-                    CreateVehicleDatabase(player, vehicle, modelid, color, price, aircraft)
+                    CreateVehicleData(player, vehicle, modelid, license_plate)
+                    CreateVehicleDatabase(player, vehicle, modelid, color, price, aircraft, license_plate)
                     RemoveBalanceFromAccount(player, "cash", tonumber(price))
 					CallRemoteEvent(player, "closeCarDealer")
 					return CallRemoteEvent(player, 'KNotify:Send', _("car_buy_sucess", name, price, _("currency")), "#0f0")
