@@ -2,7 +2,10 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 
 VehicleData = {}
 
-function CreateVehicleData(player, vehicle, modelid)
+function CreateVehicleData(player, vehicle, modelid, license_plate)
+    if license_plate ~= nil then
+        SetVehicleLicensePlate(vehicle, license_plate)
+    end
     VehicleData[vehicle] = {}
 
     VehicleData[vehicle].garageid = 0

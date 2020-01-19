@@ -1,4 +1,5 @@
 {
+    "license_plate" : "License Plate",
     "emergency_received": "Emergency SMS From {1} To {2}",
     "message_received": "SMS Received From {1}",
     "enter_higher_number": "Please enter a higher number",

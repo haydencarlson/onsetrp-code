@@ -11,6 +11,7 @@ AddEvent("OnTranslationReady", function()
 	cardealer = Dialog.create(_("car_dealer"), nil, _("buy"), _("cancel"))
 	Dialog.addSelect(cardealer, 1, _("vehicle_list"), 10)
 	Dialog.addSelect(cardealer, 2, _("color"), 10)
+	Dialog.addTextInput(cardealer, 2, _("license_plate")..":")
 end)
 
 function OnKeyPress(key)
@@ -31,7 +32,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 			if args[1] == "" or args[2] == "" then
 				CallEvent('KNotify:Send', _("select_car_to_buy"), "#f00")
 			else
-				CallRemoteEvent("buyCarServer", args[1], args[2], NearestCarDealer)
+				CallRemoteEvent("buyCarServer", args[1], args[2], NearestCarDealer, args[3])
 			end
         end
     end
