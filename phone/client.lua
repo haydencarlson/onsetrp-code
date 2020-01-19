@@ -237,6 +237,7 @@ AddEvent("Kuzkay:PhoneTweet", SendTweet)
 
 function RecieveTweet(sender, text)
 	ExecuteWebJS(ui, "AddTweet('"..sender.."','"..text.."');")
+	AddPlayerChat('<span color="#020aff" size="17">['.."twitter"..']</><span> @'..string.gsub(sender, "%s+", "")..': </> '..text)
 end
 AddRemoteEvent("Kuzkay:PhoneRecieveTweet", RecieveTweet)
 
