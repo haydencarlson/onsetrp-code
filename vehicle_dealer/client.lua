@@ -31,6 +31,8 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
 		if button == 1 then
 			if args[1] == "" or args[2] == "" then
 				CallEvent('KNotify:Send', _("select_car_to_buy"), "#f00")
+			elseif args[3] == "" then
+				CallEvent('KNotify:Send', _("enter_license_plate"), "#f00")
 			else
 				CallRemoteEvent("buyCarServer", args[1], args[2], NearestCarDealer, args[3])
 			end
