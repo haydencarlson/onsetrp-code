@@ -12,10 +12,12 @@ AddRemoteEvent("GetInitialHud", function(player)
     local job = PlayerData[player].job
     local time = GetServerTimeString()
     CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job, time)
+    CallRemoteEvent(player, "pc:update", time)
 end)
 
 AddEvent("ServerTimeUpdated", function(serverTime)
     for k, v in pairs(GetAllPlayers()) do
         CallRemoteEvent(v, "RPNotify:HUDEvent", "time", serverTime)
+        CallRemoteEvent(v, "pc:update", serverTime)
     end
 end)
