@@ -38,7 +38,7 @@ function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, ad
       v['job'] = "Citizen"
     end
     if admin == true then
-      ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] ..  '(' .. v['id'] .. ')' .. '", "' .. v['job'] .. '", "' .. v['sessiontime'] .. '", "'.. tostring(v['admin']) .. '", ' .. v['ping'] .. ')')
+      ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] ..  ' (' .. v['id'] .. ')' .. '", "' .. v['job'] .. '", "' .. v['sessiontime'] .. '", "'.. tostring(v['admin']) .. '", ' .. v['ping'] .. ')')
     else
       ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] .. '", "' .. v['job'] .. '", "' .. v['sessiontime'] .. '", "'.. tostring(v['admin']) .. '", ' .. v['ping'] .. ')')
     end

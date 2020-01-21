@@ -14,8 +14,8 @@ function AddPlayer(name, job, sessiontime, admin, ping) {
         `<tr>
     <td>${name}</td>
     <td>${job.charAt(0).toUpperCase() + job.slice(1)}</td>
-    <td>${SecondsToTime(sessiontime)}</td>
     <td>${admin === 'true' ? "Admin" : "Player"}</td>
+    <td>${SecondsToTime(sessiontime)}</td>
     <td>${ping}ms</td>
   </tr>`;
 }
