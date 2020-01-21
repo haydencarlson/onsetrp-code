@@ -201,7 +201,17 @@ end)
 
 AddRemoteEvent("RemoveIllegalItems", function(player, playerToRemove)
 	local playerInventory = PlayerData[playerToRemove].inventory
-	local illegalItems = { "dirty_silver_bar" }
+	local illegalItems = { 
+		"dirty_silver_bar", 
+		"unprocessed_meth", 
+		"unprocessed_coke", 
+		"processed_meth", 
+		"processed_coke",
+		"unproccesed_heroin",
+		"processed_heroin",
+		"unprocessed_weed",
+		"processed_weed"
+	}
 	local itemsRemoved = false
 	for k,v in pairs(playerInventory) do
 		for key,value in pairs(illegalItems) do

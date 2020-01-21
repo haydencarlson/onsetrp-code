@@ -328,6 +328,9 @@ function SavePlayerAccount(player)
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
+	print(PlayerData[player].time)
+	print(PlayerData[player].kills)
+	print(PlayerData[player].deaths)
 	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
 		PlayerData[player].bank_balance,
