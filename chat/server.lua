@@ -5,6 +5,11 @@ function OnPlayerChat(player, message)
     local player_who_sent = player
     local streamedPlayers = GetStreamedPlayersForPlayer(player_who_sent)
 
+    local c = string.sub(message, 1, 1)
+	if (c == '@') then
+        return AddAdminChat(GetPlayerName(player).."("..player.."): "..string.sub(message, 2))
+    end
+    
     local message_action = {
         [0] = '<span>'..GetPlayerName(player)..':</> '..message,
         [1] = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
@@ -16,7 +21,7 @@ function OnPlayerChat(player, message)
 end
 AddEvent("OnPlayerChat", OnPlayerChat)
 -- Global chat
-AddCommand("g", function(player, ...)
+AddCommand("/", function(player, ...)
     local args = { ... }
     local message = ""
     for i=1,#args do
@@ -33,25 +38,6 @@ AddCommand("g", function(player, ...)
     AddPlayerChatAll(message)
 end)
 
-
--- Send message to admin
-AddCommand("/", function(player, ...) 
-    local args = { ... }
-    local message = ""
-    for i=1,#args do
-        if i > 1 then
-            message = message.." "
-        end
-        message = message..args[i]
-    end
-    message = '<span color="#00FF7F">['.._("admin")..']</> <span>'..GetPlayerName(player)..':</> '..message
-    AddPlayerChat(player, message)
-    for k,v in pairs(GetAllPlayers()) do
-        if PlayerData[k].admin == 1 then
-            AddPlayerChat(k, message)
-        end
-    end
-end)
 
 -- Private message
 AddCommand("p", function(player, toplayer, ...)

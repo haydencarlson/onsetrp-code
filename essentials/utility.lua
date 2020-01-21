@@ -66,12 +66,6 @@ for i in pairs(serverinfo) do
 		AddPlayerChatAll(serverinfo[i])
 	end, 300000)
 end
- 
-AddRemoteEvent("EngineOff", function(player)
-	local vehicle = GetPlayerVehicle(player)
-	StopVehicleEngine(vehicle)
-	AddPlayerChat(player, "You turn off your vehicle.")
-end)	
 
 function OnPackageStart(player)
 	CreateTimer(function(player)
@@ -149,6 +143,113 @@ AddCommand("unfreeze", function(player, instigator)
 			return false
       	end
 end)
+
+function GetCurrentPlayTime(player)
+	CreateTimer(function(player)
+		for k, v in pairs (GetAllPlayers()) do
+	local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
+		PlayerData[v].accountid)
+	mariadb_async_query(sql, query, GetPlayerTime, v)
+		end 
+	end, 1000, player)
+end
+AddEvent("OnPlayerJoin", GetCurrentPlayTime)
+
+function GetPlayerTime(player)
+	local result = mariadb_get_assoc(1)
+	local ptime = math.tointeger(result['time'])
+	PlayerData[player].time = math.floor(PlayerData[player].time + (GetTimeSeconds() - PlayerData[player].play_time))
+	PlayerData[player].play_time = GetTimeSeconds()
+	return PlayerData[player].time + ptime
+end
+
+function GetPlayerKD(player)
+	local deaths = PlayerData[player].deaths
+	if deaths == 0 then
+		deaths = 1.0
+	end
+
+	return string.format("%.2f", PlayerData[player].kills / deaths)
+end
+
+function OnPlayerDeath(player, instigator)
+	PlayerData[player].deaths = PlayerData[player].deaths + 1
+
+	if (player ~= instigator) then
+		PlayerData[instigator].kills = PlayerData[instigator].kills + 1
+	end
+end
+AddEvent("OnPlayerDeath", OnPlayerDeath)
+
+function cmd_pm(player, otherplayer, ...)
+	local message = table.concat({...}, " ") 
+
+	if (otherplayer == nil or #{...} == 0) then
+		return AddPlayerChat(player, "Usage: /pm <player> <message>")
+	end
+
+	otherplayer = tonumber(otherplayer)
+
+	if (not IsValidPlayer(otherplayer)) then
+		return AddPlayerChat(player, "Unknown player")
+	end
+	
+	if (player == otherplayer) then
+		return AddPlayerChat(player, "Cannot do this command on yourself")
+	end
+	
+	AddPlayerChat(otherplayer, "***[PM] from Player("..player.."): "..message)
+	AddPlayerChat(player, ">>>[PM] to Player("..otherplayer.."): "..message)
+end
+AddCommand("pm", cmd_pm)
+
+function cmd_richestplayer(player)
+	local arr = {}
+	for _, v in pairs(GetAllPlayers()) do
+		table.insert(arr, { PlayerData[v].cash, v })
+	end
+
+	table.sort(arr, function(a, b)
+		return a[1] > b[1]
+	end)
+
+	for k, v in pairs(arr) do
+		local cash = GetPlayerCash(v[2])
+		local bank = PlayerData[v[2]].bank_balance
+		local total = bank + cash
+		AddPlayerChat(v[2], ''..GetPlayerName(v[2])..' is the richest player and has $'..total..'')
+	end
+end
+AddCommand("richestplayer", cmd_richestplayer)
+
+function cmd_oldestplayer(player)
+	local arr = {}
+	for _, v in pairs(GetAllPlayers()) do
+		table.insert(arr, { PlayerData[v].time, v })
+	end
+
+	table.sort(arr, function(a, b)
+		return a[1] > b[1]
+	end)
+
+	for k, v in pairs(arr) do
+		if v[1] < 1440 then
+			local message = ""..GetPlayerName(v[2]).." is the oldest player and has played "..FormatPlayTime(v[1]).." hours"
+			AddPlayerChat(v[2], message)
+		else
+		local message = ""..GetPlayerName(v[2]).." is the oldest player and has played "..FormatPlayTime(v[1]).." minutes"
+		AddPlayerChat(v[2], message)
+		end
+	end
+end
+AddCommand("oldestplayer", cmd_oldestplayer)
+
+
+function cmd_kdr(player)
+	local message = "Your KDR is %"..GetPlayerKD(player)..""
+	AddPlayerChat(player, message)
+end
+AddCommand("kdr", cmd_kdr)
 
 --[[
 function SetPlayerOnline(player)

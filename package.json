@@ -103,7 +103,8 @@
         "robbery/config.lua",
         "robbery/client.lua",
         "essentials/nlr/client.lua",
-        "essentials/c_drop_and_pick.lua"
+        "essentials/c_drop_and_pick.lua",
+        "essentials/esp.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
