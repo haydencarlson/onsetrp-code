@@ -5,13 +5,20 @@ function OnPackageStart()
     -- Save all player data automatically 
     CreateTimer(function()
 		for k, v in pairs(GetAllPlayers()) do
-            SavePlayerAccount(v)
+			SavePlayerAccount(v)
 		end
 		print("All accounts have been saved !")
     end, 30000)
 end
 AddEvent("OnPackageStart", OnPackageStart)
-
+--[[
+function GetCurrentPlayTime(player)
+	local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE accountid = '?' LIMIT 1;",
+	PlayerData[player].accountid
+	)
+	mariadb_async_query(sql, query, SavePlayerAccount, player)
+end
+]]
 function OnPlayerSteamAuth(player)
 
 	CreatePlayerData(player)
@@ -171,6 +178,9 @@ function OnAccountLoaded(player)
 		PlayerData[player].inventory = json_decode(result['inventory'])
 		PlayerData[player].created = math.tointeger(result['created'])
 		PlayerData[player].position = json_decode(result['position'])
+		PlayerData[player].time = math.tointeger(result['time'])
+		PlayerData[player].kills = math.tointeger(result['kills'])
+		PlayerData[player].deaths = math.tointeger(result['deaths'])
 		if GetPlayerBag(player) == 1 then
 			local x, y, z = GetPlayerLocation(player)
             PlayerData[player].backpack = CreateObject(820, x, y, z)
@@ -239,6 +249,13 @@ function CreatePlayerData(player)
 	PlayerData[player].death_pos = {}
 	PlayerData[player].position = {}
 	PlayerData[player].lastinteract = ""
+	PlayerData[player].play_time = GetTimeSeconds()
+	PlayerData[player].time = 0
+	PlayerData[player].esp_enabled = false
+	PlayerData[player].mute = 0
+	PlayerData[player].cmd_cooldown = 0
+	PlayerData[player].kills = 0
+	PlayerData[player].deaths = 0
     print("Data created for : "..player)
 end
 
@@ -305,13 +322,11 @@ function SavePlayerAccount(player)
 	if (PlayerData[player].accountid == 0 or PlayerData[player].logged_in == false) then
 		return
 	end
-
-
+	
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
-
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ? WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
 		PlayerData[player].bank_balance,
 		100,
@@ -329,9 +344,11 @@ function SavePlayerAccount(player)
 		PlayerData[player].driver_license,
 		PlayerData[player].gun_license,
 		PlayerData[player].helicopter_license,
+		PlayerData[player].time,
+		PlayerData[player].kills,
+		PlayerData[player].deaths,
 		PlayerData[player].accountid
-	)
-        
+	) 
 	mariadb_query(sql, query)
 end
 
