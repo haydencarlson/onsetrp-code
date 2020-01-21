@@ -251,6 +251,8 @@ function CreatePlayerData(player)
 	PlayerData[player].lastinteract = ""
 	PlayerData[player].play_time = GetTimeSeconds()
 	PlayerData[player].time = 0
+	PlayerData[player].play_times = GetTimeSeconds()
+	PlayerData[player].times = 0
 	PlayerData[player].esp_enabled = false
 	PlayerData[player].mute = 0
 	PlayerData[player].cmd_cooldown = 0
