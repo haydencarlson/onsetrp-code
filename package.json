@@ -57,7 +57,8 @@
         "robbery/config.lua",
         "robbery/server.lua",
         "essentials/nlr/server.lua",
-        "essentials/s_drop_and_pick.lua"
+        "essentials/s_drop_and_pick.lua",
+        "essentials/server_pc_data.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
