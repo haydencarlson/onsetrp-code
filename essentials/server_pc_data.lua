@@ -27,7 +27,8 @@ function LoadedPlayerCompany(player)
     local PCData = {}
     if mariadb_get_row_count() ~= 0 then
         local company = mariadb_get_assoc(1)
-        PCData['near_players'] = playersInRange
+        -- local playersInRange = GetPlayersInRange(player)
+        -- PCData['near_players'] = playersInRange
         CompanyDataToObject(PCData, company, player)
         local query = mariadb_prepare(sql, "SELECT accounts.name, accounts.id FROM company_employee LEFT JOIN accounts ON company_employee.account_id = accounts.id WHERE company_id = '?';", company['id'])
         mariadb_async_query(sql, query, LoadedCompanyEmployees, PCData, player)

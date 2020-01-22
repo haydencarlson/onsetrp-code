@@ -59,8 +59,13 @@
         "essentials/nlr/server.lua",
         "essentials/s_drop_and_pick.lua",
         "essentials/server_pc_data.lua",
+<<<<<<< HEAD
 	"companies/server.lua",
 	"bitcoinminer/server.lua"
+=======
+        "bitcoinminer/server.lua",
+        "companies/server.lua"
+>>>>>>> be8afafc7a4fdf91eb6d2595b075005b16a11353
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -108,8 +113,13 @@
         "essentials/nlr/client.lua",
         "essentials/c_drop_and_pick.lua",
         "essentials/esp.lua",
+<<<<<<< HEAD
 	"companies/client.lua",
 	"bitcoinminer/client.lua"
+=======
+        "bitcoinminer/client.lua",
+        "companies/client.lua"
+>>>>>>> be8afafc7a4fdf91eb6d2595b075005b16a11353
     ],
     "files": [
         "hud/speaking/speaking.png",
