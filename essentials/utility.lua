@@ -233,10 +233,11 @@ function cmd_oldestplayer(player)
 	end)
 
 	for k, v in pairs(arr) do
-		if v[1] < 1440 then
+		local time = v[1]
+		if time > 3600 then
 			local message = ""..GetPlayerName(v[2]).." is the oldest player and has played "..FormatPlayTime(v[1]).." hours"
 			AddPlayerChat(v[2], message)
-		else
+		elseif time < 3600 then
 		local message = ""..GetPlayerName(v[2]).." is the oldest player and has played "..FormatPlayTime(v[1]).." minutes"
 		AddPlayerChat(v[2], message)
 		end
