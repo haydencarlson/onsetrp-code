@@ -20,16 +20,25 @@ local Machines = {
 
 
 -- MACHINE PAYMENTS
-AddEvent("ServerTime:OneHourPassed", function()
-    PayOutMachines()
-end)
 
-function PayOutMachines()
-    local query = mariadb_prepare(sql, "SELECT * FROM companies WHERE bitcoinminer = 1 and bitcoin_machines_amount != 0;")
-    mariadb_async_query(sql, query, LoadedCompanyWithMiners)
+local function PayEmployee(company, employeeExtraPercentage)
+    -- Pay employee bitcoin
 end
 
-function LoadedCompanyWithMiners()
+local function PayCompany(employee, company, employeeExtraPercentage)
+    local companyMiners = tonumber(company['bitcoin_machines_amount'])
+    local extraPercent = employeeExtraPercentage
+    local extraBitcoin = (companyMiners * BaseBitcoinPerHour) * extraPercent
+    local payAmount = (companyMiners * BaseBitcoinPerHour) + extraBitcoin
+    local companyOwner = FindPlayerByAccountId(company['accountid'])
+    if companyOwner then
+        -- Add Bitcoin 
+    else
+        -- Add 
+    end
+end
+
+local function LoadedCompanyWithMiners()
     print("Loaded companies with miners")
     if mariadb_get_row_count() ~= 0 then
         for i=1,mariadb_get_row_count() do
@@ -40,7 +49,12 @@ function LoadedCompanyWithMiners()
     end
 end
 
-function LoadedCompanyEmployees(company)
+local function PayOutMachines()
+    local query = mariadb_prepare(sql, "SELECT * FROM companies WHERE bitcoinminer = 1 and bitcoin_machines_amount != 0;")
+    mariadb_async_query(sql, query, LoadedCompanyWithMiners)
+end
+
+local function LoadedCompanyEmployees(company)
     print("Loaded company employees")
     local employeeExtraPercentage = 0.000
     if mariadb_get_row_count() ~= 0 then
@@ -57,26 +71,14 @@ function LoadedCompanyEmployees(company)
         PayCompany(company, 0)
     end
 end
+
 AddCommand('pay', function()
     CallEvent("ServerTime:OneHourPassed")
 end)
 
-function PayCompany(employee, company, employeeExtraPercentage)
-    local companyMiners = tonumber(company['bitcoin_machines_amount'])
-    local extraPercent = employeeExtraPercentage
-    local extraBitcoin = (companyMiners * BaseBitcoinPerHour) * extraPercent
-    local payAmount = (companyMiners * BaseBitcoinPerHour) + extraBitcoin
-    local companyOwner = FindPlayerByAccountId(company['accountid'])
-    if companyOwner then
-        -- Add Bitcoin 
-    else
-        -- Add 
-    end
-end
-
-function PayEmployee(company, employeeExtraPercentage)
-    -- Pay employee bitcoin
-end
+AddEvent("ServerTime:OneHourPassed", function()
+    PayOutMachines()
+end)
 
 -- CODE FOR HANDLING IN GAME MACHINES
 AddEvent("OnPackageStart", function()
