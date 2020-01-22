@@ -193,7 +193,7 @@ function OnAccountLoaded(player)
 		setPlayerHunger(player, tonumber(result['hunger']))
 		setPositionAndSpawn(player, PlayerData[player].position)
 		SetPlayerLoggedIn(player)
-		
+
 		if math.tointeger(result['created']) == 0 then
 			CallRemoteEvent(player, "askClientCreation")
 		else
@@ -206,6 +206,7 @@ function OnAccountLoaded(player)
 			CallRemoteEvent(player, "ClientChangeClothing", player, 5, PlayerData[player].clothing[5], 0, 0, 0, 0)
 			-- CallRemoteEvent(player, "AskSpawnMenu")
 		end
+		CallEvent("PlayerDataLoaded", player)
 		print("Account ID "..PlayerData[player].accountid.." loaded for "..GetPlayerIP(player))
 	end
 end
@@ -256,6 +257,9 @@ function CreatePlayerData(player)
 	PlayerData[player].cmd_cooldown = 0
 	PlayerData[player].kills = 0
 	PlayerData[player].deaths = 0
+	PlayerData[player].company = nil
+	PlayerData[player].employee = nil
+	PlayerData[player].employee_earn_percentage = nil
     print("Data created for : "..player)
 end
 
@@ -273,6 +277,9 @@ AddEvent("OnPackageStart", function()
 			serverTimeSeconds = 0
 		end
 		serverTimeSeconds = serverTimeSeconds + 1
+		if serverTimeSeconds % 60 == 0 then
+			CallEvent("ServerTime:OneHourPassed")
+		end
 		CallEvent("ServerTimeUpdated", GetServerTimeString())
 	end, 1000)
 end)

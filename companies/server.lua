@@ -12,6 +12,37 @@ local CompanyUpgrades = {
     }
 }
 
+AddEvent("PlayerDataLoaded", function(player)
+    LookForPlayerCompany(player)
+    LookForPlayerCompanyEmployee(player)
+end)
+
+function LookForPlayerCompany(player)
+    local query = mariadb_prepare(sql, "SELECT * FROM companies WHERE accountid = '?';", PlayerData[player].accountid)
+    mariadb_async_query(sql, query, LookedForPlayerCompany, player)
+end
+
+function LookedForPlayerCompany(player) 
+    if mariadb_get_row_count() ~= 0 then
+        local company = mariadb_get_assoc(1)
+        print(company['id'])
+        PlayerData[player].company = company['id']
+    end
+end
+
+function LookForPlayerCompanyEmployee(player)
+    local query = mariadb_prepare(sql, "SELECT * FROM company_employee WHERE account_id = '?';", PlayerData[player].accountid)
+    mariadb_async_query(sql, query, LookedForPlayerCompanyEmployee, player)
+end
+
+function LookedForPlayerCompanyEmployee(player)
+    if mariadb_get_row_count() ~= 0 then
+        local employee = mariadb_get_assoc(1)
+        PlayerData[player].employee = employee['id']
+        PlayerData[player].employee_earn_percentage = tonumber(employee['earn_percentage'])
+    end
+end
+
 AddRemoteEvent("OpenCompanyMenu", function(player)
     local x, y, z = GetPlayerLocation(player)
     local nearestPlayers = GetPlayersInRange3D(x, y, z, 1000)
@@ -85,6 +116,8 @@ AddRemoteEvent("FirePlayer", function(player, playerToFire)
     local firedPlayer = FindPlayerByAccountId(playerToFire)
     CallRemoteEvent(player, 'KNotify:Send', "Successfully fired player", "#0f0")
     if firedPlayer then
+        PlayerData[firedPlayer].employee = nil
+        PlayerData[firedPlayer].employee_earn_percentage = nil
         CallRemoteEvent(firedPlayer, 'KNotify:Send', "You have been fired from the company your were in.", "#0f0")
     end
 end)
