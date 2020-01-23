@@ -6,8 +6,7 @@ local companyNpcLocation = {
 local companyNpc = nil
 local CompanyUpgrades = {
     bitcoinminer = {
-        text = "Bitcoin Mining Warehouse ($100,000)",
-        price = 100000,
+        price = 500000,
         notificationText = "Bitcoin Warehouse"
     }
 }
@@ -25,21 +24,25 @@ end
 function LookedForPlayerCompany(player) 
     if mariadb_get_row_count() ~= 0 then
         local company = mariadb_get_assoc(1)
-        print(company['id'])
         PlayerData[player].company = company['id']
+        PlayerData[player].company_upgrades['bitcoin_miner'] = tonumber(company['bitcoinminer'])
     end
 end
 
 function LookForPlayerCompanyEmployee(player)
-    local query = mariadb_prepare(sql, "SELECT * FROM company_employee WHERE account_id = '?';", PlayerData[player].accountid)
+    local query = mariadb_prepare(sql, "SELECT * FROM company_employee LEFT JOIN companies ON company_employee.company_id = companies.id WHERE account_id = '?';", PlayerData[player].accountid)
     mariadb_async_query(sql, query, LookedForPlayerCompanyEmployee, player)
 end
 
 function LookedForPlayerCompanyEmployee(player)
     if mariadb_get_row_count() ~= 0 then
-        local employee = mariadb_get_assoc(1)
-        PlayerData[player].employee = employee['id']
-        PlayerData[player].employee_earn_percentage = tonumber(employee['earn_percentage'])
+        local companyEmployee = mariadb_get_assoc(1)
+        PlayerData[player].employee = {
+            id = companyEmployee['id'],
+            company_id = companyEmployee['company_id'],
+            employee_earn_percentage = tonumber(companyEmployee['earn_percentage'])
+        }
+        PlayerData[player].company_upgrades['bitcoin_miner'] = tonumber(companyEmployee['bitcoinminer'])
     end
 end
 
@@ -86,12 +89,12 @@ end)
 
 AddRemoteEvent("UpgradeCompany", function(player, upgrade)
     local price = CompanyUpgrades[upgrade].price
-    if GetPlayerCash(player) < price then
+    if tonumber(GetPlayerCash(player)) < price then
         return CallRemoteEvent(player, 'KNotify:Send', "You dont have $" .. price, "#f00")
     end
-    print(upgrade)
+
     local query = mariadb_prepare(sql, "UPDATE companies SET ? = 1 where accountid = '?';", upgrade, PlayerData[player].accountid)
-    mariadb_async_query(sql, query, UpgradedCompany, player, upgrade)
+    mariadb_async_query(sql, query, UpgradedCompany, player, upgrade, price)
 end)
 
 AddRemoteEvent("LeaveCompany", function(player)
@@ -146,7 +149,6 @@ function LoadPlayerListToFire(player)
         end
     end
     local query = mariadb_prepare(sql, "SELECT * FROM accounts where id IN (?);", employeeList)
-    print(query)
     mariadb_async_query(sql, query, LoadedCompanyEmployeesById, player)
     
 end
@@ -178,7 +180,7 @@ end
 function LookHiredPlayerIsInCompany(hiringPlayer, employee, companyId, companyName) 
     if mariadb_get_row_count() == 0 then
         local query = mariadb_prepare(sql, "INSERT INTO company_employee (company_id, account_id) VALUES (?, ?);", tostring(companyId), PlayerData[tonumber(employee)].accountid)
-        mariadb_query(sql, query)
+        mariadb_async_query(sql, query, InsertedNewEmployee, employee)
         CallRemoteEvent(hiringPlayer, 'KNotify:Send', "You have hired " .. PlayerData[tonumber(employee)].name, "#0f0")
         CallRemoteEvent(employee, 'KNotify:Send', companyName .. ' has hired you', "#0f0")
     else
@@ -186,7 +188,14 @@ function LookHiredPlayerIsInCompany(hiringPlayer, employee, companyId, companyNa
     end
 end
 
-function UpgradedCompany(player, upgrade)
+function InsertedNewEmployee(employee)
+    local insertId = mariadb_get_insert_id()
+    PlayerData[employee].employee = insertId
+end
+
+function UpgradedCompany(player, upgrade, amount)
+    RemoveBalanceFromAccount(player, "cash", amount)
+    CallRemoteEvent(player, "BRPC:UpgradedCompany", upgrade)
     CallRemoteEvent(player, 'KNotify:Send', "Your company now has access to the " .. CompanyUpgrades[upgrade].notificationText, "#0f0")
 end
 
@@ -214,6 +223,8 @@ function ExistingCompanyName(companyName, player)
 end
 
 function CreatedNewCompany(companyName, player)
+    local insertId = mariadb_get_insert_id()
+    PlayerData[player].company = insertId
     CallRemoteEvent(player, 'KNotify:Send', companyName .. " company has been created.", "#0f0")
 end
 

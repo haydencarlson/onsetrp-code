@@ -3,7 +3,7 @@ PlayerBitcoinMiners = {}
 BitcoinMinerNpcXYZ = { -1414, 141106, 1851 }
 BaseBitcoinPerHour = 0.005
 BitcoinMinerNpc = nil
-local machinePowerTimeSecs = 5
+local machinePowerTimeSecs = 15
 local Machines = {
     {name="Machine 1",x=-1665,y=141383,z=1851},
     {name="Machine 2",x=-1889,y=141383,z=1851},
@@ -17,7 +17,6 @@ local Machines = {
     {name="Machine 10",x=-3744,y=141383,z=1851},
     {name="Machine 11",x=-3972,y=141383,z=1851}
 }
-
 
 -- MACHINE PAYMENTS
 local function TotalBitcoinPay(company, percent, isEmployee)
@@ -75,10 +74,6 @@ local function PayOutMachines()
     mariadb_async_query(sql, query, LoadedCompanyWithMiners)
 end
 
-AddCommand('pay', function()
-    CallEvent("ServerTime:OneHourPassed")
-end)
-
 AddEvent("ServerTime:OneHourPassed", function()
     PayOutMachines()
 end)
@@ -96,47 +91,68 @@ AddEvent("OnPackageStart", function()
 	end 
 end)
 
-AddRemoteEvent("StartPoweringBitcoinMachine", function(player)
-    -- if PlayerData[player].company ~= nil then
-    --     return CallRemoteEvent(player, 'KNotify:Send', "Only employees can power the machines", "#f00")
-    -- end
-    
+AddRemoteEvent("StartPoweringBitcoinMachine", function(player)  
+    if PlayerData[player].company ~= nil then
+        CompletedPoweringMachine(player, false)
+        return CallRemoteEvent(player, 'KNotify:Send', "Only employees can power the machines", "#f00")
+    end
+
     if PlayerData[player].employee == nil then
+        CompletedPoweringMachine(player, false)
         return CallRemoteEvent(player, 'KNotify:Send', "You dont work for a company", "#f00")
+    end
+
+    if PlayerData[player].company_upgrades['bitcoin_miner'] ~= 1 then
+        CompletedPoweringMachine(player, false)
+        return CallRemoteEvent(player, 'KNotify:Send', "The company you work for doesnt have this upgrade", "#f00")
     end
     
     if PlayerData[player].employee ~= nil then
         SetPlayerAnimation(player, "PICKUP_MIDDLE")
         CallRemoteEvent(player, "LockControlMove", true)
         CallRemoteEvent(player, 'KNotify:AddProgressBar', "Powering Machine", machinePowerTimeSecs, "#990000", "powering_bitcoin_machine", true)
-        Delay((machinePowerTimeSecs * 1000) + 1000, CompletedPoweringMachine, player)
+        Delay((machinePowerTimeSecs * 1000) + 1000, CompletedPoweringMachine, player, true)
     end
 end)
 
-function CompletedPoweringMachine(player)
-    CallRemoteEvent(player, "FinishedPoweringMachine")
+function CompletedPoweringMachine(player, powered)
+    CallRemoteEvent(player, "FinishedPoweringMachine", powered)
     CallRemoteEvent(player, "LockControlMove", false)
-    CouldUpdatePlayerPercentage(player)
+    if powered then
+        CouldUpdatePlayerPercentage(player)
+    end
 end
 
 function CouldUpdatePlayerPercentage(player)
     local outcome = Random(0, 1)
     local earnPercentIncrease = 0.001
     if outcome == 1 then
-        local query = mariadb_prepare(sql, "UPDATE company_employee set earn_percentage = earn_percentage + ? WHERE id = '?';", earnPercentIncrease, PlayerData[player].employee)
+        local query = mariadb_prepare(sql, "UPDATE company_employee set earn_percentage = earn_percentage + ? WHERE id = '?';", earnPercentIncrease, PlayerData[player].employee['id'])
         mariadb_async_query(sql, query, OnUpdatedPlayerEarnPercentage, player, earnPercentIncrease)
     end
 end
 
 function OnUpdatedPlayerEarnPercentage(player, earnPercentIncrease)
-    local newPercent = tonumber(PlayerData[player].employee_earn_percentage) + earnPercentIncrease
-    PlayerData[player].employee_earn_percentage = newPercent
+    local newPercent = tonumber(PlayerData[player].employee['employee_earn_percentage']) + earnPercentIncrease
+    PlayerData[player].employee['employee_earn_percentage'] = newPercent
     Delay(3000, function(p, percent)
         CallRemoteEvent(p, 'KNotify:Send', "You now make " .. tostring(newPercent * 100) .. " %% from the company miners", "#0f0")
     end, player, newPercent)
 end
 
 AddRemoteEvent("OpenBitcoinWareHouseMenu", function(player)
+    if PlayerData[player].company == nil and PlayerData[player].employee == nil then
+        return CallRemoteEvent(player, 'KNotify:Send', "You have to own a company to interact with the manager", "#f00")
+    end
+
+    if PlayerData[player].company == nil and PlayerData[player].employee ~= nil then
+        return CallRemoteEvent(player, 'KNotify:Send', "Do your job. Only the company owner can interact", "#f00")
+    end
+
+    if PlayerData[player].company_upgrades['bitcoin_miner'] ~= 1 then
+        return CallRemoteEvent(player, 'KNotify:Send', "Your company does not have this upgrade unlocked", "#f00")
+    end
+
     if PlayerData[player].company ~= nil then
         return CallRemoteEvent(player, "ShowBitcoinWarehouseCompanyMenu")
     end
@@ -153,7 +169,7 @@ AddRemoteEvent("PurchaseBitcoinMachines", function(player, numMachines)
         if numMachines < 1 then
             return CallRemoteEvent(player, 'KNotify:Send', _("no_zero_machines"), "#f00")
         end
-        if GetPlayerCash(player) >= cost then
+        if tonumber(GetPlayerCash(player)) >= tonumber(cost) then
             RemoveBalanceFromAccount(player, "cash", cost)
             AddMachinesToCompany(numMachines, PlayerData[player].company, player)
         else
@@ -165,7 +181,7 @@ AddRemoteEvent("PurchaseBitcoinMachines", function(player, numMachines)
 end)
 
 function AddMachinesToCompany(numMachines, company, player)
-    local query = mariadb_prepare(sql, "UPDATE companies set bitcoin_machines_amount = bitcoin_machines_amount + 1 WHERE id = '?';", company)
+    local query = mariadb_prepare(sql, "UPDATE companies set bitcoin_machines_amount = bitcoin_machines_amount + '?' WHERE id = '?';", numMachines, company)
     mariadb_async_query(sql, query, AddedNewMachines, numMachines, player)
 end
 

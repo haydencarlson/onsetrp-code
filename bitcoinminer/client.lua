@@ -69,9 +69,11 @@ function CheckBitcoinMiner()
 	end
 end
 
-AddRemoteEvent("FinishedPoweringMachine", function()
+AddRemoteEvent("FinishedPoweringMachine", function(powered)
     CallEvent('KNotify:RemoveProgressBar', "powering_bitcoin_machine")
-    CallEvent('KNotify:Send', "You have powered the machine", "#0f0")
+    if powered then
+        CallEvent('KNotify:Send', "You have powered the machine", "#0f0")
+    end
     poweringMachine = false
 end)
 
@@ -84,7 +86,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     local args = { ... }
     if dialog == buyBitcoinMachineMenu then
         if button == 1 then
-            if args[1] == "" then
+            if args[1] == "" or tonumber(args[1]) < 0 then
                 CallEvent('KNotify:Send', _("no_zero_machines"), "#f00")
             else
                 CallRemoteEvent("PurchaseBitcoinMachines", args[1])
@@ -95,7 +97,6 @@ end)
 
 
 AddRemoteEvent("ShowBitcoinWarehouseCompanyMenu", function()
-    AddPlayerChat("test")
     Dialog.show(buyBitcoinMachineMenu)
 end)
 

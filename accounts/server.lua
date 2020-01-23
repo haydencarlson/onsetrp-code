@@ -253,8 +253,8 @@ function CreatePlayerData(player)
 	PlayerData[player].kills = 0
 	PlayerData[player].deaths = 0
 	PlayerData[player].company = nil
+	PlayerData[player].company_upgrades = {}
 	PlayerData[player].employee = nil
-	PlayerData[player].employee_earn_percentage = nil
     print("Data created for : "..player)
 end
 

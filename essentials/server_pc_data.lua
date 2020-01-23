@@ -5,18 +5,16 @@ local function GetPlayersInRange(player)
     local nearestPlayers = GetPlayersInRange3D(x, y, z, 1000)
     local PlayerList = {}
     for k,v in pairs(nearestPlayers) do
-        if v ~= player then
+        -- if v ~= player then
             if PlayerData[v] ~= nil then 
                 local name = PlayerData[v].name
                 if name ~= nil then
-                    PlayerList[tostring(v)] = name
+                    table.insert(PlayerList, { name = name, id = v})
                 end
             end
-        end
+        -- end
     end
-    table.insert(PlayerList, {playerid = player, name = PlayerData[player].name})
-    playerList[tostring(player)] = PlayerData[player].name
-    return playerList
+    return PlayerList
 end
 
 
@@ -28,8 +26,11 @@ local function LoadedCompanyEmployees(PCData, player)
             table.insert(PCData['company']['employees'], employee)
         end
     end
-    PCData['company']['employee_id'] = PlayerData[player].employee
+    if PlayerData[player].employee ~= nil then
+        PCData['company']['employee_id'] = PlayerData[player].employee['id']
+    end
     PCData['company']['company_id'] = PlayerData[player].company
+    print("Showing UI")
     CallRemoteEvent(player, "BRPC:Show", json_encode(PCData))
 end
 
@@ -42,7 +43,7 @@ local function CompanyDataToObject(PCData, company, player)
     }
     table.insert(PCData['company']['upgrades'], 
         { 
-            name = "bitcoin_miner",
+            name = "bitcoinminer",
             available = company['bitcoinminer'],
             friendly_name = _('bitcoin_warehouse') .. " ($500,000)"
         }
@@ -53,15 +54,20 @@ local function LoadedPlayerCompany(player)
     local PCData = {}
     if mariadb_get_row_count() ~= 0 then
         local company = mariadb_get_assoc(1)
-        -- local playersInRange = GetPlayersInRange(player)
-        -- PCData['near_players'] = playersInRange
+        local playersInRange = GetPlayersInRange(player)
+        PCData['near_players'] = playersInRange
         CompanyDataToObject(PCData, company, player)
-        local query = mariadb_prepare(sql, "SELECT accounts.name, accounts.id FROM company_employee LEFT JOIN accounts ON company_employee.account_id = accounts.id WHERE company_id = '?';", company['id'])
+        local query = mariadb_prepare(sql, "SELECT accounts.name, accounts.id, company_employee.earn_percentage FROM company_employee LEFT JOIN accounts ON company_employee.account_id = accounts.id WHERE company_id = '?';", company['id'])
         mariadb_async_query(sql, query, LoadedCompanyEmployees, PCData, player)
     end
 end
 
 AddRemoteEvent("BRPC:FetchPCData", function(player)
-    local query = mariadb_prepare(sql, "SELECT * FROM companies where accountid = '?';", PlayerData[player].accountid)
+    local query
+    if PlayerData[player].employee ~= nil then
+        query = mariadb_prepare(sql, "SELECT * FROM companies where id = '?';", PlayerData[player].employee['company_id'])
+    else
+        query = mariadb_prepare(sql, "SELECT * FROM companies where accountid = '?';", PlayerData[player].accountid)
+    end
     mariadb_async_query(sql, query, LoadedPlayerCompany, player)
 end)
