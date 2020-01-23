@@ -20,26 +20,47 @@ local Machines = {
 
 
 -- MACHINE PAYMENTS
-
-local function PayEmployee(company, employeeExtraPercentage)
-    -- Pay employee bitcoin
+local function TotalBitcoinPay(company, percent, isEmployee)
+    local companyMiners = tonumber(company['bitcoin_machines_amount'])
+    local extraPercent = percent
+    local payAmount
+    if isEmployee then
+        payAmount = (companyMiners * BaseBitcoinPerHour) * percent
+    else
+        local extraBitcoin = (companyMiners * BaseBitcoinPerHour) * extraPercent
+        payAmount = (companyMiners * BaseBitcoinPerHour) + extraBitcoin
+    end
+    return payAmount
 end
 
-local function PayCompany(employee, company, employeeExtraPercentage)
-    local companyMiners = tonumber(company['bitcoin_machines_amount'])
-    local extraPercent = employeeExtraPercentage
-    local extraBitcoin = (companyMiners * BaseBitcoinPerHour) * extraPercent
-    local payAmount = (companyMiners * BaseBitcoinPerHour) + extraBitcoin
-    local companyOwner = FindPlayerByAccountId(company['accountid'])
-    if companyOwner then
-        -- Add Bitcoin 
+local function PayEmployee(employee, company, employeeEarnPercent)
+    local payAmount = TotalBitcoinPay(company, employeeEarnPercent, true)
+    local query = mariadb_prepare(sql, "UPDATE company_employee SET bitcoin_balance = bitcoin_balance + '?' WHERE id = '?'", payAmount, employee['id'])
+    mariadb_query(sql, query)
+end
+
+local function PayCompany(company, employeeExtraPercentage)
+    local payAmount = TotalBitcoinPay(company, employeeExtraPercentage, false)
+    local query = mariadb_prepare(sql, "UPDATE companies SET bitcoin_balance = bitcoin_balance + '?' WHERE id = '?'", payAmount, company['id'])
+    mariadb_query(sql, query)
+end
+
+local function LoadedCompanyEmployees(company)
+    local employeeExtraPercentage = 0.000
+    if mariadb_get_row_count() ~= 0 then
+        for i=1,mariadb_get_row_count() do
+            local employee = mariadb_get_assoc(i)
+            local employeeEarnPercent = tonumber(employee['earn_percentage'])
+            employeeExtraPercentage = employeeExtraPercentage + employeeEarnPercent
+            PayEmployee(employee, company, employeeEarnPercent)
+        end
+        PayCompany(company, employeeExtraPercentage)
     else
-        -- Add 
+        PayCompany(company, employeeExtraPercentage)
     end
 end
 
 local function LoadedCompanyWithMiners()
-    print("Loaded companies with miners")
     if mariadb_get_row_count() ~= 0 then
         for i=1,mariadb_get_row_count() do
             local company = mariadb_get_assoc(i)
@@ -52,24 +73,6 @@ end
 local function PayOutMachines()
     local query = mariadb_prepare(sql, "SELECT * FROM companies WHERE bitcoinminer = 1 and bitcoin_machines_amount != 0;")
     mariadb_async_query(sql, query, LoadedCompanyWithMiners)
-end
-
-local function LoadedCompanyEmployees(company)
-    print("Loaded company employees")
-    local employeeExtraPercentage = 0.000
-    if mariadb_get_row_count() ~= 0 then
-        for i=1,mariadb_get_row_count() do
-            local employee = mariadb_get_assoc(i)
-            local employeeEarnPercent = tonumber(employee['earn_percentage'])
-            employeeExtraPercentage = employeeExtraPercentage + employeeEarnPercent
-            -- PayEmployee(employee, company, employeeEarnPercent)
-        end
-        print("Paying company")
-        print(company)
-        PayCompany(employee, company, employeeExtraPercentage)
-    else
-        PayCompany(company, 0)
-    end
 end
 
 AddCommand('pay', function()
