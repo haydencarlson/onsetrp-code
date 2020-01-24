@@ -1,4 +1,5 @@
 local Dialog = ImportPackage("dialogui")
+local brpc = ImportPackage("brpc")
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local companyNpc = nil
 local createJoinCompany = nil
@@ -23,12 +24,8 @@ AddEvent("OnTranslationReady", function()
     -- Create or Join Menu
     createJoinCompany = Dialog.create(_("create_join_company"), nil, _("create_company"), _("cancel"))
 
-    -- Upgrade Menu
-    upgradeCompany = Dialog.create(_("upgrade_company"), nil, _("purchase_company_upgrade"),_("cancel"))
-    Dialog.addSelect(upgradeCompany, 1, _("company_upgrades_available"), 5)
-
     -- Manage Menu
-    manageCompany = Dialog.create(_("manage_your_company"), nil, _("upgrade_company"), _("cancel"))
+    openPC = Dialog.create(_("manage_your_company"), nil, "Open Computer", _("cancel"))
 
     -- Create new Company Menu
     createCompany = Dialog.create(_("create_new_company"), nil, _("create_company"), _("cancel"))
@@ -75,9 +72,9 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
             Dialog.show(createCompany)
         end
     end
-    if dialog == manageCompany then
+    if dialog == openPC then
         if button == 1 then
-            CallRemoteEvent("ManageCompany")
+            CallRemoteEvent("BRPC:FetchPCData")
         end
     end
     if dialog == createCompany then
@@ -87,16 +84,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
                 Dialog.show(createCompany)
             else
                 CallRemoteEvent("CreateNewCompany", args[1])
-            end
-        end
-    end
-    if dialog == upgradeCompany then
-        if button == 1 then
-            local upgrade = args[1]
-            if upgrade == "" then
-                CallEvent('KNotify:Send', _("choose_company_upgrade"), "#f00")
-            else
-                CallRemoteEvent("UpgradeCompany", upgrade)
             end
         end
     end
@@ -129,17 +116,9 @@ AddRemoteEvent("ShowCreateJoinCompany", function()
 end)
 
 AddRemoteEvent("ShowManageCompany", function()
-    Dialog.show(manageCompany)
+    Dialog.show(openPC)
 end)
 
 AddRemoteEvent("ShowLeaveCompany", function()
     Dialog.show(leaveCompany)
-end)
-
-AddRemoteEvent("ShowUpgradeCompany", function(upgradesAvailable)
-    if upgradesAvailable == nil then
-        return CallEvent('KNotify:Send', _("company_all_upgrades_done"), "#f00")
-    end
-    Dialog.setSelectLabeledOptions(upgradeCompany, 1, 1, upgradesAvailable)
-    Dialog.show(upgradeCompany)
 end)
