@@ -36,24 +36,6 @@ AddEvent("OnTranslationReady", function()
 
     -- Leave company
     leaveCompany = Dialog.create("Leave Company", nil, _("yes_leave"), _("cancel"))
-
-    -- Company Menu
-    companyMenu = Dialog.create(_("company_name"), nil, _("hire_player"),_("fire_player"),_("cancel"))
-
-    -- Hire menu
-    hireMenu = Dialog.create(_("hire_player"), nil, _("hire_player"),_("cancel"))
-    Dialog.addSelect(hireMenu, 1, _("close_players"), 5)
-
-    -- Fire Menu
-    fireMenu = Dialog.create(_("fire_player"), nil, _("fire_player"),_("cancel"))
-    Dialog.addSelect(fireMenu, 1, _("company_employees"), 5)
-end)
-
-
-AddEvent("OnKeyPress", function(key)
-    if key == "F6" and not onCharacterCreation then
-        CallRemoteEvent("OpenCompanyMenu")
-    end
 end)
 
 AddRemoteEvent("ShowCompanyMenu", function(playerList)
@@ -76,14 +58,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
             else
                 CallRemoteEvent("FirePlayer", employee)
             end
-        end
-    end
-    if dialog == companyMenu then
-        if button == 1 then
-            Dialog.show(hireMenu)
-        end
-        if button == 2 then
-            CallRemoteEvent("OpenFireMenu")
         end
     end
     if dialog == hireMenu then

@@ -22,7 +22,13 @@ local function LoadedCompanyEmployees(PCData, player)
     PCData['company']['employees'] = {}
     if mariadb_get_row_count() ~= 0 then
         for i=1,mariadb_get_row_count() do
-        local employee = mariadb_get_assoc(i)
+            local employee = mariadb_get_assoc(i)
+            if PlayerData[player].employee ~= nil then
+                if tostring(employee['id']) == tostring(PlayerData[player].accountid) then
+                    PCData['company']['bitcoin_total_earnings'] = employee['total_bitcoin_earnings']
+                    PCData['company']['bitcoin_balance'] = employee['bitcoin_balance']
+                end
+            end
             table.insert(PCData['company']['employees'], employee)
         end
     end
@@ -30,7 +36,6 @@ local function LoadedCompanyEmployees(PCData, player)
         PCData['company']['employee_id'] = PlayerData[player].employee['id']
     end
     PCData['company']['company_id'] = PlayerData[player].company
-    print("Showing UI")
     CallRemoteEvent(player, "BRPC:Show", json_encode(PCData))
 end
 
@@ -41,6 +46,11 @@ local function CompanyDataToObject(PCData, company, player)
         bitcoin_balance = company['bitcoin_balance'],
         upgrades = {}
     }
+
+    if PlayerData[player].company ~= nil then
+        PCData['company']['bitcoin_total_earnings'] = company['total_bitcoin_earnings']
+        PCData['company']['bitcoin_balance'] = company['bitcoin_balance']
+    end
     table.insert(PCData['company']['upgrades'], 
         { 
             name = "bitcoinminer",
@@ -57,7 +67,7 @@ local function LoadedPlayerCompany(player)
         local playersInRange = GetPlayersInRange(player)
         PCData['near_players'] = playersInRange
         CompanyDataToObject(PCData, company, player)
-        local query = mariadb_prepare(sql, "SELECT accounts.name, accounts.id, company_employee.earn_percentage FROM company_employee LEFT JOIN accounts ON company_employee.account_id = accounts.id WHERE company_id = '?';", company['id'])
+        local query = mariadb_prepare(sql, "SELECT accounts.name, company_employee.bitcoin_balance, accounts.id, company_employee.earn_percentage, company_employee.total_bitcoin_earnings FROM company_employee LEFT JOIN accounts ON company_employee.account_id = accounts.id WHERE company_id = '?';", company['id'])
         mariadb_async_query(sql, query, LoadedCompanyEmployees, PCData, player)
     end
 end

@@ -30,7 +30,7 @@ function LookedForPlayerCompany(player)
 end
 
 function LookForPlayerCompanyEmployee(player)
-    local query = mariadb_prepare(sql, "SELECT * FROM company_employee LEFT JOIN companies ON company_employee.company_id = companies.id WHERE account_id = '?';", PlayerData[player].accountid)
+    local query = mariadb_prepare(sql, "SELECT companies.bitcoin_machines_amount, company_employee.company_id, company_employee.id, company_employee.company_id, company_employee.earn_percentage, companies.bitcoinminer FROM company_employee LEFT JOIN companies ON company_employee.company_id = companies.id WHERE account_id = '?';", PlayerData[player].accountid)
     mariadb_async_query(sql, query, LookedForPlayerCompanyEmployee, player)
 end
 
@@ -42,6 +42,7 @@ function LookedForPlayerCompanyEmployee(player)
             company_id = companyEmployee['company_id'],
             employee_earn_percentage = tonumber(companyEmployee['earn_percentage'])
         }
+        PlayerData[player].company_bitcoin_machines = tonumber(companyEmployee['bitcoin_machines_amount'])
         PlayerData[player].company_upgrades['bitcoin_miner'] = tonumber(companyEmployee['bitcoinminer'])
     end
 end

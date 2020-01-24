@@ -173,7 +173,7 @@ end)
 
 function AddInventory(player, item, amount)
     local slotsAvailables = tonumber(GetPlayerMaxSlots(player)) - tonumber(GetPlayerUsedSlots(player))
-     if tonumber(slotsAvailables) >= tonumber(amount) or item == "cash"then
+     if tonumber(slotsAvailables) >= tonumber(amount) or item == "cash" or item == "bitcoin" then
         if item == "item_backpack" and GetPlayerBag(player) == 1 then -- On ne peux pas acheter plusieurs sacs
             return false
         end
@@ -250,7 +250,7 @@ end
 function GetPlayerUsedSlots(player)
     local usedSlots = 0
     for k,v in pairs(PlayerData[player].inventory) do
-        if k == 'cash' then
+        if k == 'cash' or k == 'bitcoin' then
             usedSlots = usedSlots + 1
         else
             usedSlots = usedSlots + v
