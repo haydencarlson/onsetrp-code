@@ -74,7 +74,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     end
     if dialog == openPC then
         if button == 1 then
-            CallRemoteEvent("BRPC:FetchPCData")
+            CallEvent("BRPC:StartOpen")
         end
     end
     if dialog == createCompany then
