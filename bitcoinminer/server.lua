@@ -102,7 +102,7 @@ AddRemoteEvent("StartPoweringBitcoinMachine", function(player)
         return CallRemoteEvent(player, 'KNotify:Send', "You dont work for a company", "#f00")
     end
 
-    if PlayerData[player].company_upgrades['bitcoin_miner'] ~= 1 then
+    if PlayerData[player].company_upgrades['bitcoinminer'] ~= 1 then
         CompletedPoweringMachine(player, false)
         return CallRemoteEvent(player, 'KNotify:Send', "The company you work for doesnt have this upgrade", "#f00")
     end
@@ -207,7 +207,7 @@ AddRemoteEvent("OpenBitcoinWareHouseMenu", function(player)
         return CallRemoteEvent(player, 'KNotify:Send', "Do your job. Only the company owner can interact", "#f00")
     end
 
-    if PlayerData[player].company_upgrades['bitcoin_miner'] ~= 1 then
+    if PlayerData[player].company_upgrades['bitcoinminer'] ~= 1 then
         return CallRemoteEvent(player, 'KNotify:Send', "Your company does not have this upgrade unlocked", "#f00")
     end
 
