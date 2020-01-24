@@ -64,9 +64,20 @@ end
 
 AddRemoteEvent("BRPC:FetchPCData", function(player)
     local query
+    if PlayerData[player].employee == nil and PlayerData[player].company == nil then
+        -- Default return when they dont have a company or arent an employee
+        PCData = {
+            company = {
+                employee_id = nil,
+                company_id = nil
+            }
+        }
+        return CallRemoteEvent(player, "BRPC:Show", json_encode(PCData))
+    end
+
     if PlayerData[player].employee ~= nil then
         query = mariadb_prepare(sql, "SELECT * FROM companies where id = '?';", PlayerData[player].employee['company_id'])
-    else
+    else 
         query = mariadb_prepare(sql, "SELECT * FROM companies where accountid = '?';", PlayerData[player].accountid)
     end
     mariadb_async_query(sql, query, LoadedPlayerCompany, player)

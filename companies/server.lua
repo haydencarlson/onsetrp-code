@@ -165,22 +165,22 @@ end
 function LookupPlayerCompany(hiringPlayer, employee) 
     local company = mariadb_get_assoc(1)
     local query = mariadb_prepare(sql, "SELECT * from companies where accountid = '?';", PlayerData[tonumber(employee)].accountid)
-    mariadb_async_query(sql, query, LookHiredPlayerOwnsCompany, hiringPlayer, employee, company['id'], company['name'])
+    mariadb_async_query(sql, query, LookHiredPlayerOwnsCompany, hiringPlayer, employee, company['id'], company['name'], company)
 end
 
-function LookHiredPlayerOwnsCompany(hiringPlayer, employee, companyId, companyName) 
+function LookHiredPlayerOwnsCompany(hiringPlayer, employee, companyId, compsanyName, company) 
     if mariadb_get_row_count() == 0 then
         local query = mariadb_prepare(sql, "SELECT * from company_employee where account_id = '?';", PlayerData[tonumber(employee)].accountid)
-        mariadb_async_query(sql, query, LookHiredPlayerIsInCompany, hiringPlayer, employee, companyId, companyName)
+        mariadb_async_query(sql, query, LookHiredPlayerIsInCompany, hiringPlayer, employee, companyId, companyName, company)
     else
         CallRemoteEvent(hiringPlayer, 'KNotify:Send', "Player owns there own company", "#f00")
     end
 end
 
-function LookHiredPlayerIsInCompany(hiringPlayer, employee, companyId, companyName) 
+function LookHiredPlayerIsInCompany(hiringPlayer, employee, companyId, companyName, company) 
     if mariadb_get_row_count() == 0 then
         local query = mariadb_prepare(sql, "INSERT INTO company_employee (company_id, account_id) VALUES (?, ?);", tostring(companyId), PlayerData[tonumber(employee)].accountid)
-        mariadb_async_query(sql, query, InsertedNewEmployee, employee)
+        mariadb_async_query(sql, query, InsertedNewEmployee, employee, company)
         CallRemoteEvent(hiringPlayer, 'KNotify:Send', "You have hired " .. PlayerData[tonumber(employee)].name, "#0f0")
         CallRemoteEvent(employee, 'KNotify:Send', companyName .. ' has hired you', "#0f0")
     else
@@ -188,9 +188,14 @@ function LookHiredPlayerIsInCompany(hiringPlayer, employee, companyId, companyNa
     end
 end
 
-function InsertedNewEmployee(employee)
+function InsertedNewEmployee(employee, company)
     local insertId = mariadb_get_insert_id()
-    PlayerData[employee].employee = insertId
+    PlayerData[tonumber(employee)].employee = {
+        id = insertId,
+        company_id = company['id'],
+        employee_earn_percentage = 0
+    }
+    PlayerData[tonumber(employee)].company_upgrades['bitcoin_miner'] = tonumber(company['bitcoinminer'])
 end
 
 function UpgradedCompany(player, upgrade, amount)
@@ -224,7 +229,7 @@ end
 
 function CreatedNewCompany(companyName, player)
     local insertId = mariadb_get_insert_id()
-    PlayerData[player].company = insertId
+    PlayerData[tonumber(player)].company = insertId
     CallRemoteEvent(player, 'KNotify:Send', companyName .. " company has been created.", "#0f0")
 end
 

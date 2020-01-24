@@ -255,6 +255,8 @@ function CreatePlayerData(player)
 	PlayerData[player].company = nil
 	PlayerData[player].company_upgrades = {}
 	PlayerData[player].employee = nil
+	print("employee")
+	print(PlayerData[player].employee)
     print("Data created for : "..player)
 end
 

@@ -127,7 +127,7 @@ function CouldUpdatePlayerPercentage(player)
     local outcome = Random(0, 1)
     local earnPercentIncrease = 0.001
     if outcome == 1 then
-        local query = mariadb_prepare(sql, "UPDATE company_employee set earn_percentage = earn_percentage + ? WHERE id = '?';", earnPercentIncrease, PlayerData[player].employee['id'])
+        local query = mariadb_prepare(sql, "UPDATE company_employee set earn_percentage = earn_percentage + ? WHERE id = '?';", earnPercentIncrease, PlayerData[tonumber(player)].employee['id'])
         mariadb_async_query(sql, query, OnUpdatedPlayerEarnPercentage, player, earnPercentIncrease)
     end
 end
