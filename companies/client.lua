@@ -1,4 +1,5 @@
 local Dialog = ImportPackage("dialogui")
+local brpc = ImportPackage("brpc")
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local companyNpc = nil
 local createJoinCompany = nil
@@ -23,12 +24,8 @@ AddEvent("OnTranslationReady", function()
     -- Create or Join Menu
     createJoinCompany = Dialog.create(_("create_join_company"), nil, _("create_company"), _("cancel"))
 
-    -- Upgrade Menu
-    upgradeCompany = Dialog.create(_("upgrade_company"), nil, _("purchase_company_upgrade"),_("cancel"))
-    Dialog.addSelect(upgradeCompany, 1, _("company_upgrades_available"), 5)
-
     -- Manage Menu
-    manageCompany = Dialog.create(_("manage_your_company"), nil, _("upgrade_company"), _("cancel"))
+    openPC = Dialog.create(_("manage_your_company"), nil, "Open Computer", _("cancel"))
 
     -- Create new Company Menu
     createCompany = Dialog.create(_("create_new_company"), nil, _("create_company"), _("cancel"))
@@ -36,24 +33,6 @@ AddEvent("OnTranslationReady", function()
 
     -- Leave company
     leaveCompany = Dialog.create("Leave Company", nil, _("yes_leave"), _("cancel"))
-
-    -- Company Menu
-    companyMenu = Dialog.create(_("company_name"), nil, _("hire_player"),_("fire_player"),_("cancel"))
-
-    -- Hire menu
-    hireMenu = Dialog.create(_("hire_player"), nil, _("hire_player"),_("cancel"))
-    Dialog.addSelect(hireMenu, 1, _("close_players"), 5)
-
-    -- Fire Menu
-    fireMenu = Dialog.create(_("fire_player"), nil, _("fire_player"),_("cancel"))
-    Dialog.addSelect(fireMenu, 1, _("company_employees"), 5)
-end)
-
-
-AddEvent("OnKeyPress", function(key)
-    if key == "F6" and not onCharacterCreation then
-        CallRemoteEvent("OpenCompanyMenu")
-    end
 end)
 
 AddRemoteEvent("ShowCompanyMenu", function(playerList)
@@ -78,14 +57,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
             end
         end
     end
-    if dialog == companyMenu then
-        if button == 1 then
-            Dialog.show(hireMenu)
-        end
-        if button == 2 then
-            CallRemoteEvent("OpenFireMenu")
-        end
-    end
     if dialog == hireMenu then
         if button == 1 then
             local player = args[1]
@@ -101,9 +72,9 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
             Dialog.show(createCompany)
         end
     end
-    if dialog == manageCompany then
+    if dialog == openPC then
         if button == 1 then
-            CallRemoteEvent("ManageCompany")
+            CallEvent("BRPC:StartOpen")
         end
     end
     if dialog == createCompany then
@@ -113,16 +84,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
                 Dialog.show(createCompany)
             else
                 CallRemoteEvent("CreateNewCompany", args[1])
-            end
-        end
-    end
-    if dialog == upgradeCompany then
-        if button == 1 then
-            local upgrade = args[1]
-            if upgrade == "" then
-                CallEvent('KNotify:Send', _("choose_company_upgrade"), "#f00")
-            else
-                CallRemoteEvent("UpgradeCompany", upgrade)
             end
         end
     end
@@ -155,17 +116,9 @@ AddRemoteEvent("ShowCreateJoinCompany", function()
 end)
 
 AddRemoteEvent("ShowManageCompany", function()
-    Dialog.show(manageCompany)
+    Dialog.show(openPC)
 end)
 
 AddRemoteEvent("ShowLeaveCompany", function()
     Dialog.show(leaveCompany)
-end)
-
-AddRemoteEvent("ShowUpgradeCompany", function(upgradesAvailable)
-    if upgradesAvailable == nil then
-        return CallEvent('KNotify:Send', _("company_all_upgrades_done"), "#f00")
-    end
-    Dialog.setSelectLabeledOptions(upgradeCompany, 1, 1, upgradesAvailable)
-    Dialog.show(upgradeCompany)
 end)

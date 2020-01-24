@@ -6,16 +6,17 @@ function ResetScoreboard() {
     tableOuter.scrollTop = 0;
 }
 
-function AddPlayer(name, ping, job, admin) {
+function AddPlayer(name, job, sessiontime, admin, ping) {
     let table = document.getElementsByTagName("table")[0];
     let tableContent = table.getElementsByTagName("tbody")[0].innerHTML;
     table.getElementsByTagName("tbody")[0].innerHTML =
         tableContent +
         `<tr>
     <td>${name}</td>
-    <td>${ping}ms</td>
     <td>${job.charAt(0).toUpperCase() + job.slice(1)}</td>
     <td>${admin === 'true' ? "Admin" : "Player"}</td>
+    <td>${SecondsToTime(sessiontime)}</td>
+    <td>${ping}ms</td>
   </tr>`;
 }
 

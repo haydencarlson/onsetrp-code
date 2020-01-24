@@ -5,9 +5,6 @@ local Stores = Config.Stores
 local InProgress = {}
 local recentDeductionTimer = 0
 
-
-
-
 function OnPackageStart()
 	local i = 1
 	for _ in pairs(Stores) do

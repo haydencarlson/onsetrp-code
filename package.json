@@ -57,7 +57,10 @@
         "robbery/config.lua",
         "robbery/server.lua",
         "essentials/nlr/server.lua",
-        "essentials/s_drop_and_pick.lua"
+        "essentials/s_drop_and_pick.lua",
+        "essentials/server_pc_data.lua",
+        "bitcoinminer/server.lua",
+        "companies/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -103,7 +106,11 @@
         "robbery/config.lua",
         "robbery/client.lua",
         "essentials/nlr/client.lua",
-        "essentials/c_drop_and_pick.lua"
+        "essentials/c_drop_and_pick.lua",
+        "essentials/esp.lua",
+        "bitcoinminer/client.lua",
+        "companies/client.lua"
+
     ],
     "files": [
         "hud/speaking/speaking.png",
