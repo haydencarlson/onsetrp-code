@@ -25,7 +25,7 @@ function LookedForPlayerCompany(player)
     if mariadb_get_row_count() ~= 0 then
         local company = mariadb_get_assoc(1)
         PlayerData[player].company = company['id']
-        PlayerData[player].company_upgrades['bitcoin_miner'] = tonumber(company['bitcoinminer'])
+        PlayerData[player].company_upgrades['bitcoinminer'] = tonumber(company['bitcoinminer'])
     end
 end
 
@@ -43,7 +43,7 @@ function LookedForPlayerCompanyEmployee(player)
             employee_earn_percentage = tonumber(companyEmployee['earn_percentage'])
         }
         PlayerData[player].company_bitcoin_machines = tonumber(companyEmployee['bitcoin_machines_amount'])
-        PlayerData[player].company_upgrades['bitcoin_miner'] = tonumber(companyEmployee['bitcoinminer'])
+        PlayerData[player].company_upgrades['bitcoinminer'] = tonumber(companyEmployee['bitcoinminer'])
     end
 end
 
@@ -196,12 +196,30 @@ function InsertedNewEmployee(employee, company)
         company_id = company['id'],
         employee_earn_percentage = 0
     }
-    PlayerData[tonumber(employee)].company_upgrades['bitcoin_miner'] = tonumber(company['bitcoinminer'])
+    PlayerData[tonumber(employee)].company_upgrades['bitcoinminer'] = tonumber(company['bitcoinminer'])
+end
+
+local function EmployeesToAddUpgradesTo(player, upgrade)
+    for i=1,mariadb_get_row_count() do
+        local employee = mariadb_get_assoc(i)
+        local playerInGame = FindPlayerByAccountId(employee['account_id'])
+        if playerInGame then
+            PlayerData[playerInGame].company_upgrades[upgrade] = 1
+        end
+    end
+end
+
+local function AddUpgradeToCompanyPlayerData(player, upgrade)
+    PlayerData[player].company_upgrades[upgrade] = 1
+    local query = mariadb_prepare(sql, "SELECT * FROM company_employee WHERE company_id = '?';", PlayerData[player].company)
+    mariadb_async_query(sql, query, EmployeesToAddUpgradesTo, player)
+    
 end
 
 function UpgradedCompany(player, upgrade, amount)
     RemoveBalanceFromAccount(player, "cash", amount)
     CallRemoteEvent(player, "BRPC:UpgradedCompany", upgrade)
+    AddUpgradeToCompanyPlayerData(player, upgrade)
     CallRemoteEvent(player, 'KNotify:Send', "Your company now has access to the " .. CompanyUpgrades[upgrade].notificationText, "#0f0")
 end
 
