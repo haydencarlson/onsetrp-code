@@ -10,9 +10,6 @@ function OnPackageStart()
 		end
 		CreatePlants()
 		CreateLabs()
-		CreateDealer()
-		dealer.timer = CreateTimer(DealerChange, 1200000)
-
 	end)
 end
 AddEvent("OnPackageStart", OnPackageStart)
