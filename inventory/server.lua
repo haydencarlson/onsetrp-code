@@ -1,6 +1,6 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 
-local inventory_base_max_slots = 32
+local inventory_base_max_slots = 100
 
 AddRemoteEvent("ServerPersonalMenu", function(player)
     local x, y, z = GetPlayerLocation(player)

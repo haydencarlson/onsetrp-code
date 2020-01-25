@@ -60,7 +60,10 @@
         "essentials/s_drop_and_pick.lua",
         "essentials/server_pc_data.lua",
         "bitcoinminer/server.lua",
-        "companies/server.lua"
+        "companies/server.lua",
+        "drugs/basic/config.lua",
+        "drugs/basic/plants.lua",
+        "drugs/basic/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -109,8 +112,10 @@
         "essentials/c_drop_and_pick.lua",
         "essentials/esp.lua",
         "bitcoinminer/client.lua",
-        "companies/client.lua"
-
+        "companies/client.lua",
+        "drugs/basic/client.lua",
+        "drugs/basic/functions_c.lua",
+        "drugs/basic/actions.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -151,8 +156,8 @@
         "idcard/id.js",
         "idcard/id.css",
         "idcard/Cedarville-Cursive.ttf",
-        "phone/utils/jquery.js",
-		"phone/utils/jquery-ui.js",
+        "client/files/javascript/jquery.js",
+		"client/files/javascript/jquery-ui.js",
 		"phone/utils/Yanone.ttf",
 		"phone/utils/Bebas.ttf",
 		"phone/utils/vibration.wav",
@@ -167,6 +172,38 @@
 		"phone/gui/img/location.png",
         "phone/gui/img/garlic.png",
         "bitcoinminer/gamingcomputer.pak",
-        "client/files/bitcoinminerfan.mp3"
+        "client/files/bitcoinminerfan.mp3",
+        "drugs/img/cocaine.png",
+        "drugs/img/spill_gas.png",
+        "drugs/img/spill_acetone.png",
+        "drugs/img/spill_calcium.png",
+        "drugs/gui/gui.html",
+        "drugs/utils/jquery-ui.js",
+        "drugs/img/table.png",
+        "drugs/img/leaf.png",
+        "drugs/img/poppy_seed.png",
+        "client/files/icons/exit.png",
+        "client/files/icons/unknown.png",
+        "client/files/icons/empty.png",
+        "client/files/icons/cannabis.png",
+        "client/files/icons/coca.png",
+        "client/files/icons/meth.png",
+        "client/files/icons/cocaine.png",
+        "client/files/icons/weed.png",
+        "client/files/icons/bandage.png",
+        "client/files/icons/garbage.png",
+        "client/files/icons/asphalt.png",
+        "client/files/icons/acetone.png",
+        "client/files/icons/gas.png",
+        "client/files/icons/poppy.png",
+        "client/files/icons/heroin.png",
+        "client/files/icons/medkit.png",
+        "client/files/icons/firework.png",
+        "client/files/icons/bigfirework.png",
+        "client/files/icons/ammo.png",
+        "client/files/icons/calcium.png",
+        "client/files/icons/repairkit.png",
+        "client/files/icons/ziptie.png",
+        "client/files/icons/cuffs.png"
     ]
 }

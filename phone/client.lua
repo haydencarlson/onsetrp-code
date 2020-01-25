@@ -1,21 +1,21 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
 local GPSlocations = {
-	{name="Cocaine farm", show=false, locations={
+	{name="Cocaine farm", show=true, locations={
 		{x=-220692,y=-85078,z=187}
 	}},
-	{name="Cocaine Lab", show=false, locations={
+	{name="Cocaine Lab", show=true, locations={
 		{x=-177203,y=3759,z=2009}
 	}},
-	{name="Known Acetone location", show=false, locations={
+	{name="Known Acetone location", show=true, locations={
 		{x=-186594,y=-36751,z=1148}
 	}},
-	{name="Known Opium Poppy Field", show=false,locations={
+	{name="Known Opium Poppy Field", show=true,locations={
 		{x=130085,y=177023,z=1381}
 	}},
-	{name="Known Calcium location", show=false,locations={
+	{name="Known Calcium location", show=true,locations={
 		{x=137745,y=209936,z=1292}
 	}},
-	{name="Heroin Lab", show=false, locations={
+	{name="Heroin Lab", show=true, locations={
 		{x=-5992,y=118385,z=1387}
 	}},
 	{name="Acomore", show=true, locations={
@@ -30,48 +30,45 @@ local GPSlocations = {
 	{name="Steveville", show=true, locations={
 		{x=42081,y=135863,z=1572}
 	}},
-
 	{name="Nearest Store", show=true, locations={
 		{x=128765,y=77854,z=1577},
 		{x=42650,y=138188,z=1581},
 		{x=-15391,y=-2588,z=2065},
 		{x=-168934,y=-39183,z=1149},
-		{x=42678,y=137926,z=1581},
-		{x=49288,y=133307,z=1578}
+		{x=171131,y=203562,z=1413},
 	}},
 	{name="Nearest Weapon Store", show=true, locations={
-		{x=-181761,y=-40668,z=1163},
+		{x=-181943,y=-40668,z=1163},
 		{x=206067,y=193102,z=1357}
 	}},
 	{name="Nearest Garage", show=true, locations={
-		{x=128153,y=75993,z=1566},
-		{x=-170162,y=-36975,z=1146},
-		{x=175674,y=203230,z=1308},
-		{x=-15861,y=-8101,z=2062}
+		{x=126574,y=74560,z=1567},
+		{x=22083,y=146617,z=1560},
+		{x=-16207,y=-8641,z=2062},
+		{x=-161738,y=192055,z=1361},
+		{x=207317,y=169364,z=1306}
 	}},
 	{name="Nearest Car Dealership",show=true, locations={
-		{x=-189001,y=-52181,z=1148},
-		{x=173150,y=212774,z=1282}
+		{x=127891,y=81206,z=1566},
+		{x=207113,y=171199,z=1330}
 	}},
 	{name="Nearest ATM",show=true,locations={
-		{x=-181944 ,y=-40246,z=1163},
-		{x=129099,y=77949,z=1576},
-		{x=-15091,y=-2416,z=2065},
-		{x=43783,y=133267,z=1569},
-		{x=42244,y=137938,z=1581},
-		{x=-189247,y=-51745,z=1148},
-		{x=212899,y=190039,z=1309},
-		{x=213426,y=190578,z=1309}
+		{x=212950 ,y=190500,z=1250},
+		{x=213419,y=190723,z=1250},
+		{x=212908,y=189890,z=1250},
+		{x=116650,y=163194,z=2980},
+		{x=129240,y=77945,z=1500},
+		{x=-15000,y=-2385,z=2000},
+		{x=43900,y=133143,z=1500},
+		{x=213426,y=190578,z=1309},
+		{x=-168797,y=-39550,z=1050}
 	}},
 	{name="Nearest Job Center",show=true,locations={
-		{x=164082,y=205865,z=1358},
-		{x=-15507,y=-4068,z=2062},
-		{x=-169911,y=-38935,z=1146}
+		{x=213003,y=174652,z=1307}
 	}}
 }  
 
-local  myNumber = 0
-
+local myNumber = 0
 local open = false
 local ui = 0
 function OnPackageStart()
