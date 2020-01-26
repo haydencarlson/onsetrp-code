@@ -1,7 +1,7 @@
 cinematicUIConfig = {
     company = {
         title = "Company Manager",
-        message = "Here you can create, join or manage your company. With a company you can upgrade your business to open up yourself and employees to additional revenue streams.",
+        message = "Here you can create, join or manage your company. With a company you can upgrade your business to open up yourself and employees to additional revenue streams. You can push F8 to pull out PC and view the company app.",
         actions = {
             {
                 text = "Go",

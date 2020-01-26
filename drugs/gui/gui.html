@@ -1,0 +1,338 @@
+<html>
+<head>
+<script src="http://asset/onsetrp/client/files/javascript/jquery.js"></script>
+<script src="http://asset/onsetrp/client/files/javascript/jquery-ui.js"></script>
+</head>
+
+<body>
+
+	<div class="window">
+		<label class="cocaine hide title">Cocaine Production</label>
+		<label class="heroin hide title">Heroin Production</label>
+		<div class="button-box">
+			<div class="cocaine hide button start-btn" onclick="AddItem('cocaine')"><label>Add Coca leaves [8x]</label></div>
+			<div class="cocaine hide button other-btn pour-gas" onclick="AddAddon('gasoline')" action="gasoline"><label>Pour gasoline</label></div>
+			<div class="cocaine hide button other-btn pour-acetone" onclick="AddAddon('acetone')" action="acetone"><label>Pour acetone</label></div>
+			<div class="cocaine hide button other-btn" onclick="StartDryItem()" action="dry"><label>Blow dry the leaves</label></div>
+			<div class="cocaine hide button other-btn" onclick="OnCrushItem()" action="crush"><label>Crush the leaves</label></div>
+			<div class="cocaine hide button collect-btn" onclick="Collect()"><label>Collect cocaine</label></div>
+
+
+			<div class="heroin hide button start-btn" onclick="AddItem('heroin')"><label>Add Opium poppies [6x]</label></div>
+			<div class="heroin hide button other-btn pour-acetone" onclick="AddAddon('acetone')" action="acetone"><label>Pour acetone</label></div>
+			<div class="heroin hide button other-btn pour-calcium" onclick="AddAddon('calcium')" action="calcium"><label>Add calcium</label></div>
+			<div class="heroin hide button other-btn" onclick="OnCrushItem()" action="crush"><label>Crush</label></div>
+			<div class="heroin hide button collect-btn" onclick="Collect()"><label>Collect heroin</label></div>
+
+			<div class="hide button restart-btn" onclick="RestartProduction()"><label>Restart production</label></div>
+
+		</div>
+		<div class="item-box">
+			
+		</div>
+		<div class="addon-box">	
+		</div>
+	</div>
+
+
+</body>
+
+<script>
+	$(".hide").hide();
+
+	function StartProduction(type){
+		$(".hide").hide();
+		$("." + type+".start-btn").show();
+	}
+
+	function AddItem(type){
+		CallEvent("Kuzkay:DrugsAddItem", type);
+	}
+	function AddAddon(type){
+		CallEvent("Kuzkay:DrugsAddAddon", type);
+	}
+
+	function AppendItem(type){
+		$(".start-btn").hide();
+		$(".other-btn." + type).fadeIn(250);
+		$(".other-btn." + type).css("display", "table");
+		if(type == "cocaine"){
+			$(".item-box").append('<div class="item" id="item" liquid="" drug="cocaine"></div>');
+			$(".item").css("background-image", "url(http://asset/onsetrp/client/files/icons/coca.png)");
+		}
+
+		if(type == "heroin"){
+			$(".item-box").append('<div class="item" id="item" liquid="" drug="heroin"></div>');
+			$(".item").css("background-image", "url(http://asset/onsetrp/client/files/icons/poppy.png)");
+		}
+
+
+		$( ".item" ).draggable({
+			containment: "parent"
+		});
+	}
+
+	function FreezeDraggable(bool){
+		$(".item").draggable(bool);
+	}
+	
+
+	function SetItemWet(liquid){
+		$(".item").removeClass("dry");
+
+		$(".item").addClass(liquid);
+		$(".item").attr("liquid", liquid);
+
+		if(liquid == "mix"){
+			$(".restart-btn").fadeIn(200);
+			$(".restart-btn").css("display", "table");
+		}
+	}
+
+	function OnCrushItem(){
+		CallEvent("Kuzkay:DrugsOnCrush");
+	}
+
+
+	function AppendAddon(type) {
+		if(type == "gasoline"){
+			$(".addon-box").append('<div class="addon" action="wet" liquid="gasoline" style="background-image: url(http://asset/onsetrp/drugs/img/spill_gas.png); top:40%; left:5%;"></div>');
+			$(".pour-gas").hide();
+		}
+		if(type == "acetone"){
+			$(".addon-box").append('<div class="addon" action="wet" liquid="acetone" style="background-image: url(http://asset/onsetrp/drugs/img/spill_acetone.png); top:15%;right:10%;"></div>');
+			$(".pour-acetone").hide();
+		}
+		if(type == "calcium"){
+			$(".addon-box").append('<div class="addon" action="wet" liquid="calcium" style="background-image: url(http://asset/onsetrp/drugs/img/spill_calcium.png); top:43%;right:60%;"></div>');
+			$(".pour-calcium").hide();
+		}
+
+		$( ".addon" ).droppable({
+			drop: function(event, ui){
+				var action = $(this).attr("action");
+				var liquid = $(this).attr("liquid");
+				if(action == "wet"){
+					CallEvent("Kuzkay:DrugsSoakItem", liquid);
+				}
+				
+			}
+		});
+	}
+
+	function StartDryItem(){
+		CallEvent("Kuzkay:DrugsStartDry");
+	}
+
+	function DryItem(){
+		$(".item").addClass("dry");
+		$(".item").attr("liquid", "");
+	}
+
+	function FryItem(){
+		$(".item").addClass("fried");
+		$(".item").attr("liquid", "");
+		$(".restart-btn").fadeIn(200);
+		$(".restart-btn").css("display", "table");
+	}
+
+	function CrushItem(type){
+		$(".item").addClass(type);
+
+		if($(".item").attr("drug") == "cocaine"){
+			if(type == "crushed"){
+				$(".collect-btn.cocaine").fadeIn(300);
+				$(".collect-btn.cocaine").css("display", "table");
+				$(".other-btn").fadeOut(200);
+				$(".item").css("background-image", "url(http://asset/onsetrp/drugs/img/cocaine.png)");
+				$(".addon").fadeOut(500);
+			}else{
+				$(".restart-btn").fadeIn(200);
+				$(".restart-btn").css("display", "table");
+			}
+		}
+
+		if($(".item").attr("drug") == "heroin"){
+			if(type == "crushed"){
+				$(".item").css("background-image", "url(http://asset/onsetrp/drugs/img/poppy_seed.png)");
+			}else{
+
+				if(type == "crushed-broken"){
+					$(".restart-btn").fadeIn(200);
+					$(".restart-btn").css("display", "table");
+				}
+
+				if(type == "finished"){
+					$(".collect-btn.heroin").fadeIn(300);
+					$(".collect-btn.heroin").css("display", "table");
+					$(".item").css("background-image", "url(http://asset/onsetrp/drugs/img/cocaine.png)");
+				}
+			}
+		}
+		
+	}
+
+	function Collect(){
+		CallEvent("Kuzkay:DrugsCollect");
+	}
+
+	function RestartProduction(){
+		CallEvent("Kuzkay:DrugsRestartProduction");
+	}
+
+(function(obj)
+	{
+		ue.game = {};
+		ue.game.callevent = function(name, ...args)
+		{
+			if (typeof name != "string") {
+				return;
+			}
+
+			if (args.length == 0) {
+				obj.callevent(name, "")
+			}
+			else {
+				let params = []
+				for (let i = 0; i < args.length; i++) {
+					params[i] = args[i];
+				}
+				obj.callevent(name, JSON.stringify(params));
+			}
+		};
+	})(ue.game);
+CallEvent = ue.game.callevent;
+</script>
+
+<style>
+	@font-face {
+	  font-family: Yanone Kaffeesatz;
+	  src: url('http://asset/onsetrp/drugs/utils/Yanone.ttf');
+	}
+	body{
+		margin: 0;
+		user-select: none; 
+		font-family: 'Yanone Kaffeesatz', sans-serif !important;
+	}
+	.window{
+		width: 80vh;
+		height: 60vh;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-image: url("http://asset/onsetrp/drugs/img/table.png");
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+		border-radius: 1.5vh;
+		filter: brightness(0.85);
+		box-shadow: 0vh 0vh 1vh 0.3vh rgba(0,0,0,0.5);
+	}
+	.title{
+		color: white;
+		font-size: 3vh;
+		width: 100%;
+		top: 2%;
+		text-align: center;
+		position: absolute;
+	}
+	.button-box{
+		display: block;
+		width: 30%;
+		height: 70%;
+		position: absolute;
+		left: 3%;
+		top: 50%;
+		transform: translate(0, -40%);
+		border-radius: 1.2vh;
+		border: dashed 0.14vh white;
+		background-color: rgba(0,0,0,0.3);
+	}
+	.button{
+		position: relative;
+		height: 10%;
+		width: 95%;
+		background-color: rgba(20,20,20,0.3);
+		z-index: 3;
+		border: solid 0.1vh rgba(255,255,255,0.8);
+		border-radius: 0.7vh;
+		margin: 2.5%;
+		display: table;
+		text-align: center;
+		vertical-align: middle;
+	}
+	.button label{
+		color: white;
+		font-size: 2vh;
+		position: relative;
+		display: table-cell;
+		vertical-align: middle;
+	}
+	.item-box{
+		position: absolute;
+		width: 60%;
+		height: 70%;
+		background-color: rgba(20,20,20,0.45);
+		top: 50%;
+		right: 3vh;
+		transform: translate(0, -40%);
+		border-radius: 1vh;
+		border: dashed 0.14vh white;
+		box-shadow: inset 0 0 1.7vh 0.1vh rgba(0,0,0,0.9);
+	}
+	.item{
+		width: 14vh;
+		height: 14vh;
+		margin: 0vh;
+		background-image: url(http://asset/onsetrp/client/files/icons/coca.png);
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+	.gasoline{
+		filter: brightness(0.7) hue-rotate(15deg);
+	}
+	.acetone{
+		filter: brightness(0.8) invert(10%) hue-rotate(85deg);
+	}
+	.calcium{
+		filter: brightness(1.2) invert(15%) hue-rotate(15deg);
+	}
+	.dry{
+		filter: brightness(1.15) hue-rotate(-15deg);
+	}
+	.mix{
+		filter: grayscale(0.9) blur(0.35vh) brightness(0.6) sepia(65%);
+	}
+	.fried{
+		filter: grayscale(0.7) blur(0.3vh) brightness(0.3) !important;
+	}
+	.crushed-broken{
+		filter: hue-rotate(15deg) blur(0.4vh) brightness(0.9);
+	}
+	.crushed{
+		filter: grayscale(0.9) brightness(1.3);
+	}
+
+
+	.addon-box{
+		position: absolute;
+		width: 60%;
+		height: 70%;
+		top: 50%;
+		right: 3vh;
+		transform: translate(0, -40%);
+		pointer-events: none;
+	}
+	.addon{
+		position: absolute;
+		height: 17vh;
+		width: 17vh;
+		background-size: contain;
+		background-repeat: no-repeat;
+	}
+	.other-btn, .collect-btn, .restart-btn{
+		display: none;
+	}
+</style>

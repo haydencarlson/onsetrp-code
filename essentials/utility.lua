@@ -104,6 +104,17 @@ function OnPackageStart(player)
 			end		
 		end
 	end, 600000, v)
+
+	CreateTimer(function(player)
+		for k, v in pairs (GetAllPlayers()) do
+			if PlayerData[v] ~= nil and PlayerData[v].accountid ~= nil then
+				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
+				PlayerData[v].accountid)
+				mariadb_async_query(sql, query, GetPlayerTime, v)
+			end
+		end 
+	end, 1000, player)
+
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
@@ -142,6 +153,7 @@ AddCommand("unfreeze", function(player, instigator)
       	end
 end)
 
+<<<<<<< HEAD
 function GetCurrentPlayTime(player)
 	CreateTimer(function(player)
 		for k, v in pairs (GetAllPlayers()) do
@@ -153,6 +165,8 @@ function GetCurrentPlayTime(player)
 end
 AddEvent("OnPackageStart", GetCurrentPlayTime)
 
+=======
+>>>>>>> 0370a0d62ee9f81e3c133abb3ef3c87da76a95ae
 function GetPlayerTime(player)
 	local result = mariadb_get_assoc(1)
 	local ptime = math.tointeger(result['time'])

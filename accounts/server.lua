@@ -8,7 +8,19 @@ function OnPackageStart()
 			SavePlayerAccount(v)
 		end
 		print("All accounts have been saved !")
-    end, 30000)
+	end, 30000)
+	-- Game time
+	CreateTimer(function()
+		if serverTimeSeconds + 1 == 1441 then
+			serverTimeSeconds = 0
+		end
+		serverTimeSeconds = serverTimeSeconds + 1
+		if serverTimeSeconds % 60 == 0 then
+			CallEvent("ServerTime:OneHourPassed")
+		end
+		CallEvent("ServerTimeUpdated", GetServerTimeString())
+	end, 1000)
+
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
@@ -111,7 +123,7 @@ function OnAccountCreated(player)
 	print("Account ID "..PlayerData[player].accountid.." created for "..player)
 
 	AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="15">Welcome '..GetPlayerName(player)..'</>')
-	AddPlayerChatAll('<span color="00ee00ff">'..PlayerData[player].accountid..' total players</>')
+	AddPlayerChatAll('<span color="00ee00ff">'..PlayerData[player].accountid..' registered players</>')
 end
 
 function LoadPlayerAccount(player)
@@ -255,8 +267,6 @@ function CreatePlayerData(player)
 	PlayerData[player].company = nil
 	PlayerData[player].company_upgrades = {}
 	PlayerData[player].employee = nil
-	print("employee")
-	print(PlayerData[player].employee)
     print("Data created for : "..player)
 end
 
@@ -267,19 +277,6 @@ function AddBalanceToBankAccountSQL(accountid, amount)
 		mariadb_query(sql, update_query)
 	end
 end
-
-AddEvent("OnPackageStart", function()
-	CreateTimer(function()
-		if serverTimeSeconds + 1 == 1441 then
-			serverTimeSeconds = 0
-		end
-		serverTimeSeconds = serverTimeSeconds + 1
-		if serverTimeSeconds % 60 == 0 then
-			CallEvent("ServerTime:OneHourPassed")
-		end
-		CallEvent("ServerTimeUpdated", GetServerTimeString())
-	end, 1000)
-end)
 
 function GetServerTimeString()
 	hours = string.format("%02.f", math.floor(serverTimeSeconds/3600));
