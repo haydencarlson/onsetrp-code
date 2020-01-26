@@ -23,8 +23,6 @@ function OnPlayerDeath(player, instigator)
         AddPlayerChat(player,  message)
     end
 end
-AddRemoteEvent("OnPlayerDeath", OnPlayerDeath)
-
 AddEvent("OnPlayerDeath", OnPlayerDeath)
 
 AddCommand("tips", function(player)
@@ -147,13 +145,13 @@ end)
 function GetCurrentPlayTime(player)
 	CreateTimer(function(player)
 		for k, v in pairs (GetAllPlayers()) do
-	local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
-		PlayerData[v].accountid)
-	mariadb_async_query(sql, query, GetPlayerTime, v)
+			local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
+			PlayerData[v].accountid)
+			mariadb_async_query(sql, query, GetPlayerTime, v)
 		end 
 	end, 1000, player)
 end
-AddEvent("OnPlayerJoin", GetCurrentPlayTime)
+AddEvent("OnPackageStart", GetCurrentPlayTime)
 
 function GetPlayerTime(player)
 	local result = mariadb_get_assoc(1)
@@ -162,6 +160,29 @@ function GetPlayerTime(player)
 	PlayerData[player].play_time = GetTimeSeconds()
 	return PlayerData[player].time + ptime
 end
+
+function FormatUpTime(seconds)
+	local seconds = tonumber(seconds)
+  
+	if seconds <= 0 then
+		return "00:00:00"
+	else
+		hours = string.format("%02.f", math.floor(seconds / 3600));
+		mins = string.format("%02.f", math.floor(seconds / 60 - (hours * 60)));
+		secs = string.format("%02.f", math.floor(seconds - hours * 3600 - mins * 60));
+		return hours..":"..mins..":"..secs
+	end
+end
+
+AddCommand("uptime", function(player)
+	if GetTimeSeconds() > 3600 then
+		AddPlayerChat(player, "The server has been up for "..FormatUpTime(GetTimeSeconds()).." hours.")
+	elseif GetTimeSeconds() > 60 then
+		AddPlayerChat(player, "The server has been up for "..FormatUpTime(GetTimeSeconds()).." minutes.")
+	else
+		AddPlayerChat(player, "The server has been up for "..FormatUpTime(GetTimeSeconds()).." seconds.")
+	end
+end)
 
 function GetPlayerKD(player)
 	local deaths = PlayerData[player].deaths

@@ -58,3 +58,9 @@ function OnKeyPress(key)
 	end
 end
 AddEvent("OnKeyPress", OnKeyPress)
+
+
+function OnPlayerSpawn()
+	AddPlayerChat("You have connected to the server in "..GetTime().." seconds.")
+end
+AddEvent("OnPlayerSpawn", OnPlayerSpawn)
