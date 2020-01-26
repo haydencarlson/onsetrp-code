@@ -197,6 +197,7 @@ function InsertedNewEmployee(employee, company)
         employee_earn_percentage = 0
     }
     PlayerData[tonumber(employee)].company_upgrades['bitcoinminer'] = tonumber(company['bitcoinminer'])
+    PlayerData[tonumber(employee)].company_bitcoin_machines = tonumber(company['bitcoin_machines_amount'])
 end
 
 local function EmployeesToAddUpgradesTo(player, upgrade)

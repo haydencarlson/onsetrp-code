@@ -123,7 +123,7 @@ function OnAccountCreated(player)
 	print("Account ID "..PlayerData[player].accountid.." created for "..player)
 
 	AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="15">Welcome '..GetPlayerName(player)..'</>')
-	AddPlayerChatAll('<span color="00ee00ff">'..PlayerData[player].accountid..' total players</>')
+	AddPlayerChatAll('<span color="00ee00ff">'..PlayerData[player].accountid..' registered players</>')
 end
 
 function LoadPlayerAccount(player)

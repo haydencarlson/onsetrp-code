@@ -1,0 +1,26 @@
+{
+	"author": "Kuzkay",
+	"version": "1.0",
+	"server_scripts": [
+		"basic/config.lua",
+		"basic/plants.lua",
+		"basic/server.lua"
+	],
+	"client_scripts": [
+		"basic/client.lua"
+	],
+	"files": [
+		"img/cocaine.png",
+		"img/spill_gas.png",
+		"img/spill_acetone.png",
+		"img/spill_calcium.png",
+		"gui/gui.html",
+		"utils/jquery.js",
+		"utils/jquery-ui.js",
+		"utils/Yanone.ttf",
+		"utils/Bebas.ttf",
+		"img/table.png",
+		"img/leaf.png",
+		"img/poppy_seed.png"
+	]
+}
