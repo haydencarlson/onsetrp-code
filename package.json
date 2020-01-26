@@ -63,7 +63,8 @@
         "companies/server.lua",
         "drugs/basic/config.lua",
         "drugs/basic/plants.lua",
-        "drugs/basic/server.lua"
+        "drugs/basic/server.lua",
+	"cinema/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",
@@ -115,7 +116,8 @@
         "companies/client.lua",
         "drugs/basic/client.lua",
         "drugs/basic/functions_c.lua",
-        "drugs/basic/actions.lua"
+        "drugs/basic/actions.lua",
+	"cinema/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",

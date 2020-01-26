@@ -108,7 +108,7 @@ function OnPackageStart(player)
 	CreateTimer(function(player)
 		for k, v in pairs (GetAllPlayers()) do
 			if PlayerData[v] ~= nil and PlayerData[v].accountid ~= nil then
-				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
+				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?';",
 				PlayerData[v].accountid)
 				mariadb_async_query(sql, query, GetPlayerTime, v)
 			end
@@ -153,26 +153,25 @@ AddCommand("unfreeze", function(player, instigator)
       	end
 end)
 
-<<<<<<< HEAD
 function GetCurrentPlayTime(player)
 	CreateTimer(function(player)
 		for k, v in pairs (GetAllPlayers()) do
-			local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
-			PlayerData[v].accountid)
-			mariadb_async_query(sql, query, GetPlayerTime, v)
+			if GetAllPlayers() == true then
+				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
+				PlayerData[v].accountid)
+				mariadb_async_query(sql, query, GetPlayerTime, v)
+			end
 		end 
 	end, 1000, player)
 end
 AddEvent("OnPackageStart", GetCurrentPlayTime)
 
-=======
->>>>>>> 0370a0d62ee9f81e3c133abb3ef3c87da76a95ae
 function GetPlayerTime(player)
 	local result = mariadb_get_assoc(1)
-	local ptime = math.tointeger(result['time'])
+	local playtime = math.tointeger(result['time']) -- total time played on the server
 	PlayerData[player].time = math.floor(PlayerData[player].time + (GetTimeSeconds() - PlayerData[player].play_time))
 	PlayerData[player].play_time = GetTimeSeconds()
-	return PlayerData[player].time + ptime
+	return PlayerData[player].time + playtime -- returns current session play time + total play time on the server
 end
 
 function FormatUpTime(seconds)
