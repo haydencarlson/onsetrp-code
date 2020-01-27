@@ -116,8 +116,7 @@
         "companies/client.lua",
         "drugs/basic/client.lua",
         "drugs/basic/functions_c.lua",
-        "drugs/basic/actions.lua",
-	"cinema/client.lua"
+        "drugs/basic/actions.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
