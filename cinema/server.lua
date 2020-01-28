@@ -21,7 +21,7 @@ AddEvent("startembed", function(link)
  
 AddCommand("play", function(player, link)
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
-        if PlayerData[v].job == 'Cinema Manager' then
+        if PlayerData[v].job == 'cinema' then
             if link ~= nil then 
                 CallEvent("startembed", link)
             else
@@ -29,14 +29,14 @@ AddCommand("play", function(player, link)
             end
         end
     end
-    if PlayerData[player].job ~= 'Cinema Manager' then
+    if PlayerData[player].job ~= 'cinema' then
         AddPlayerChat(player, "You must be a cinema manager to do this.")
     end 
 end)
 
 AddCommand("play_fullscreen", function(player, link) 
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
-        if PlayerData[v].job == 'Cinema Manager' then
+        if PlayerData[v].job == 'cinema' then
             if link ~= nil then
                 CallEvent("startfs", link)
             else
@@ -44,17 +44,17 @@ AddCommand("play_fullscreen", function(player, link)
             end
         end
     end
-    if PlayerData[player].job ~= 'Cinema Manager' then
+    if PlayerData[player].job ~= 'cinema' then
         AddPlayerChat(player, "You must be a cinema manager to do this.")
     end
 end)
 
-AddRemoteEvent("StartCinemaJob", function(player) 
-    PlayerData[player].job = 'Cinema Manager'
-    CallRemoteEvent(player, "RPNotify:HUDEvent", "job", "Cinema Manager")
+AddRemoteEvent("StartCinemaJob", function(player) --this gets called np
+    PlayerData[player].job = 'cinema'
 end)
-AddRemoteEvent("StopCinemaJob", function(player)
+AddRemoteEvent("StopCinemaJob", function(player) -- wont do anything to the job status
     PlayerData[player].job = ''
+    IsCm = false
 end)
 AddRemoteEvent("RPNotify:ObjectInteract_cinemaenter", function(player, object)
     SetPlayerLocation(player, 173709, 198107, 2492)

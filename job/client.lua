@@ -93,7 +93,7 @@ function SelectedJob(selection, playerjob)
             mechanic = function()
                 CallRemoteEvent("StopMechanicJob")
             end,
-            cinema = function()
+            cinema = function() 
             CallRemoteEvent("StopCinemaJob")
             end
         }
@@ -116,7 +116,7 @@ function SelectedJob(selection, playerjob)
         mechanic = function()
             CallRemoteEvent("StartMechanicJob")
         end,
-        cinema = function()
+        cinema = function() 
             CallRemoteEvent("StartCinemaJob")
         end
     }   

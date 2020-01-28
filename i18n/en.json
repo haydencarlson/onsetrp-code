@@ -480,5 +480,11 @@
     "lottonumber": "Pick a number 1-150 (Costs $50)",
     "less_then_zero": "Quantity less then or equal to 0",
     "dirty_bar_buyer": "Buys stolen bars",
-    "cannot_spawn_work_vehicle": "Something is in the way"
+    "cannot_spawn_work_vehicle": "Something is in the way",
+    "cinema": "Cinema Manager",
+    "police": "Police Officer",
+    "thief": "Thief",
+    "mechanic": "Mechanic",
+    "medic": "Medic",
+    "citizen": "citizen"
 }

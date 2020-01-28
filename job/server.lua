@@ -63,12 +63,23 @@ AddRemoteEvent("JobGuyInteract", function(player, jobguyid)
     ShowSelectJob(player)
 end)
 
+AddCommand("iscm", function(player)
+    print(IsCm)
+end)
+
+
 function JobSelected(player, selection)
     if selection ~= PlayerData[player].job then
         CallRemoteEvent(player, "CUI:Close", "job_selection", true)
         CallRemoteEvent(player, "SelectedJob", selection, PlayerData[player].job)
         if selection ~= "police" then
             CallRemoteEvent(player, 'KNotify:Send', "Your new job: " .. selection, "#0f0")
+        end
+        if selection == "cinema" then
+            IsCm = true
+        end
+        if selection == "cinema" and IsCm == true then
+            return
         end
         CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
         CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
@@ -97,7 +108,7 @@ function ShowSelectJob(player)
     local i = 1;
     for k, v in pairs(text) do
         i = i + 1;
-        CallRemoteEvent(player, "CUI:AddOption", k, k, v['short_desc'], "Select")
+        CallRemoteEvent(player, "CUI:AddOption", k, _(k), v['short_desc'], "Select")
     end
     CallRemoteEvent(player, "CUI:Show", "job_selection", true)
 end
