@@ -25,6 +25,9 @@ local cameraPaths = {
     mechanic = {
         hasCamera = false
     },
+    cinema = {
+        hasCamera = false
+    },
     medic = {
         hasCamera = false
     },
@@ -89,6 +92,9 @@ function SelectedJob(selection, playerjob)
             end,
             mechanic = function()
                 CallRemoteEvent("StopMechanicJob")
+            end,
+            cinema = function() 
+            CallRemoteEvent("StopCinemaJob")
             end
         }
         stopaction[playerjob]()
@@ -109,6 +115,9 @@ function SelectedJob(selection, playerjob)
         end,
         mechanic = function()
             CallRemoteEvent("StartMechanicJob")
+        end,
+        cinema = function() 
+            CallRemoteEvent("StartCinemaJob")
         end
     }   
     action[selection]()       

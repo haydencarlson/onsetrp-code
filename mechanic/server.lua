@@ -22,7 +22,6 @@ end)
 AddRemoteEvent("StartMechanicJob", function(player) 
     PlayerData[player].job = 'mechanic'
 end)
-
 AddRemoteEvent("StopMechanicJob", function(player)
     PlayerData[player].job = ''
 end)

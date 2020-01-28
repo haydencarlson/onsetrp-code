@@ -23,8 +23,6 @@ function OnPlayerDeath(player, instigator)
         AddPlayerChat(player,  message)
     end
 end
-AddRemoteEvent("OnPlayerDeath", OnPlayerDeath)
-
 AddEvent("OnPlayerDeath", OnPlayerDeath)
 
 AddCommand("tips", function(player)
@@ -76,6 +74,7 @@ function OnPackageStart(player)
 			local robber = PlayerData[v].job == "thief"
 			local citizen = PlayerData[v].job == "citizen" or PlayerData[v].job == ""
 			local mechanic = PlayerData[v].job == "mechanic"
+			local cinema = PlayerData[v].job == "cinema"
 			if police then
 				amount = 1000
 			elseif medic then
@@ -86,6 +85,8 @@ function OnPackageStart(player)
 				amount = 500
 			elseif mechanic then
 				amount = 700
+			elseif cinema then
+				amount = 350
 			end
 
 			AddBalanceToAccount(v, "cash", amount) 
@@ -110,7 +111,7 @@ function OnPackageStart(player)
 	CreateTimer(function(player)
 		for k, v in pairs (GetAllPlayers()) do
 			if PlayerData[v] ~= nil and PlayerData[v].accountid ~= nil then
-				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
+				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?';",
 				PlayerData[v].accountid)
 				mariadb_async_query(sql, query, GetPlayerTime, v)
 			end
@@ -155,13 +156,49 @@ AddCommand("unfreeze", function(player, instigator)
       	end
 end)
 
+function GetCurrentPlayTime(player)
+	CreateTimer(function(player)
+		for k, v in pairs (GetAllPlayers()) do
+			if GetAllPlayers() == true then
+				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
+				PlayerData[v].accountid)
+				mariadb_async_query(sql, query, GetPlayerTime, v)
+			end
+		end 
+	end, 1000, player)
+end
+AddEvent("OnPackageStart", GetCurrentPlayTime)
+
 function GetPlayerTime(player)
 	local result = mariadb_get_assoc(1)
-	local ptime = math.tointeger(result['time'])
+	local playtime = math.tointeger(result['time']) -- total time played on the server
 	PlayerData[player].time = math.floor(PlayerData[player].time + (GetTimeSeconds() - PlayerData[player].play_time))
 	PlayerData[player].play_time = GetTimeSeconds()
-	return PlayerData[player].time + ptime
+	return PlayerData[player].time + playtime -- returns current session play time + total play time on the server
 end
+
+function FormatUpTime(seconds)
+	local seconds = tonumber(seconds)
+  
+	if seconds <= 0 then
+		return "00:00:00"
+	else
+		hours = string.format("%02.f", math.floor(seconds / 3600));
+		mins = string.format("%02.f", math.floor(seconds / 60 - (hours * 60)));
+		secs = string.format("%02.f", math.floor(seconds - hours * 3600 - mins * 60));
+		return hours..":"..mins..":"..secs
+	end
+end
+
+AddCommand("uptime", function(player)
+	if GetTimeSeconds() > 3600 then
+		AddPlayerChat(player, "The server has been up for "..FormatUpTime(GetTimeSeconds()).." hours.")
+	elseif GetTimeSeconds() > 60 then
+		AddPlayerChat(player, "The server has been up for "..FormatUpTime(GetTimeSeconds()).." minutes.")
+	else
+		AddPlayerChat(player, "The server has been up for "..FormatUpTime(GetTimeSeconds()).." seconds.")
+	end
+end)
 
 function GetPlayerKD(player)
 	local deaths = PlayerData[player].deaths
