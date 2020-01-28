@@ -77,8 +77,7 @@ function JobSelected(player, selection)
         end
         if selection == "cinema" then
             IsCm = true
-        end
-        if selection == "cinema" and IsCm == true then
+        elseif selection == "cinema" and IsCm == true then
             return
         end
         CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
