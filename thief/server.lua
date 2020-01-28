@@ -139,7 +139,7 @@ AddRemoteEvent("RPNotify:ObjectInteract_trade_silver_bars", function(player, obj
     local total_silver_bars = PlayerData[player]['inventory']['dirty_silver_bar']
     if total_silver_bars ~= nil then
         math.randomseed(os.time())
-        random_bar_amount = math.random(150, 400)
+        random_bar_amount = math.random(100, 250)
         AddBalanceToAccount(player, "cash", random_bar_amount * total_silver_bars)
         RemoveInventory(player, "dirty_silver_bar", total_silver_bars)
         CallRemoteEvent(player, 'KNotify:Send', _("silver_bars_sold"), "#0f0")
