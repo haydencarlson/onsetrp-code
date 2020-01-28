@@ -3,7 +3,8 @@ globaldoors = {}
 
 function AddNewGlobalDoor(location, door, locked)
 	globaldoors[door] = {
-		locked = locked
+		locked = locked,
+		location = location
 	}
 end
 AddEvent("OnPackageStart", function()
@@ -127,10 +128,10 @@ AddEvent("OnPackageStart", function()
 	CreateDoor(63, 214722.000000, 191549.000000, 1211.000000, 180.0, true) --
 	CreateDoor(63, 215228.000000, 192407.000000, 1211.000000, -90.0, true) --
 	CreateDoor(64, 214090.000000, 192008.000000, 1211.000000, 180.0, true) --
-	CreateDoor(65, 214176.000000, 192436.000000, 1242.000000, 180.0, true) --
+	AddNewGlobalDoor('branchbankvault', CreateDoor(65, 214176.000000, 192436.000000, 1242.000000, 180.0, true), true) -- safe
 	
 	-- IWB Bank Underground
-	AddNewGlobalDoor('bankvault', CreateDoor(73, 185069.000000, 203285.000000, 295.000000, -90.0, true), true) -- safe
+	AddNewGlobalDoor('undergroundbankvault', CreateDoor(73, 185069.000000, 203285.000000, 295.000000, -90.0, true), true) -- safe
 	CreateDoor(74, 185034.000000, 201752.000000, 263.000000, -90.0, true) -- safe 2
 	CreateDoor(75, 186334.000000, 203004.000000, 68.000000, -90.0, true)
 
