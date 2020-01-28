@@ -40,22 +40,27 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 10*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "apple" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 5*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "peach" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 10*amount)
                 addPlayerThirst(player, 5*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "water_bottle" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 25*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "health_kit" then
                 if GetPlayerHealth(player) == 100 then
@@ -64,6 +69,7 @@ AddRemoteEvent("UseInventory", function(player, item, amount)
                     SetPlayerAnimation(player, "COMBINE")
                     RemoveInventory(player, item, amount)
                     SetPlayerHealth(player, 100)
+                    CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
                 end
             end
             if item == "repair_kit" then
