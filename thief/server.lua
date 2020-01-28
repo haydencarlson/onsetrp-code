@@ -1,7 +1,23 @@
 local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
-vaultTimer = 0 
-vaultLockProgress = 0
-local vaultProgressText 
+local bankVaults = {
+    branchbankvault = {
+        vaultTimer = 0,
+        vaultLockProgress = 0,
+        vaultProgressText = nil,
+        progressLocation = { 213795.546875, 192394.828125, 1309.1391601563 },
+        barsLocation = { 214035.46875, 192979.625, 1200.3317871094 },
+        textLocation = { 214105, 192949, 1400 }
+    },
+    undergroundbankvault = {
+        vaultTimer = 0,
+        vaultLockProgress = 0,
+        vaultProgressText = nil,
+        progressLocation = { 185145.328125, 203271.4375, 160.6325378418 },
+        barsLocation = { 183977, 202876, 50 },
+        textLocation = { 184098, 202955, 260 }
+    }
+}
+
 AddEvent("OnPackageStart", function()
     bankenterobject = CreateObject(340, 191911, 198230, 1309)
     SetObjectPropertyValue(bankenterobject, "action", "bankenter", true)
@@ -11,15 +27,18 @@ AddEvent("OnPackageStart", function()
     SetObjectPropertyValue(bankleaveobject, "action", "bankleave", true)
     CreateText3D(_("leave_bank").."\n".._("press_e"), 18, 189914, 201541, 813 + 120, 0, 0, 0)
 
-    bankbars = CreateObject(1487, 183977, 202876, 50)
-    CreateText3D(_("press_e"), 20, 183977, 202950, 250, 0, 0, 0)
-    SetObjectPropertyValue(bankbars, "action", "stealbars", true)
-
     bartradernpc = CreateNPC(151589, 203814, 363, 240)
     SetNPCPropertyValue(bartradernpc, "action", "trade_silver_bars", true)
     CreateText3D(_("press_e"), 18, 151584, 203722, 380, 0, 0, 0)
-
-    vaultProgressText = CreateText3D("Picklock Progress: " .. vaultLockProgress .. " %", 18, 185145.328125, 203271.4375, 160.6325378418, 0, 0, 0)
+    
+    for k, v in pairs(bankVaults) do
+        local vault = bankVaults[k]
+        local bankbars = CreateObject(1487, vault['barsLocation'][1], vault['barsLocation'][2], vault['barsLocation'][3])
+        CreateText3D(_("press_e"), 20, vault['textLocation'][1], vault['textLocation'][2], vault['textLocation'][3], 0, 0, 0)
+        SetObjectPropertyValue(bankbars, "action", "stealbars", true)
+        SetObjectPropertyValue(bankbars, "vault", k, true)
+        vault['vaultProgressText'] = CreateText3D("Picklock Progress: " .. vault['vaultLockProgress'] .. " %", 18, vault['progressLocation'][1], vault['progressLocation'][2], vault['progressLocation'][3], 0, 0, 0)
+    end
 end)
 
 AddEvent("OnPlayerInteractDoor", function( player, door, bWantsOpen )
@@ -58,9 +77,11 @@ end)
 AddRemoteEvent("PickOpenDoor", function(player)
     if PlayerData[player].job == "thief" and GetPlayerPropertyValue(player, "actionInProgress") == 'false' then
         if GetPlayerEquippedWeapon(player) ~= 0 then
-            if vaultTimer <= 0 then
-                local nearestdoor = GetNearestDoor(player)
-                if globaldoors[nearestdoor] ~= nil then
+            local nearestdoor = GetNearestDoor(player)
+            if globaldoors[nearestdoor] ~= nil then
+                local vaultTimer = bankVaults[globaldoors[nearestdoor]['location']]['vaultTimer']
+                local vaultLockProgress = bankVaults[globaldoors[nearestdoor]['location']]['vaultLockProgress']
+                if vaultTimer <= 0 then
                     if vaultLockProgress == 0 then
                         AddPlayerChatAll('<span color="#ff0000">' .. GetPlayerName(player) .. ' is hitting the bank vault. Stop them from stealing the banks money</>')
                     end
@@ -69,19 +90,19 @@ AddRemoteEvent("PickOpenDoor", function(player)
                     CallEvent("bankRob", player)
                     if vaultLockProgress + 5 < 100 then
                         Delay(2000, function()
-                            vaultLockProgress = vaultLockProgress + 5
-                            SetText3DText(vaultProgressText, "Picklock Progress: " .. vaultLockProgress .. " %")
+                            bankVaults[globaldoors[nearestdoor]['location']]['vaultLockProgress'] = vaultLockProgress + 5
+                            SetText3DText(bankVaults[globaldoors[nearestdoor]['location']]['vaultProgressText'], "Picklock Progress: " .. bankVaults[globaldoors[nearestdoor]['location']]['vaultLockProgress'] .. " %")
                             SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
                         end)
                     else
                         SetPlayerPropertyValue(player, 'actionInProgress', 'false', true)
-                        SetText3DText(vaultProgressText, "Picklock Progress: 100 %")
+                        SetText3DText(bankVaults[globaldoors[nearestdoor]['location']]['vaultProgressText'], "Picklock Progress: 100 %")
                         globaldoors[nearestdoor].locked = false
                         SetDoorOpen(nearestdoor, true)
                         CallRemoteEvent(player, 'KNotify:Send', _("door_picklocked"), "#0f0")
                         Delay(60000, function()
-                            SetText3DText(vaultProgressText, "Picklock Progress: 0 %")
-                            vaultLockProgress = 0
+                            SetText3DText(bankVaults[globaldoors[nearestdoor]['location']]['vaultProgressText'], "Picklock Progress: 0 %")
+                            bankVaults[globaldoors[nearestdoor]['location']]['vaultLockProgress'] = 0
                             if IsDoorOpen(nearestdoor) then
                                 SetDoorOpen(nearestdoor, false)
                             end
@@ -89,10 +110,10 @@ AddRemoteEvent("PickOpenDoor", function(player)
                         end)
                     end
                 else
-                    CallRemoteEvent(player, 'KNotify:Send', _("cant_picklock_here"), "#f00")
+                    CallRemoteEvent(player, 'KNotify:Send', _("cant_steal_bars_now"), "#f00")
                 end
             else
-                CallRemoteEvent(player, 'KNotify:Send', _("cant_steal_bars_now"), "#f00")
+                CallRemoteEvent(player, 'KNotify:Send', _("cant_picklock_here"), "#f00")
             end
         else
             CallRemoteEvent(player, 'KNotify:Send', "You need a weapon", "#f00")
@@ -131,9 +152,12 @@ AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
     if PlayerData[player].job == "thief" then
         local ox, oy, oz = GetObjectLocation(object)
         local x, y, z = GetPlayerLocation(player)
+        local vaultName = GetObjectPropertyValue(object, "vault")
+        local vaultTimer = bankVaults[vaultName]['vaultTimer']
+        
         if vaultTimer <= 0 then
             if GetDistance3D(x, y, z, ox, oy, oz) <= 250.00 then
-                vaultTimer = 600000
+                bankVaults[vaultName]['vaultTimer'] = 600000
                 SetPlayerAnimation(player, "PICKUP_MIDDLE")
                 Delay(1500, function() 
                     local thief = GetPlayerName(player)
@@ -158,8 +182,11 @@ AddRemoteEvent("RPNotify:ObjectInteract_stealbars", function(player, object)
 end)
 
 CreateTimer(function()
-    if vaultTimer > 0 then
-        vaultTimer = vaultTimer - 1000
+    for k, v in pairs(bankVaults) do
+        local timer =  bankVaults[k]['vaultTimer']
+        if timer > 0 then
+            bankVaults[k]['vaultTimer'] = bankVaults[k]['vaultTimer'] - 1000
+        end
     end
 end, 1000)
 
@@ -179,7 +206,3 @@ function GetNearestDoor(player)
     end
     return 0
 end
-
-AddCommand('obank', function(player) 
-    SetPlayerLocation(player, 151589, 203814, 363)
-end)
