@@ -5,6 +5,7 @@ AddEvent("OnPackageStart", function()
 end)
 
 AddEvent("default_laws", function()
+    Laws = {}
     CallEvent("SetLaws", "1", "No jaywalking.", "Fine: 100$")
     CallEvent("SetLaws", "2", "No heavy weapons allowed.", "Arrest: 2 mins")
     CallEvent("SetLaws", "3", "Handguns allowed with licence", "Fine: 500$")
