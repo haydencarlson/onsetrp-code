@@ -33,8 +33,12 @@ text = {
         long_desc = "Push F3 to open your mechanic menu. When you are near a car you can select repair vehicle to repair the players vehicle. Drive other peoples car into the mechanic mod spot to apply mods to their vehicle. Be sure to get money from them and it will come out of your pocket"
     },
     cinema = {
-        short_desc = "In charge the cinema and playing videos.",
+        short_desc = "In charge of the cinema and playing videos.",
         long_desc = "You can use /play [Video ID] and /play_fullscreen [Video ID] to play videos. </br> You can find video IDs in any youtube url, here is an example. </br> https://www.youtube.com/watch?v=<b>wYCLjsae0hg</b> </br>The video id for that video is <b>wYCLjsae0hg</b> </br> To play that video you would use the command like this; /play <b>wYCLjsae0hg</b> or /play_fullscreen <b>wYCLjsae0hg</b>"
+    },
+    mayor = {
+        short_desc = "In charge of the city and police force.",
+        long_desc = "You rule the city."
     }
 }
 
@@ -66,6 +70,9 @@ end)
 AddCommand("iscm", function(player)
     print(IsCm)
 end)
+AddCommand("ism", function(player)
+    print(IsMayor)
+end)
 
 
 function JobSelected(player, selection)
@@ -78,6 +85,11 @@ function JobSelected(player, selection)
         if selection == "cinema" then
             IsCm = true
         elseif selection == "cinema" and IsCm == true then
+            return
+        end
+        if selection == "mayor" then
+            IsMayor = true
+        elseif selection == "mayor" and IsMayor == true then
             return
         end
         CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")

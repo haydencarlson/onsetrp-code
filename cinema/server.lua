@@ -15,7 +15,7 @@ AddEvent("startembed", function(link)
     webuistreamer.SetWebUI3DUrl(cinemascreen, "https://youtube.com/embed/"..link.."?autoplay=1")
  end)
 
- AddEvent("startfs", function(link)
+ AddEvent("startfullscreen", function(link)
     webuistreamer.SetWebUI3DUrl(cinemascreen, "https://youtube.com/watch?v="..link.."?autoplay=1")
  end)
  
@@ -37,7 +37,7 @@ end)
 AddCommand("stopvideo", function(player)
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
         if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
-            webuistreamer.SetWebUI3DUrl(cinemascreen, "https://www.balancerp.com")
+            webuistreamer.SetWebUI3DUrl(cinemascreen, "http://www.gstatic.com/hostedimg/81360443f9dd01d2_large")
         end
     end
 
@@ -50,7 +50,7 @@ AddCommand("play_fullscreen", function(player, link)
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
         if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
             if link ~= nil then
-                CallEvent("startfs", link)
+                CallEvent("startfullscreen", link)
             else
                 AddPlayerChat(player, "Usage: /play [VideoID]")
             end
@@ -61,10 +61,10 @@ AddCommand("play_fullscreen", function(player, link)
     end
 end)
 
-AddRemoteEvent("StartCinemaJob", function(player) --this gets called np
+AddRemoteEvent("StartCinemaJob", function(player)
     PlayerData[player].job = 'cinema'
 end)
-AddRemoteEvent("StopCinemaJob", function(player) -- wont do anything to the job status
+AddRemoteEvent("StopCinemaJob", function(player)
     PlayerData[player].job = ''
     IsCm = false
 end)
