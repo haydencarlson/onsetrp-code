@@ -1,13 +1,8 @@
 function ResetScoreboard() {
-    let table = document.getElementsByClassName("table-server")[0];
-    table.getElementsByTagName("tbody")[0].innerHTML = table.rows[0].innerHTML;
-
-    let tableOuter = document.getElementsByClassName("table")[0];
-    tableOuter.scrollTop = 0;
+    $('#server-table-tbody').empty();
 }
 
 function AddPlayer(name, job, sessiontime, admin, ping) {
-    $('#server-table-tbody').empty();
     $('#server-table-tbody').append(
     `<tr>
         <td>${name}</td>
