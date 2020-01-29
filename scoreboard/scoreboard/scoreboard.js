@@ -1,5 +1,5 @@
 function ResetScoreboard() {
-    let table = document.getElementsByTagName("table")[0];
+    let table = document.getElementsByClassName("table-server")[0];
     table.getElementsByTagName("tbody")[0].innerHTML = table.rows[0].innerHTML;
 
     let tableOuter = document.getElementsByClassName("table")[0];
@@ -7,17 +7,27 @@ function ResetScoreboard() {
 }
 
 function AddPlayer(name, job, sessiontime, admin, ping) {
-    let table = document.getElementsByTagName("table")[0];
-    let tableContent = table.getElementsByTagName("tbody")[0].innerHTML;
-    table.getElementsByTagName("tbody")[0].innerHTML =
-        tableContent +
-        `<tr>
-    <td>${name}</td>
-    <td>${job.charAt(0).toUpperCase() + job.slice(1)}</td>
-    <td>${admin === 'true' ? "Admin" : "Player"}</td>
-    <td>${SecondsToTime(sessiontime)}</td>
-    <td>${ping}ms</td>
-  </tr>`;
+    $('#server-table-tbody').empty();
+    $('#server-table-tbody').append(
+    `<tr>
+        <td>${name}</td>
+        <td>${job.charAt(0).toUpperCase() + job.slice(1)}</td>
+        <td>${admin === 'true' ? "Admin" : "Player"}</td>
+        <td>${SecondsToTime(sessiontime)}</td>
+        <td>${ping}ms</td>
+    </tr>`);
+}
+
+function AddLaws(laws) {
+    $('#law-table-tbody').empty();
+    laws.forEach((law) => {
+        $('#law-table-tbody').append(`
+        <tr>
+            <td style="width:70px;">${law.id}</td>
+            <td style="min-width:250px; max-width: 250px;">${law.law_name}</td>
+            <td style="width:150px;">${law.action}</td>
+        </tr>`);
+    });
 }
 
 function SecondsToTime(d) {

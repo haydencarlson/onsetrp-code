@@ -28,7 +28,7 @@ body.center {
   position: relative;
 }
 
-.table {
+.table-server {
   width: 100%;
   height: calc(100% - 20px);
   overflow-y: auto;
@@ -44,6 +44,9 @@ table {
 table tr {
   height: 65px;
 }
+thead tr {
+  height: 55px;
+}
 
 table td {
   padding: 7px 14px;
@@ -53,25 +56,35 @@ table tr:nth-child(even)  {
   background: #343434;
 }
 
-table tr:nth-child(1) {
+.table-server th {
   position: sticky;
   top: 0;
 }
 
-table tr:nth-child(1), table tr:nth-child(1) td {
+.law-table th {
   height: 36px;
-  text-align: left;
+  text-align: center;
   background: #3684ff;
   font-weight: 600;
   text-transform: uppercase;
+  width: 20%;
 }
 
-table tr:nth-child(1) td:first-child {
-  width: 35%;
+.table-server th {
+  height: 36px;
+  text-align: center;
+  background: #3684ff;
+  font-weight: 600;
+  text-transform: uppercase;
+  width: 20%;
 }
 
-table tr:nth-child(1) td > img {
-  height: 60%;
+table td {
+  text-align: center;
+}
+
+.table-server img {
+  height: 40%;
 }
 
 ::-webkit-scrollbar {
@@ -105,4 +118,17 @@ table tr:nth-child(1) td > img {
 
 .server > .players {
   float: right;
+}
+
+.laws {
+  width:500px;
+  height: 50%;
+  background-color:#171717;
+  margin-right: 30px;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
 }

@@ -64,7 +64,8 @@
         "drugs/basic/config.lua",
         "drugs/basic/plants.lua",
         "drugs/basic/server.lua",
-	"cinema/server.lua"
+        "cinema/server.lua",
+        "mayor/server.lua"
     ],
     "client_scripts": [
         "hunger/client.lua",

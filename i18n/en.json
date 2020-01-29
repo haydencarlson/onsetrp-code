@@ -486,5 +486,6 @@
     "thief": "Thief",
     "mechanic": "Mechanic",
     "medic": "Medic",
-    "citizen": "citizen"
+    "citizen": "Citizen",
+    "mayor": "Mayor"
 }
