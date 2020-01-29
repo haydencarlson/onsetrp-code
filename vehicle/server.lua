@@ -83,6 +83,7 @@ function OnPackageStart()
                         local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=1 WHERE `id` = ?;",
                         VehicleData[v].garageid)
                         mariadb_async_query(sql, query)
+                    else return false
                     end
                     DestroyVehicleData(v)
                     DestroyVehicle(v)

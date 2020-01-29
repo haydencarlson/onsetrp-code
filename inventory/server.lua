@@ -186,6 +186,8 @@ function AddInventory(player, item, amount)
             DisplayPlayerBackpack(player, 1)
         end
         return true
+    elseif (item == "bitcoin") == nil then
+        return false
     else
         return false
     end
