@@ -1,5 +1,5 @@
-ws = ImportPackage("webuistreamer")
-local web = ws.CreateRemoteWebUI3D( 173430.34375, 198950.296875, 2900.1923828125, 0.0, -360.0, 0.0, 1280, 720, 60, 2200)
+webuistreamer = ImportPackage("webuistreamer")
+cinemascreen = webuistreamer.CreateRemoteWebUI3D( 173430.34375, 198950.296875, 2900.1923828125, 0.0, -360.0, 0.0, 1280, 720, 60, 2200)
 
 AddEvent("OnPackageStart", function()
     cinemaenterobject = CreateObject(340, 173869, 197698, 1310)
@@ -12,16 +12,16 @@ AddEvent("OnPackageStart", function()
 end)
 
 AddEvent("startembed", function(link)
-    ws.SetWebUI3DUrl(web, "https://youtube.com/embed/"..link.."?autoplay=1")
+    webuistreamer.SetWebUI3DUrl(cinemascreen, "https://youtube.com/embed/"..link.."?autoplay=1")
  end)
 
- AddEvent("startfs", function(link)
-    ws.SetWebUI3DUrl(web, "https://youtube.com/watch?v="..link.."?autoplay=1")
+ AddEvent("startfullscreen", function(link)
+    webuistreamer.SetWebUI3DUrl(cinemascreen, "https://youtube.com/watch?v="..link.."?autoplay=1")
  end)
  
 AddCommand("play", function(player, link)
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
-        if PlayerData[v].job == 'cinema' then
+        if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
             if link ~= nil then 
                 CallEvent("startembed", link)
             else
@@ -33,12 +33,24 @@ AddCommand("play", function(player, link)
         AddPlayerChat(player, "You must be a cinema manager to do this.")
     end 
 end)
+ 
+AddCommand("stopvideo", function(player)
+    for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
+        if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
+            webuistreamer.SetWebUI3DUrl(cinemascreen, "http://www.gstatic.com/hostedimg/81360443f9dd01d2_large")
+        end
+    end
+
+    if PlayerData[player].job ~= 'cinema' then
+        AddPlayerChat(player, "You must be a cinema manager to do this.")
+    end 
+end)
 
 AddCommand("play_fullscreen", function(player, link) 
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
-        if PlayerData[v].job == 'cinema' then
+        if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
             if link ~= nil then
-                CallEvent("startfs", link)
+                CallEvent("startfullscreen", link)
             else
                 AddPlayerChat(player, "Usage: /play [VideoID]")
             end
@@ -49,10 +61,10 @@ AddCommand("play_fullscreen", function(player, link)
     end
 end)
 
-AddRemoteEvent("StartCinemaJob", function(player) --this gets called np
+AddRemoteEvent("StartCinemaJob", function(player)
     PlayerData[player].job = 'cinema'
 end)
-AddRemoteEvent("StopCinemaJob", function(player) -- wont do anything to the job status
+AddRemoteEvent("StopCinemaJob", function(player)
     PlayerData[player].job = ''
     IsCm = false
 end)

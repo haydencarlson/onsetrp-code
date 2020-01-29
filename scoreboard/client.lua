@@ -14,6 +14,7 @@ AddEvent("OnPackageStart", Scoreboard_OnPackageStart)
 function Scoreboard_OnKeyPress(key)
   if key == 'Tab' then
     CallRemoteEvent('RequestScoreboardUpdate')
+    CallRemoteEvent('RequestScoreboardLaws')
     SetInputMode(INPUT_GAMEANDUI)
     SetWebVisibility(ScoreboardUI, WEB_VISIBLE)
   end
@@ -45,3 +46,8 @@ function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, ad
   end
 end
 AddRemoteEvent('OnServerScoreboardUpdate', Scoreboard_OnServerScoreboardUpdate)
+
+function Scoreboard_OnServerLawUpdate(laws)
+  ExecuteWebJS(ScoreboardUI, 'AddLaws(' .. laws .. ')')
+end
+AddRemoteEvent('OnServerLawUpdate', Scoreboard_OnServerLawUpdate)
