@@ -40,7 +40,7 @@ AddEvent("OnPlayerJoin", function(player)
 end)
 
 AddRemoteEvent("StartMedicJob", function(player)
-    if PlayerData[player].job == "" then
+    if PlayerData[player].job == "" or PlayerData[player].job == 'citizen' then
         local jobCount = 0
         for k,v in pairs(PlayerData) do
             if v.job == "medic" then

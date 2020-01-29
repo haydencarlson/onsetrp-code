@@ -13,6 +13,7 @@ AddEvent("OnPackageStart", Scoreboard_OnPackageStart)
 
 function Scoreboard_OnKeyPress(key)
   if key == 'Tab' then
+    ShowMouseCursor(true)
     CallRemoteEvent('RequestScoreboardUpdate')
     CallRemoteEvent('RequestScoreboardLaws')
     SetInputMode(INPUT_GAMEANDUI)
@@ -23,6 +24,7 @@ AddEvent('OnKeyPress', Scoreboard_OnKeyPress)
 
 function Scoreboard_OnKeyRelease(key)
   if key == 'Tab' then
+    ShowMouseCursor(false)
     SetInputMode(INPUT_GAME)
     SetWebVisibility(ScoreboardUI, WEB_HIDDEN)
   end

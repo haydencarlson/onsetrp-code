@@ -66,7 +66,7 @@ AddRemoteEvent("StartCinemaJob", function(player)
 end)
 AddRemoteEvent("StopCinemaJob", function(player)
     PlayerData[player].job = ''
-    IsCm = false
+    isCm = false
 end)
 AddRemoteEvent("RPNotify:ObjectInteract_cinemaenter", function(player, object)
     SetPlayerLocation(player, 173709, 198107, 2492)
