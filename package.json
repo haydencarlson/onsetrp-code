@@ -117,7 +117,8 @@
         "companies/client.lua",
         "drugs/basic/client.lua",
         "drugs/basic/functions_c.lua",
-        "drugs/basic/actions.lua"
+        "drugs/basic/actions.lua",
+	    "essentials/materials/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -206,6 +207,8 @@
         "client/files/icons/calcium.png",
         "client/files/icons/repairkit.png",
         "client/files/icons/ziptie.png",
-        "client/files/icons/cuffs.png"
+        "client/files/icons/cuffs.png",
+	"essentials/materials/newmat.pak",
+	"essentials/materials/posteffects.pak"
     ]
 }
