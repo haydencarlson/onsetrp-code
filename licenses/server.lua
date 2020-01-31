@@ -5,8 +5,7 @@ Licenses = {
     gun_license = 6000,
     helicopter_license = 30000
 }
-LicensesNpcLocation = { x = 183339, y = 182525, z = 1291, h = 0 }
--- LicensesNpcLocation = { x = 211564, y = 175848, z = 1307, h = 180 }
+LicensesNpcLocation = { x = 183400, y = 182513, z = 1290, h = 0 }
 LicensesNpc = {}
 
 AddEvent("OnPackageStart", function()

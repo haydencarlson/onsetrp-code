@@ -96,6 +96,7 @@ end)
 AddRemoteEvent("StartMayorJob", function(player)
     if PlayerData[player].job ~= 'mayor' then
         PlayerData[player].job = 'mayor'
+        UpdateClothes(player)
     end
 end)
 

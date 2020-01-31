@@ -104,7 +104,8 @@ AddRemoteEvent("StartDelivery", function(player)
             if isSpawnable then
                 local vehicle = CreateVehicle(24, deliveryNpc[nearestDelivery].spawn[1], deliveryNpc[nearestDelivery].spawn[2], deliveryNpc[nearestDelivery].spawn[3], deliveryNpc[nearestDelivery].spawn[4])
                 PlayerData[player].job_vehicle = vehicle
-                CreateVehicleData(player, vehicle, 24, "DLVRY")
+                CreateVehicleData(player, vehicle, 24, "DELIVERY", 100)
+                SetVehicleRespawnParams(vehicle, false)
                 SetVehiclePropertyValue(vehicle, "locked", true, true)
                 PlayerData[player].job = "delivery"
                 return

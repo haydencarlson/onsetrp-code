@@ -10,12 +10,12 @@ AddRemoteEvent("PlayAudioFile", PlayAudioFile)
 
 -- Keybinding
 function OnKeyPress(key)
-    if key == "V" and not onCharacterCreation then
+    if key == FPS_KEY and not GetPlayerBusy() then
 		if IsFirstPersonCamera() then
 			EnableFirstPersonCamera(false)
 		else
 			EnableFirstPersonCamera(true)
-			SetNearClipPlane(25)
+			SetNearClipPlane(10)
 		end
 	end
 end

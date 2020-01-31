@@ -63,6 +63,7 @@ end)
 
 AddRemoteEvent("StartCinemaJob", function(player)
     PlayerData[player].job = 'cinema'
+    UpdateClothes(player)
 end)
 AddRemoteEvent("StopCinemaJob", function(player)
     PlayerData[player].job = ''

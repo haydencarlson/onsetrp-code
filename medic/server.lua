@@ -12,11 +12,16 @@ local medicPoint = {
 
 local medicNpcCached = {}
 local playerMedic = {}
+local maxMedics = 10
 
 AddEvent("OnPlayerSpawn", function(player)
     if(GetPlayerPropertyValue(player, "reviveHint") ~= nil) then
-		DestroyText3D(GetPlayerPropertyValue(player, "reviveHint"))
-    end
+	DestroyText3D(GetPlayerPropertyValue(player, "reviveHint"))
+	end
+
+	if PlayerData and PlayerData[player] and (PlayerData[player].health_state == "no_medic" or PlayerData[player].health_state == "dead") then
+		PlayerData[player].inventory = {}
+	end
 end)
 
 AddEvent("OnPlayerQuit", function(player)
@@ -40,51 +45,34 @@ AddEvent("OnPlayerJoin", function(player)
 end)
 
 AddRemoteEvent("StartMedicJob", function(player)
-    if PlayerData[player].job == "" or PlayerData[player].job == 'citizen' then
-        local jobCount = 0
-        for k,v in pairs(PlayerData) do
-            if v.job == "medic" then
-            jobCount = jobCount + 1
-            end
-        end
-		if jobCount == 10 then
-			return CallRemoteEvent(player, 'KNotify:Send', _("job_full"), "#f00")
-        end
+    local nearestMedic = GetNearestMedic(player)
+    if PlayerData[player].job == "" then
+	local jobCount = 0
+	for k,v in pairs(PlayerData) do
+	    if v.job == "medic" then
+		jobCount = jobCount + 1
+	    end
+	end
+	if jobCount >= maxMedics then
+	    return CallRemoteEvent(player, 'KNotify:Send', _("job_full"), "#f00")
+	end
         if PlayerData[player].job_vehicle ~= nil then
             DestroyVehicle(PlayerData[player].job_vehicle)
             DestroyVehicleData(PlayerData[player].job_vehicle)
             PlayerData[player].job_vehicle = nil
         else
-            local vehicle = CreateVehicle(8, 212758.125, 173967.53125, 1291.8017578125, -90)
-            PlayerData[player].job_vehicle = vehicle
-            CreateVehicleData(player, vehicle, 8, "MEDIC")
-            SetVehiclePropertyValue(vehicle, "locked", true, true)
+			local vehicle = CreateVehicle(8, 212758.125, 173967.53125, 1291.8017578125, 180)
+			PlayerData[player].job_vehicle = vehicle
+			CreateVehicleData(player, vehicle, 8, "EMS")
+			SetVehicleRespawnParams(vehicle, false)
+			SetVehiclePropertyValue(vehicle, "locked", true, true)
 			PlayerData[player].job = "medic"
 			CallRemoteEvent(player, 'KNotify:Send', _("join_medic"), "#0f0")
-            CallRemoteEvent(player, "UpdateMedicUniform", player)
-            SetupUpdateMedicUniform(player)
-            return
+			CallRemoteEvent(player, "UpdateMedicUniform", player)
+			UpdateClothes(player)
+			return
         end
     end
-end)
-
-function SetupUpdateMedicUniform(player)
-    for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
-		if(PlayerData[v] ~= nil and PlayerData[player].job == "medic" and player ~= v) then
-			CallRemoteEvent(v, "UpdateMedicUniform", player)
-		end
-    end
-end
-AddRemoteEvent("SetupUpdateMedicUniform", SetupUpdateMedicUniform)
-
-AddRemoteEvent("SetupMedicUniformOnStreamIn", function(player, otherplayer)
-    if PlayerData[otherplayer] == nil then
-	return
-    end
-    if(PlayerData[otherplayer].job ~= "medic") then
-	return
-    end
-    CallRemoteEvent(player, "UpdateMedicUniform", otherplayer)
 end)
 
 AddRemoteEvent("StopMedicJob", function(player,spawncar)
@@ -95,7 +83,7 @@ AddRemoteEvent("StopMedicJob", function(player,spawncar)
 			PlayerData[player].job_vehicle = nil
 		end
 		PlayerData[player].job = ""
-		RemoveUniformServer(player)
+		UpdateClothes(player)
 		playerMedic[player] = nil
     end
 end)
@@ -154,10 +142,10 @@ AddRemoteEvent("MedicDoRevive", function(player,deadplayer)
 	    SetPlayerAnimation(player, "STOP")
 	    SetPlayerRespawnTime(deadplayer, 100)
 	    PlayerData[deadplayer].health_state = "revived"
-		SetPlayerSpawnLocation(deadplayer, PlayerData[deadplayer].death_pos[1], PlayerData[deadplayer].death_pos[2], PlayerData[deadplayer].death_pos[3], 90)
-		CallRemoteEvent(player, 'KNotify:Send', _("revive_player_success"), "#0f0")
+	    SetPlayerSpawnLocation(deadplayer, PlayerData[deadplayer].death_pos[1], PlayerData[deadplayer].death_pos[2], PlayerData[deadplayer].death_pos[3], 90)
+	    CallRemoteEvent(player, 'KNotify:Send', _("revive_player_success"), "#0f0")
 		CallRemoteEvent(player, 'KNotify:Send', _("revive_reward"), "#0f0")
-	    PlayerData[player].bank_balance = PlayerData[player].bank_balance + 200
+		PlayerData[player].bank_balance = PlayerData[player].bank_balance + 200
 	    DestroyText3D(GetPlayerPropertyValue(deadplayer, "reviveHint"))
 	    if(GetPlayerPropertyValue(deadplayer, "medic_on_the_way") ~= nil) then
 			local reviver = GetPlayerPropertyValue(deadplayer, "medic_on_the_way")

@@ -18,6 +18,11 @@ function OnPlayerChat(player, message)
         local message = message_action[PlayerData[player].admin]
         AddPlayerChat(v, message)
     end
+
+    local query = mariadb_prepare(sql, "INSERT INTO logs VALUES (NULL, UNIX_TIMESTAMP(), '?');",
+		message)
+
+	mariadb_async_query(sql, query)
 end
 AddEvent("OnPlayerChat", OnPlayerChat)
 -- Global chat
@@ -33,7 +38,7 @@ AddCommand("/", function(player, ...)
     if tonumber (PlayerData[player].admin) == 1 then
         message = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
     else
-    message = '<span color="#008000">[Global] </><span>'..GetPlayerName(player)..':</> '..message
+        message = '<span color="#008000">[Global] </><span>'..GetPlayerName(player)..':</> '..message
     end
     AddPlayerChatAll(message)
 end)
@@ -70,7 +75,7 @@ AddCommand("cinema", function(player)
     end
     SetPlayerLocation(player, 173747.000000, 198165.000000, 2532.000000)
 end)
-AddCommand("police", function(player)
+AddCommand("policeplace", function(player)
     if PlayerData[player].admin ~= 1 then
         return
     end
@@ -99,6 +104,13 @@ AddCommand("spec", function(player)
         return
     end
     SetPlayerSpectate( player, true)
+end)
+
+AddCommand("end_spec", function(player)
+    if PlayerData[player].admin ~= 1 then
+        return
+    end
+    SetPlayerSpectate( player, false)
 end)
 
 AddCommand("tppos", function(player, x, y, z)

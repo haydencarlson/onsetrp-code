@@ -67,7 +67,7 @@ end)
 
 AddRemoteEvent("StartThiefJob", function(player)
     PlayerData[player].job = "thief"
-    ChangeToThiefClothing(player)
+    UpdateClothes(player)
 end)
 
 AddRemoteEvent("StopThiefJob", function(player)

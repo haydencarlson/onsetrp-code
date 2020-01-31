@@ -29,7 +29,7 @@ AddRemoteEvent("DropGun", function(player)
                 end)    
             end
     else
-        return CallRemoteEvent(player, "MakeNotification", _("nothing_todrop"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+        return CallRemoteEvent(player, 'KNotify:Send', _("nothing_todrop"), "#f00")
     end
 end)
 
@@ -62,7 +62,7 @@ AddRemoteEvent("PickupGun", function(player, streamedObjects)
                 local item = "weapon_" .. tostring(model)
                 local space = AddInventory(player, item, 1)
                 if not space then
-                    return CallRemoteEvent(player, "MakeNotification",_("inventory_not_enough_space"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+                    return CallRemoteEvent(player, 'KNotify:Send', _("inventory_not_enough_space"), "#f00")
                 end
 		        SetPlayerAnimation(player, "STOP")
                 if GetPlayerWeapon(player, slot) ~= 1 then
@@ -77,7 +77,7 @@ AddRemoteEvent("PickupGun", function(player, streamedObjects)
                 end
                 DestroyObject(closest.id) 
                 SetPlayerAnimation(player, "PICKUP_LOWER")
-                CallRemoteEvent(player, "MakeNotification", _("store_item"), "linear-gradient(to right, #00b09b, #96c93d)")
+                CallRemoteEvent(player, 'KNotify:Send', _("store_item"), "#0f0")
             end
         end
     end

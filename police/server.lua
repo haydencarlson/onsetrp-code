@@ -79,7 +79,10 @@ AddRemoteEvent("StartPoliceJob", function(player)
 			return CallRemoteEvent(player, 'KNotify:Send', _("job_full"), "#f00")
 		end
 		PlayerData[player].job = "police"
-		GetUniformServer(player)
+		SetPlayerWeapon(player, 4, 200, false, 1, true)
+		SetPlayerWeapon(player, 21, 50, false, 2, true)
+		SetPlayerArmor(player, 100)
+		UpdateClothes(player)
 		CallRemoteEvent(player, 'KNotify:Send', _("join_police"), "#0f0")
 		return
 	end 
@@ -123,7 +126,7 @@ AddRemoteEvent("StartStopPolice", function(player)
 		end
 		CallRemoteEvent(player, "RPNotify:HUDEvent", "job", "police")
 		PlayerData[player].job = "police"
-		GetUniformServer(player)
+		UpdateClothes(player)
 		CallRemoteEvent(player, 'KNotify:Send', _("join_police"), "#0f0")
 		return
     end

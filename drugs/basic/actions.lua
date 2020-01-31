@@ -69,18 +69,20 @@ function Refresh()
 		
 		if GetObjectPropertyValue(v, "action") ~= nil then
 			local px,py,pz = GetObjectLocation(v)
-			if GetDistance3D(x,y,z,px,py,pz) <= GetObjectPropertyValue(v, "action_range") then
-				got = true
-				action = GetObjectPropertyValue(v, "action")
-				if GetObjectPropertyValue(v, "action_attr") ~= nil then
-					attr = GetObjectPropertyValue(v, "action_attr")
-				end
+			if GetObjectPropertyValue(v, "action_range") ~= nil then
+				if GetDistance3D(x,y,z,px,py,pz) <= GetObjectPropertyValue(v, "action_range") then
+					got = true
+					action = GetObjectPropertyValue(v, "action")
+					if GetObjectPropertyValue(v, "action_attr") ~= nil then
+						attr = GetObjectPropertyValue(v, "action_attr")
+					end
 
-				if GetObjectPropertyValue(v, "action_type") ~= nil then
-					callType = GetObjectPropertyValue(v, "action_type")
-				end
+					if GetObjectPropertyValue(v, "action_type") ~= nil then
+						callType = GetObjectPropertyValue(v, "action_type")
+					end
 
-				CallEvent("KNotify:SendPress", GetObjectPropertyValue(v, "action_text"))
+					CallEvent("KNotify:SendPress", GetObjectPropertyValue(v, "action_text"))
+				end
 			end
 		end
 	end
