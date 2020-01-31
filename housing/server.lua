@@ -786,7 +786,24 @@ houses = {
         owner = 0,
         spawn = {-173915.4375, -50723.91796875, 1244.5828857422, 0},
         text = {-173912.359375, -50595.3359375, 1227.9490966797},
-        doors = {}
+        doors = {
+            {
+                entity = -1,
+                model = 20,
+                x = -173865,
+                y = -50645,
+                z = 1147,
+                r = 270
+            },
+            {
+                entity = -1,
+                model = 24,
+                x = -173922,
+                y = -51310,
+                z = 1144,
+                r = 180
+            }
+        }
     },
     {
         id = 29,
@@ -2289,7 +2306,6 @@ function OnPackageStart()
             SaveHouseData(k)
 
         end
-        print("All houses have been saved !")
     end, 30000)
 
 end
@@ -2349,7 +2365,6 @@ AddEvent("database:connected", function()
             end
         end
     end)
-
 end)
 
 AddRemoteEvent("interactHouse", function(player, door)

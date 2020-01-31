@@ -17,7 +17,7 @@ AddRemoteEvent("SetupMedic", function(medicnpc)
 end)
 
 AddEvent("OnKeyPress", function( key )
-    if key == "E" then
+    if key == INTERACT_KEY then
 	local NearestMedic = GetNearestMedic()
 	if NearestMedic ~= 0 then
 	    Dialog.show(medicNpcMenu)
@@ -38,7 +38,7 @@ AddEvent("OnKeyPress", function( key )
 	    end
 	end
     end
-    if key == "F3" and not onSpawn and not onCharacterCreation then
+    if key == JOB_MENU_KEY and not onSpawn and not onCharacterCreation then
 	CallRemoteEvent("OpenMedicMenu")
     end
 end)
@@ -72,27 +72,17 @@ function GetNearestMedic()
     local x, y, z = GetPlayerLocation()
 
     for k,v in pairs(GetStreamedNPC()) do
-	local x2, y2, z2 = GetNPCLocation(v)
-	local dist = GetDistance3D(x, y, z, x2, y2, z2)
+		local x2, y2, z2 = GetNPCLocation(v)
+		local dist = GetDistance3D(x, y, z, x2, y2, z2)
 
-	if dist < 250.0 then
-	    for k,i in pairs(medicNpc) do
-		if v == i then
-		    return v
+		if dist < 250.0 then
+			for k,i in pairs(medicNpc) do
+				if v == i then
+					return v
+				end
+			end
 		end
-	    end
-	end
     end
 
     return 0
 end
-
-function UpdateMedicUniform(playerToUpdate)
-    SetPlayerClothingPreset(playerToUpdate, 17)
-end
-
-AddRemoteEvent("UpdateMedicUniform", UpdateMedicUniform)
-
-AddEvent("OnPlayerStreamIn", function(player, otherplayer)
-    CallRemoteEvent("SetupMedicUniformOnStreamIn", player, otherplayer)
-end)

@@ -16,7 +16,7 @@ AddRemoteEvent("LicenseSetup", function(licenseNpc)
 end)
 
 function OnKeyPress(key)
-    if key == "E" and not onSpawn and not onCharacterCreation and not UIOpen then
+    if key == INTERACT_KEY and not GetPlayerBusy() then
         local nearestNpc = GetNearestLicenseNpc()
         if nearestNpc ~= 0 then
             CallRemoteEvent("LicenseInteract", nearestNpc)

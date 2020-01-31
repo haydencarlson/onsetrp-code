@@ -6,28 +6,32 @@ gatherTable = {
         gather_item = "unprocessed_rock",
         gather_tool = "pickaxe",
         process_zone = { 209483, 207916, 1283 },
-        process_item = "processed_rock"
+        process_item = "processed_rock",
+        pickup_animation = "PICKAXE_SWING"
     },
     {
         gather_zone = { 181257, 222843, 675 },
         gather_item = "unprocessed_rock",
         gather_tool = "pickaxe",
         process_zone = { 182051, 227958, 117 },
-        process_item = "processed_rock"
+        process_item = "processed_rock",
+        pickup_animation = "PICKAXE_SWING"
     },
     {
         gather_zone = { 110192, 131749, 5305 },
         gather_item = "unprocessed_rock",
         gather_tool = "pickaxe",
         process_zone = { 109786, 129557, 5722 },
-        process_item = "processed_rock"
+        process_item = "processed_rock",
+        pickup_animation = "PICKAXE_SWING"
     },
     {
         gather_zone = { -96766, 88886, 180 },
         gather_item = "unprocessed_rock",
         gather_tool = "pickaxe",
         process_zone = { -82629, 90991, 481 },
-        process_item = "processed_rock"
+        process_item = "processed_rock",
+        pickup_animation = "PICKAXE_SWING"
     },
     {
         gather_zone = { 232464, 193521, 112 },

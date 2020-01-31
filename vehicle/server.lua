@@ -2,11 +2,41 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 
 VehicleData = {}
 
-function CreateVehicleData(player, vehicle, modelid, license_plate)
+VehicleTrunkSlots = { -- slots for vehicles
+    vehicle_1= 205,
+    vehicle_2= 50,
+    vehicle_3= 80,
+    vehicle_4= 215,
+    vehicle_5= 205,
+    vehicle_6= 90,
+    vehicle_7= 315,
+    vehicle_8= 50,
+    vehicle_9= 10,
+    vehicle_10= 10,
+    vehicle_11= 140,
+    vehicle_12= 100,
+    vehicle_13= 100,
+    vehicle_14= 100,
+    vehicle_15= 100,
+    vehicle_16= 100,
+    vehicle_17= 540,
+    vehicle_18= 540,
+    vehicle_19= 205,
+    vehicle_20= 10,
+    vehicle_21= 100,
+    vehicle_22= 475,
+    vehicle_23= 475,
+    vehicle_24= 10,
+    vehicle_25= 160
+}
+
+function CreateVehicleData(player, vehicle, modelid, license_plate, fuel)
     if license_plate ~= nil then
         SetVehicleLicensePlate(vehicle, license_plate)
     end
     VehicleData[vehicle] = {}
+
+    local fuel = fuel or 100
 
     VehicleData[vehicle].garageid = 0
     VehicleData[vehicle].owner = PlayerData[player].accountid
@@ -14,7 +44,7 @@ function CreateVehicleData(player, vehicle, modelid, license_plate)
     VehicleData[vehicle].modelid = modelid
     VehicleData[vehicle].inventory = {}
     VehicleData[vehicle].keys = {}
-    VehicleData[vehicle].fuel = 100
+    VehicleData[vehicle].fuel = fuel
 
     print("Data created for "..vehicle)
 end
@@ -29,7 +59,6 @@ function OnPackageStart()
         print("All vehicle have been saved !")
     end, 15000)
     
-
     CreateTimer(function()
         local vehicleToDelete = nil
         for k,v in pairs(GetAllVehicles()) do
@@ -96,10 +125,11 @@ AddEvent("OnPackageStart", OnPackageStart)
 
 
 function SaveVehicleData(vehicle) 
-    local query = mariadb_prepare(sql, "UPDATE player_garage SET ownerid = '?', inventory = '?' WHERE id = '?' LIMIT 1;",
-        VehicleData[vehicle].owner,
-        json_encode(VehicleData[vehicle].inventory),
-        VehicleData[vehicle].garageid
+    local query = mariadb_prepare(sql, "UPDATE player_garage SET ownerid = '?', inventory = '?', fuel = ? WHERE id = '?' LIMIT 1;",
+    VehicleData[vehicle].owner,
+    json_encode(VehicleData[vehicle].inventory),
+    VehicleData[vehicle].fuel,
+    VehicleData[vehicle].garageid
     )
     
     mariadb_query(sql, query)
@@ -303,3 +333,74 @@ function RemoveVehicleInventory(vehicle, item, amount)
         end
     end
 end
+
+AddRemoteEvent("ToggleEngine", function(player, vehicle)
+    if vehicle ~= 0 then
+        if (GetPlayerVehicleSeat(player) ~= 1) then
+            return 
+        else
+            if GetVehicleEngineState(vehicle) then
+                StopVehicleEngine(vehicle)
+            else
+                if VehicleData[vehicle] ~= nil then
+                    if VehicleData[vehicle].fuel > 0 then
+                        StartVehicleEngine(vehicle)
+                    end
+                else
+                    StartVehicleEngine(vehicle)
+                end
+            end
+        end
+    end
+end)
+
+AddRemoteEvent("ToggleTrunk", function(player)
+    if IsPlayerInVehicle(player) then
+        print("here")
+        if GetPlayerVehicleSeat(player) == 1 then
+            vehicle = GetPlayerVehicle(player)
+            if GetVehicleTrunkRatio(vehicle) > 0.0 and GetVehicleTrunkRatio(vehicle) < 60.0 then
+                -- Animation was already running
+            elseif GetVehicleTrunkRatio(vehicle) == 60.0 then
+                CreateCountTimer(function()
+                    openRatio = GetVehicleTrunkRatio(vehicle) - 0.5
+                    if openRatio >= 0.0 then
+                        SetVehicleTrunkRatio(vehicle, openRatio)
+                    end
+                end, 25, 120)
+            else
+                CreateCountTimer(function()
+                    openRatio = GetVehicleTrunkRatio(vehicle) + 0.5
+                    if openRatio <= 60.0 then
+                        SetVehicleTrunkRatio(vehicle, openRatio)
+                    end
+                end, 25, 120)
+            end
+        end
+    end
+end)
+
+AddRemoteEvent("ToggleHood", function(player)
+    if IsPlayerInVehicle(player) then
+        if GetPlayerVehicleSeat(player) == 1 then
+            vehicle = GetPlayerVehicle(player)
+            if GetVehicleHoodRatio(vehicle) > 0.0 and GetVehicleHoodRatio(vehicle) < 60.0 then
+                -- Animation was already running
+            elseif GetVehicleHoodRatio(vehicle) == 60.0 then
+                CreateCountTimer(function()
+                    openRatio = GetVehicleHoodRatio(vehicle) - 0.5
+                    if openRatio >= 0.0 then
+                        SetVehicleHoodRatio(vehicle, openRatio)
+                    end
+                end, 25, 120)
+            else
+                CreateCountTimer(function()
+                    openRatio = GetVehicleHoodRatio(vehicle) + 0.5
+                    if openRatio <= 60.0 then
+                        SetVehicleHoodRatio(vehicle, openRatio)
+                    end
+                end, 25, 120)
+            end
+        end
+    end
+end)

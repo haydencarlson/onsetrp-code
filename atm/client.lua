@@ -14,9 +14,10 @@ AddEvent("OnTranslationReady", function()
 end)
 
 AddEvent("OnKeyPress", function(key)
-    if key == "E" and not onCharacterCreation then
+    if key == INTERACT_KEY and not GetPlayerBusy() then
         local NearestATM = GetNearestATM()
 		if NearestATM ~= 0 then
+            CallRemoteEvent("account:setplayerbusy", GetPlayerId())
             CallRemoteEvent("atmInteract", NearestATM)
 		end
 	end
@@ -24,6 +25,7 @@ end)
 
 AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == atm then
+        CallRemoteEvent("account:setplayernotbusy", GetPlayerId())
         local args = { ... }
         if button == 1 then
             if args[1] ~= "" then

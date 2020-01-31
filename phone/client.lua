@@ -18,6 +18,12 @@ local GPSlocations = {
 	{name="Heroin Lab", show=true, locations={
 		{x=-5992,y=118385,z=1387}
 	}},
+	{name="Iron Ore Processing", show=true, locations={
+		{x=-82629,y=90991,z=481}
+	}},
+	{name="Iron Ingot Processing", show=true, locations={
+		{x=-191437,y=-31107,z=1148}
+	}},
 	{name="Acomore", show=true, locations={
 		{x=162725,y=205080,z=1358}
 	}},

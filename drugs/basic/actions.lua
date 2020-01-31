@@ -11,7 +11,6 @@ local attr = nil
 local callType = nil
 function OnKeyPress(key)
 	if key == "E" and action ~= nil and not cooldown and not GetPlayerPropertyValue(GetPlayerId(), 'cuffed') and not GetPlayerPropertyValue(GetPlayerId(), 'dead') then
-
 		if callType == nil or callType == "server" then
 			if attr ~= nil then
 				CallRemoteEvent(action, attr)
@@ -69,18 +68,20 @@ function Refresh()
 		
 		if GetObjectPropertyValue(v, "action") ~= nil then
 			local px,py,pz = GetObjectLocation(v)
-			if GetDistance3D(x,y,z,px,py,pz) <= GetObjectPropertyValue(v, "action_range") then
-				got = true
-				action = GetObjectPropertyValue(v, "action")
-				if GetObjectPropertyValue(v, "action_attr") ~= nil then
-					attr = GetObjectPropertyValue(v, "action_attr")
-				end
+			if GetObjectPropertyValue(v, "action_range") ~= nil then
+				if GetDistance3D(x,y,z,px,py,pz) <= GetObjectPropertyValue(v, "action_range") then
+					got = true
+					action = GetObjectPropertyValue(v, "action")
+					if GetObjectPropertyValue(v, "action_attr") ~= nil then
+						attr = GetObjectPropertyValue(v, "action_attr")
+					end
 
-				if GetObjectPropertyValue(v, "action_type") ~= nil then
-					callType = GetObjectPropertyValue(v, "action_type")
-				end
+					if GetObjectPropertyValue(v, "action_type") ~= nil then
+						callType = GetObjectPropertyValue(v, "action_type")
+					end
 
-				CallEvent("KNotify:SendPress", GetObjectPropertyValue(v, "action_text"))
+					CallEvent("KNotify:SendPress", GetObjectPropertyValue(v, "action_text"))
+				end
 			end
 		end
 	end

@@ -126,13 +126,14 @@ function spawnCarServerLoaded(player)
 
         local id = math.tointeger(result["id"])
         local modelid = math.tointeger(result["modelid"])
+        local fuel = math.tointeger(result["fuel"])
         local color = tostring(result["color"])
         local license_plate = tostring(result["license_plate"])
         local name = _("vehicle_"..modelid)
         local nos_equipped = math.tointeger(result['nos_equipped'])
         local inventory = json_decode(result['inventory'])
         local vehicle_durability = math.tointeger(result['vehicle_durability'])
-        local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=0 WHERE `id` = ?;",
+        local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`= 0 WHERE `id` = ?;",
             tostring(id)
         )
 
@@ -151,16 +152,16 @@ function spawnCarServerLoaded(player)
                     end
                 end
                 if isSpawnable then
-                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color, inventory, license_plate)
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2], v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color, inventory, license_plate, fuel)
                 else
-                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2] - 300, v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color, inventory, license_plate)
+                    return SpawnVehicle(modelid, v.spawn[1], v.spawn[2] - 300, v.spawn[3], v.spawn[4], nos_equipped, vehicle_durability, id, name, query, player, color, inventory, license_plate, fuel)
                 end
             end
         end
 	end
 end
 
-function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id, name, query, player, color, inventory, license_plate)
+function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id, name, query, player, color, inventory, license_plate, fuel)
     local vehicle = CreateVehicle(modelid, x, y, z, h)
     if nos_equipped == 1 then
         AttachVehicleNitro(vehicle , true)
@@ -171,7 +172,7 @@ function SpawnVehicle(modelid, x, y, z, h, nos_equipped, vehicle_durability, id,
     SetVehicleRespawnParams(vehicle, false)
     SetVehicleColor(vehicle, "0x"..color)
     SetVehiclePropertyValue(vehicle, "locked", true, true)
-    CreateVehicleData(player, vehicle, modelid, license_plate)
+    CreateVehicleData(player, vehicle, modelid, license_plate, fuel)
     VehicleData[vehicle].garageid = id
     VehicleData[vehicle].inventory = inventory
     mariadb_async_query(sql, query)
