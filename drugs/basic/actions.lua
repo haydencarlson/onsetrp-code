@@ -11,7 +11,6 @@ local attr = nil
 local callType = nil
 function OnKeyPress(key)
 	if key == "E" and action ~= nil and not cooldown and not GetPlayerPropertyValue(GetPlayerId(), 'cuffed') and not GetPlayerPropertyValue(GetPlayerId(), 'dead') then
-
 		if callType == nil or callType == "server" then
 			if attr ~= nil then
 				CallRemoteEvent(action, attr)

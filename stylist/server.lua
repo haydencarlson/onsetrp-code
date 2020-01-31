@@ -37,12 +37,11 @@ end)
 AddRemoteEvent("ModifyEvent", function(player, hairsChoice, shirtsChoice, pantsChoice, shoesChoice, colorChoice)
 local clothesRequest = "[\""..hairsModel[hairsChoice].."\",\""..colorChoice.."\",\""..shirtsModel[shirtsChoice].."\",\""..pantsModel[pantsChoice].."\",\""..shoesModel[shoesChoice].."\"]"
 	if GetPlayerCash(player) < 200 then
-		return CallRemoteEvent(player, "MakeNotification", _("not_enought_cash"), "linear-gradient(to right, #ff5f6d, #ffc371)")
+		return CallRemoteEvent(player, 'KNotify:Send', _("not_enought_cash"), "#f00")
 	else
 		RemovePlayerCash(player, 200)
-		CallRemoteEvent(player, "MakeNotification", _("clothes_changed"), "linear-gradient(to right, #00b09b, #96c93d)")
+		CallRemoteEvent(player, 'KNotify:Send', _("clothes_changed"), "#0f0")
 	end
-
 
 	local query = mariadb_prepare(sql, "UPDATE accounts SET clothing = '?' WHERE id = ? LIMIT 1;",
 	clothesRequest,

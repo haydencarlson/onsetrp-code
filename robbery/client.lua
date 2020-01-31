@@ -11,7 +11,7 @@ local currentRobbery = 0
 
 function OnPackageStart()
 	Stores = Config.Stores
-	refreshTimer = CreateTimer(CheckInRobbery, 100)
+	refreshTimer = CreateTimer(CheckInRobbery, 150)
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
@@ -68,6 +68,8 @@ AddEvent("OnKeyPress", OnKeyPress)
 
 function StartRobbery()
 	if currentRobbery ~= 0 and not Robbing then
+		AddPlayerChat("calling this")
+		
 		CallRemoteEvent("Kuzkay:RobberiesLaunch", currentRobbery)
 	end
 end

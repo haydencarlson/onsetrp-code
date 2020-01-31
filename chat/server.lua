@@ -10,19 +10,10 @@ function OnPlayerChat(player, message)
         return AddAdminChat(GetPlayerName(player).."("..player.."): "..string.sub(message, 2))
     end
     
-    local message_action = {
-        [0] = '<span>'..GetPlayerName(player)..':</> '..message,
-        [1] = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
-    }
     for k,v in pairs(streamedPlayers) do
-        local message = message_action[PlayerData[player].admin]
+        local message = '<span>'..GetPlayerName(player)..':</> '..message
         AddPlayerChat(v, message)
     end
-
-    local query = mariadb_prepare(sql, "INSERT INTO logs VALUES (NULL, UNIX_TIMESTAMP(), '?');",
-		message)
-
-	mariadb_async_query(sql, query)
 end
 AddEvent("OnPlayerChat", OnPlayerChat)
 -- Global chat
@@ -35,11 +26,21 @@ AddCommand("/", function(player, ...)
         end
         message = message..args[i]
     end
-    if tonumber (PlayerData[player].admin) == 1 then
-        message = '<span color="#8B0000">(Admin) </><span>'..GetPlayerName(player)..':</> '..message
-    else
-        message = '<span color="#008000">[Global] </><span>'..GetPlayerName(player)..':</> '..message
+    
+    message = '<span color="#f00000">[Global] </><span>'..GetPlayerName(player)..':</> '..message
+    AddPlayerChatAll(message)
+end)
+
+AddCommand("g", function(player, ...)
+    local args = { ... }
+    local message = ""
+    for i=1,#args do
+        if i > 1 then
+            message = message.." "
+        end
+        message = message..args[i]
     end
+    message = '<span color="#f00000">[Global] </><span>'..GetPlayerName(player)..':</> '..message
     AddPlayerChatAll(message)
 end)
 

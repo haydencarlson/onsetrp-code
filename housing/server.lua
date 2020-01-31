@@ -2365,7 +2365,6 @@ AddEvent("database:connected", function()
             end
         end
     end)
-
 end)
 
 AddRemoteEvent("interactHouse", function(player, door)

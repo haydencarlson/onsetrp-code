@@ -105,6 +105,11 @@ AddRemoteEvent("UseInventory", function(player, originPlayer, itemName, amount, 
                 CallRemoteEvent(player, 'KNotify:Send', _("not_enough_slots"), "#f00")
             end
         else
+            if itemName == "hiv" then
+                CallRemoteEvent(player, "AidsOff")
+                SetPlayerPropertyValue(player, "isRaped", 0, true)
+                RemoveInventory(player, itemName, amount)
+            end
             if itemName == "donut" or  itemName == "apple" or itemName == "peach" or itemName == "water_bottle" or itemName == "fish" then
                 UseItem(player, originPlayer, item, amount)
             end
