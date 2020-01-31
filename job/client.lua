@@ -94,10 +94,10 @@ function SelectedJob(selection, playerjob)
                 CallRemoteEvent("StopMechanicJob")
             end,
             cinema = function() 
-            CallRemoteEvent("StopCinemaJob")
+                CallRemoteEvent("StopCinemaJob")
             end,
             mayor = function() 
-            CallRemoteEvent("StopMayorJob")
+                CallRemoteEvent("StopMayorJob")
             end
         }
         stopaction[playerjob]()

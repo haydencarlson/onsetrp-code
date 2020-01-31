@@ -7,7 +7,7 @@
     <title>Scoreboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-
+    <script src="http://asset/onsetrp/client/files/javascript/jquery.js"></script>
     <script>
         (function(obj) {
             ue.game = {};
@@ -41,24 +41,33 @@
     <div class="laws">
         <div class="table">
             <table class="law-table">
+                <thead>
                     <tr>
-                        <td style="width:100px;">Law ID</th>
-                        <td style="min-width:250px; max-width: 250px;">Law</td>
-                        <td style="width:150px;">Penalty</td>
+                        <th style="width:100px;">Law ID</th>
+                        <th style="min-width:250px; max-width: 250px;">Law</th>
+                        <th style="width:150px;">Penalty</th>
                     </tr>
+                </thead>
+                <tbody id="law-table-tbody">
+                    
+                </tbody>
             </table>
         </div>
     </div>
     <div class="background">
         <div class="table">
             <table class="table-server">
-                <tr>
-                    <td>PLAYER</th>
-                            <td>Job</td>
-                            <td>Role</td>
-                            <td>Session Time</td>
-                            <td><img src="ping.png" /> PING</td>
+                <thead>
+                    <tr>
+                        <th>PLAYER</th>
+                        <th>Job</th>
+                        <th>Role</th>
+                        <th>Session Time</th>
+                        <th><img src="ping.png" /> PING</th>
                     </tr>
+                </thead>
+                <tbody id="server-table-tbody">
+                </tbody>
             </table>
         </div>
 

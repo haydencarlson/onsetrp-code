@@ -12,11 +12,13 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 6*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
 		if item == "donut" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 6*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
 			-- Needs to remove some health
             --if item == "cigarette" then
@@ -30,6 +32,8 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                     addPlayerHunger(player, 1*amount)
                     removePlayerThirst(player, 2*amount)
                     SetPlayerHealth(player, 11-amount)
+                    CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
+                    CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
                 end
 
              if item == "hiv" then
@@ -42,12 +46,15 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 9*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "ipecac_syrup" then
                 SetPlayerAnimation(player, "VOMIT")
                 RemoveInventory(player, item, amount)
                 removePlayerHunger(player, 66*amount)
                 removePlayerThirst(player, 33*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
 		
             if item == "rohypnol_tablet" then
@@ -56,103 +63,126 @@ AddRemoteEvent("UseInventory2", function(player, item, amount)
                 removePlayerHunger(player, 36*amount)
                 removePlayerThirst(player, 12*amount)
                 SetPlayerHealth(player, 6*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "salad" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 18*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "slice_pizza" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 27*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "steak" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 66*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "chicken_sandwich" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 42*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "chicken_poutine" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 81*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "coleslaw" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 6*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "chicken_bites" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 37*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "chicken_leg" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 25*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "chicken_wing" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 15*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "club_sandwich" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 35*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "fried_chicken_rice" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 75*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
             end
             if item == "chicken_soup" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 11*amount)
                 addPlayerThirst(player, 34*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "chicken_breast_combo" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerHunger(player, 100*amount)
                 addPlayerThirst(player, 100*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'hunger', PlayerData[player].hunger)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "water_bottle" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 60*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "orange_juice" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 42*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "milkshake" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 52*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "coca_cola" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 36*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "rum" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 22*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
             if item == "vodka" then
                 SetPlayerAnimation(player, "DRINKING")
                 RemoveInventory(player, item, amount)
                 addPlayerThirst(player, 25*amount)
+                CallRemoteEvent(player, 'RPNotify:HUDEvent', 'thirst', PlayerData[player].thirst)
             end
 
             if item == "scratch_ticket" then

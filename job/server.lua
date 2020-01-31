@@ -38,7 +38,7 @@ text = {
     },
     mayor = {
         short_desc = "In charge of the city and police force.",
-        long_desc = "You rule the city."
+        long_desc = "Use /setlaw [LawID 1-12] [Penalty (arrest, fine100, fine200, fine300, fine400, fine500)] [The Law]. Example: /setlaw 2 fine300 Speed limit in city is 30KM/H. If you die as the mayor you will lose your job and laws will be reset. Use the police department for your safety and to help lower crime rates."
     }
 }
 
@@ -67,14 +67,6 @@ AddRemoteEvent("JobGuyInteract", function(player, jobguyid)
     ShowSelectJob(player)
 end)
 
-AddCommand("iscm", function(player)
-    print(IsCm)
-end)
-AddCommand("ism", function(player)
-    print(IsMayor)
-end)
-
-
 function JobSelected(player, selection)
     if selection ~= PlayerData[player].job then
         CallRemoteEvent(player, "CUI:Close", "job_selection", true)
@@ -82,15 +74,19 @@ function JobSelected(player, selection)
         if selection ~= "police" then
             CallRemoteEvent(player, 'KNotify:Send', "Your new job: " .. selection, "#0f0")
         end
-        if selection == "cinema" then
-            IsCm = true
-        elseif selection == "cinema" and IsCm == true then
+
+        if selection == "cinema" and isCm then
             return
         end
-        if selection == "mayor" then
-            IsMayor = true
-        elseif selection == "mayor" and IsMayor == true then
+        if selection == "cinema" and isCm ~= true then
+            isCm = true
+        end
+
+        if selection == "mayor" and IsMayor then
             return
+        end
+        if selection == "mayor" and IsMayor ~= true then
+            IsMayor = true
         end
         CallRemoteEvent(player, "CUI:Create", "job_information", selection .. " job")
         CallRemoteEvent(player, "CUI:AddText", selection, text[selection]['long_desc'])
