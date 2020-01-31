@@ -94,7 +94,7 @@ AddRemoteEvent("openShop", function(inventory, items, shopid)
             if inventoryItem == item.name then
                 inventoryKey = inventoryKey + 1
                 lastInventoryItems[inventoryKey] = item
-                inventoryItems[inventoryKey] = inventoryCount.." x ".._(inventoryItem).." ("..inventoryCount.." x "..(item.weightInText)..")"
+                inventoryItems[inventoryKey] = inventoryCount.." x ".._(inventoryItem)
             end
         end
     end
