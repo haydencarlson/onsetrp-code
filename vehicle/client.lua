@@ -52,14 +52,37 @@ function getNearestVehicle()
 end
 
 function OnKeyPress(key)
-    if key == "U" and not onCharacterCreation then
+    if key == VEHICLE_LOCK_KEY and not GetPlayerBusy() then
         CallRemoteEvent("unlockVehicle")
     end
+    
     local nearestVehicle = getNearestVehicle()
 
-    if key == "F1" and not onCharacterCreation then
+    if key == VEHICLE_MENU_KEY and not GetPlayerBusy() then
         if nearestVehicle ~= 0 then
             CallRemoteEvent("ServerVehicleMenu", nearestVehicle)
+        end
+    end
+
+    if key == VEHICLE_ENGINE_KEY and not onSpawn and not onCharacterCreation and IsPlayerInVehicle() then
+        local player = GetPlayerId()
+        local veh = GetPlayerVehicle(player)
+        if veh ~= 0 then
+            CallRemoteEvent("ToggleEngine", veh)
+        end
+    end
+    
+    if key == VEHICLE_TRUNK_KEY and not onSpawn and not onCharacterCreation and IsPlayerInVehicle() then
+        local player = GetPlayerId()
+        if GetPlayerVehicle(player) ~= 0 then
+            CallRemoteEvent("ToggleTrunk")
+        end
+    end
+
+    if key == VEHICLE_HOOD_KEY and not onSpawn and not onCharacterCreation and IsPlayerInVehicle() then
+        local player = GetPlayerId()
+        if GetPlayerVehicle(player) ~= 0 then
+            CallRemoteEvent("ToggleHood")
         end
     end
 end

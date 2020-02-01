@@ -44,11 +44,13 @@ function LoadCardFromData(data) {
 
   for (var i = 0; i < keys.length; i++) {
     let key = keys[i]
- 
+    if (key === 'job' && data[key] === '') {
+      data[key] = "citizen";
+    }
     if (data[key] && data[key] != '') {
       cardInfoDiv.innerHTML = cardInfoDiv.innerHTML + `<tr class="one-info">
         <td class="info-title">${t(key)}</span>
-        <td class="info-content">${data[key]}</span>
+        <td class="info-content">${data[key].charAt(0).toUpperCase() + data[key].slice(1)}</span>
       </tr>`
     } else {
       cardInfoDiv.innerHTML = cardInfoDiv.innerHTML + `<tr class="one-info"><td class="info-title">&nbsp;</span><td class="info-content">&nbsp;</span></tr>`

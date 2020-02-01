@@ -82,9 +82,6 @@ AddEvent("OnNPCStreamIn", function(npc)
 	end
 end)
 
-
-
-
 AddRemoteEvent("CopyToClipboard", function(message)
 	CopyToClipboard(message)
 end)

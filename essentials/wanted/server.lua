@@ -3,11 +3,11 @@ local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...)
 local function GetNearestPlayer(player)
 	local x, y, z = GetPlayerLocation(player)
     for k, v in pairs(GetStreamedPlayersForPlayer(player)) do
-        if k ~= player then
+        if v ~= player then
             local x2, y2, z2 = GetPlayerLocation(k)
             local dist = GetDistance3D(x, y, z, x2, y2, z2)
             if dist < 150 then
-                return k
+                return v
             end
         end
 	end

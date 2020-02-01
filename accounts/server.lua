@@ -1,8 +1,8 @@
-local _ = function(k,...) return ImportPackage("i18n").t(GetPackageName(),k,...) end
+local _ = function(k, ...) return ImportPackage("i18n").t(GetPackageName(), k, ...) end
 PlayerData = {}
 serverTimeSeconds = 720
 function OnPackageStart()
-    -- Save all player data automatically 
+    -- Save all player data automatically
     CreateTimer(function()
 		for k, v in pairs(GetAllPlayers()) do
 			SavePlayerAccount(v)
@@ -24,10 +24,18 @@ function OnPackageStart()
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
-function OnPlayerSteamAuth(player)
+AddEvent("OnPackageStop", function()
+    for k, v in pairs(GetAllPlayers()) do
+        SavePlayerAccount(v)
+    end
+    print("All accounts have been saved !")
+end)
 
-	CreatePlayerData(player)
-	PlayerData[player].steamname = GetPlayerName(player)
+
+function OnPlayerSteamAuth(player)
+    
+    CreatePlayerData(player)
+    PlayerData[player].steamname = GetPlayerName(player)
     
     AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerName(player)..' from '..PlayerData[player].locale..' joined</>')
 	AddPlayerChatAll('<span color="#eeeeeeaa">'..GetPlayerCount()..' players online</>')
@@ -35,29 +43,29 @@ function OnPlayerSteamAuth(player)
     SetPlayerPropertyValue(player, "isWanted", 0, true)
 	
     -- First check if there is an account for this player
-	local query = mariadb_prepare(sql, "SELECT id FROM accounts WHERE steamid = '?' LIMIT 1;",
-    tostring(GetPlayerSteamId(player)))
-
+    local query = mariadb_prepare(sql, "SELECT id FROM accounts WHERE steamid = '?' LIMIT 1;",
+        tostring(GetPlayerSteamId(player)))
+    
     mariadb_async_query(sql, query, OnAccountLoadId, player)
 end
 AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
 function OnPlayerQuit(player)
     SavePlayerAccount(player)
-
+    GatheringCleanPlayerActions(player)-- → Gathering
     DestroyPlayerData(player)
 end
 AddEvent("OnPlayerQuit", OnPlayerQuit)
 
 function OnAccountLoadId(player)
-	if (mariadb_get_row_count() == 0) then
-		--There is no account for this player, continue by checking if their IP was banned		
+    if (mariadb_get_row_count() == 0) then
+        --There is no account for this player, continue by checking if their IP was banned
         local query = mariadb_prepare(sql, "SELECT FROM_UNIXTIME(bans.ban_time), bans.reason FROM bans WHERE bans.steamid = ?;",
-			tostring(GetPlayerSteamId(player)))
-
-		mariadb_async_query(sql, query, OnAccountCheckBan, player)
-	else
-		--There is an account for this player, continue by checking if it's banned
+            tostring(GetPlayerSteamId(player)))
+        
+        mariadb_async_query(sql, query, OnAccountCheckBan, player)
+    else
+        --There is an account for this player, continue by checking if it's banned
         PlayerData[player].accountid = mariadb_get_value_index(1, 1)
 		local query = mariadb_prepare(sql, "SELECT FROM_UNIXTIME(bans.ban_time), bans.reason FROM bans WHERE bans.steamid = ?;",
 			tostring(GetPlayerSteamId(player)))
@@ -81,10 +89,10 @@ function OnAccountCheckBan(player)
 end
 
 function CheckForIPBan(player)
-	local query = mariadb_prepare(sql, "SELECT ipbans.reason FROM ipbans WHERE ipbans.ip = '?' LIMIT 1;",
-		GetPlayerIP(player))
-
-	mariadb_async_query(sql, query, OnAccountCheckIpBan, player)
+    local query = mariadb_prepare(sql, "SELECT ipbans.reason FROM ipbans WHERE ipbans.ip = '?' LIMIT 1;",
+        GetPlayerIP(player))
+    
+    mariadb_async_query(sql, query, OnAccountCheckIpBan, player)
 end
 
 function OnAccountCheckIpBan(player)
@@ -127,10 +135,10 @@ function OnAccountCreated(player)
 end
 
 function LoadPlayerAccount(player)
-	local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = ?;",
-		PlayerData[player].accountid)
-
-	mariadb_async_query(sql, query, OnAccountLoaded, player)
+    local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = ?;",
+        PlayerData[player].accountid)
+    
+    mariadb_async_query(sql, query, OnAccountLoaded, player)
 end
 
 function AddBalanceToAccount(player, account, amount)
@@ -286,13 +294,13 @@ function GetServerTimeString()
 end
 
 function DestroyPlayerData(player)
-	if (PlayerData[player] == nil) then
-		return
-	end
-	
-	if PlayerData[player].job_vehicle ~= nil then
+    if (PlayerData[player] == nil) then
+        return
+    end
+    
+    if PlayerData[player].job_vehicle ~= nil then
         DestroyVehicle(PlayerData[player].job_vehicle)
-        DestroyVehicleData( PlayerData[player].job_vehicle)
+        DestroyVehicleData(PlayerData[player].job_vehicle)
         PlayerData[player].job_vehicle = nil
 	end
 	
@@ -358,9 +366,36 @@ function SetPlayerLoggedIn(player)
 end
 
 function IsAdmin(player)
-	return PlayerData[player].admin
+    return PlayerData[player].admin
 end
 
+function SetPlayerBusy(player)-- Shortcut to set a player in a busy state
+    local result = SetPlayerPropertyValue(player, "PlayerIsBusy", true, true)
+    return result
+end
+AddRemoteEvent("account:setplayerbusy", SetPlayerBusy)-- To do it clientside
+
+function SetPlayerNotBusy(player)-- Shortcut to set a player in a not busy state
+    local result = SetPlayerPropertyValue(player, "PlayerIsBusy", false, true)
+    return result
+end
+AddRemoteEvent("account:setplayernotbusy", SetPlayerNotBusy)-- To do it clientside
+
+function GetPlayerBusy(player)-- Shortcut to get the busy state of the player
+    local result = GetPlayerPropertyValue(player, "PlayerIsBusy") or false
+    return result
+end
+
+-- Exports
 AddFunctionExport("isAdmin", IsAdmin)
 AddFunctionExport("FindPlayerByAccountId", FindPlayerByAccountId)
 AddFunctionExport("AddBalanceToBankAccountSQL", AddBalanceToBankAccountSQL)
+AddFunctionExport("SetPlayerBusy", SetPlayerBusy)
+AddFunctionExport("SetPlayerNotBusy", SetPlayerNotBusy)
+AddFunctionExport("GetPlayerBusy", GetPlayerBusy)
+
+-- TO REMOVE
+function GetPlayerData(player)
+    return PlayerData[player]
+end
+AddFunctionExport("GetPlayerData", GetPlayerData)
