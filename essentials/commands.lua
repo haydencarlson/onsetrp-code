@@ -1,3 +1,5 @@
+local textscreen = {}
+
 AddCommand("vehdelete", function(player, vehicle) 
 if tonumber (PlayerData[player].admin) == 1 then
      local vehicle = GetNearestCar(player)
@@ -123,6 +125,7 @@ function cmd_get(player, otherplayer)
 
 	local x, y, z = GetPlayerLocation(player)
 	SetPlayerLocation(otherplayer, x, y + 50.0, z + 10.0)
+	AddPlayerChat(player, "You have teleported "..GetPlayerName(otherplayer))
 	AddPlayerChat(otherplayer, "You have been teleported to "..GetPlayerName(player))
 end
 AddCommand("bring", cmd_get)
@@ -144,23 +147,43 @@ function cmd_go(player, otherplayer)
 
 	local x, y, z = GetPlayerLocation(otherplayer)
 	SetPlayerLocation(player, x, y, z + 50.0 + 10.0)	
-	AddPlayerChat(player, "You have teleported to "..GetPlayerName(player))
+	AddPlayerChat(player, "You have teleported to "..GetPlayerName(otherplayer))
+	AddPlayerChat(otherplayer, "You have been teleported to "..GetPlayerName(player))
 end
 AddCommand("goto", cmd_go)
 
-function cmd_esp(player)
-	if (PlayerData[player].admin < 0) then
-		return AddPlayerChat(player, "Insufficient permission")
-	end
+AddCommand("addtext", function(player, size, height, ...)
+    local text = table.concat({...}, " ")
+    local x, y, z = GetPlayerLocation(player)     
+	if height or size or text ~= nil then
+		local amount = 0
+		local text_id = CreateText3D(text, size, x, y, z + height, 0,0,0)
+		table.insert(PlayerData[player].textscreens, { id = text_id, text= text })
+	end  
+end)
 
-	PlayerData[player].esp_enabled = not PlayerData[player].esp_enabled
-
-	local enable = 0
-	if (PlayerData[player].esp_enabled) then
-		enable = 1
-	end
-	CallRemoteEvent(player, "SetEnableESP", enable)
-
-	AddPlayerChat(player, "ESP: "..tostring(PlayerData[player].esp_enabled))
+local function DeleteTextscreen(player, id) 
+    for k, v in pairs(PlayerData[player].textscreens) do
+        if tonumber(v['id']) == tonumber(id) then
+			DestroyText3D(tonumber(v['id']))
+			table.remove(PlayerData[player].textscreens, k)
+		end
+    end
 end
-AddCommand("esp", cmd_esp)
+AddCommand("showtext", function(player)
+	for k, v in pairs(PlayerData[player].textscreens) do
+        if tonumber(v['id']) ~= nil then
+			AddPlayerChat(player, "ID: ".. v['id'] .. " Content: ".. v['text'] .."")
+		end
+	end
+end)
+
+AddCommand("removetext", function(player, id)
+	if id ~= nil then
+	DeleteTextscreen(player, id)
+	end
+	if id == nil then
+		AddPlayerChat(player, "Usage: /removetext [ID]")
+		AddPlayerChat(player, "Example: /removetext 411 - PS: Use /showtext to display all of your text screens.")
+	end
+end)

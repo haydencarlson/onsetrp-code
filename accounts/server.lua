@@ -51,6 +51,12 @@ end
 AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
 function OnPlayerQuit(player)
+	for k, v in pairs(PlayerData[player].textscreens) do
+        if tonumber(tonumber(v['id'])) ~= nil then
+			DestroyText3D(tonumber(v['id']))
+			table.remove(PlayerData[player].textscreens, k)
+		end
+	end
     SavePlayerAccount(player)
     GatheringCleanPlayerActions(player)-- → Gathering
     DestroyPlayerData(player)
@@ -275,6 +281,7 @@ function CreatePlayerData(player)
 	PlayerData[player].company = nil
 	PlayerData[player].company_upgrades = {}
 	PlayerData[player].employee = nil
+	PlayerData[player].textscreens = {}
     print("Data created for : "..player)
 end
 
