@@ -16,11 +16,7 @@ local maxMedics = 10
 
 AddEvent("OnPlayerSpawn", function(player)
     if(GetPlayerPropertyValue(player, "reviveHint") ~= nil) then
-	DestroyText3D(GetPlayerPropertyValue(player, "reviveHint"))
-	end
-
-	if PlayerData and PlayerData[player] and (PlayerData[player].health_state == "no_medic" or PlayerData[player].health_state == "dead") then
-		PlayerData[player].inventory = {}
+		DestroyText3D(GetPlayerPropertyValue(player, "reviveHint"))
 	end
 end)
 
