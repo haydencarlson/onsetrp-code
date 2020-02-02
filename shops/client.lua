@@ -108,6 +108,5 @@ AddRemoteEvent("openShop", function(inventory, items, shopid)
  
     Dialog.setSelectLabeledOptions(shopUI, 1, 1, inventoryItems)
     Dialog.setSelectLabeledOptions(shopUI, 2, 1, shopItems)
-    AddPlayerChat("Calling show shop dialog")
     Dialog.show(shopUI)
 end)
