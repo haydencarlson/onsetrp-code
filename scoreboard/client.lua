@@ -31,7 +31,7 @@ function Scoreboard_OnKeyRelease(key)
 end
 AddEvent('OnKeyRelease', Scoreboard_OnKeyRelease)
 
-function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, admin)
+function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, rank)
   if data == nil then return end
 
   ExecuteWebJS(ScoreboardUI, 'ResetScoreboard()')
@@ -40,7 +40,7 @@ function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, ad
     if v['job'] == "" then
       v['job'] = "Citizen"
     end
-    if admin == true then
+    if rank > 0 then
       ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] ..  ' (' .. v['id'] .. ')' .. '", "' .. v['job'] .. '", "' .. v['sessiontime'] .. '", "'.. tostring(v['rank']) .. '", ' .. v['ping'] .. ')')
     else
       ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] .. '", "' .. v['job'] .. '", "' .. v['sessiontime'] .. '", "'.. tostring(v['rank']) .. '", ' .. v['ping'] .. ')')

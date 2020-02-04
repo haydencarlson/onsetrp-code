@@ -19,7 +19,7 @@ function Scoreboard_RequestUpdate(player)
       }
     end
   end
-  local rank = GetPlayerRank(player)
+  local rank = IsRank(player)
   local session = GetPlayerTimes(player)
   CallRemoteEvent(player, 'OnServerScoreboardUpdate', _send, GetServerName(), #GetAllPlayers(), GetMaxPlayers(), rank, session)
 end
