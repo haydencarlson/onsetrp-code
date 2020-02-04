@@ -125,7 +125,6 @@
         "drugs/basic/client.lua",
         "drugs/basic/functions_c.lua",
         "drugs/basic/actions.lua",
-	    "essentials/materials/client.lua",
         "burdigalax/client/inventory.lua",
         "burdigalax/client/gasStation.lua",
         "vehicle/ragP/client.lua",
