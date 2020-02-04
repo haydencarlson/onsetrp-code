@@ -459,6 +459,7 @@ AddFunctionExport("isAdmin", IsAdmin) -- old
 AddFunctionExport("IsSupporter", IsSupporter)
 AddFunctionExport("IsRank", IsRank)
 AddFunctionExport("GetPlayerRank", GetPlayerRank)
+AddFunctionExport("GetRankById", GetRankById)
 AddFunctionExport("FindPlayerByAccountId", FindPlayerByAccountId)
 AddFunctionExport("AddBalanceToBankAccountSQL", AddBalanceToBankAccountSQL)
 AddFunctionExport("SetPlayerBusy", SetPlayerBusy)
