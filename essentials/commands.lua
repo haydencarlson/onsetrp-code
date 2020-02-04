@@ -49,7 +49,7 @@ function FormatPlayTime(seconds)
 end
 
 function cmd_mute(player, otherplayer, seconds, reason)
-	if tonumber(IsRank(player)) > 0 then
+	if tonumber(IsRank(player)) < 1 then
 		return AddPlayerChat(player, "Insufficient permission")
 	end
 
@@ -98,7 +98,7 @@ end
 AddCommand("kick", cmd_kick)
 
 function cmd_unmute(player, otherplayer)
-	if tonumber(IsRank(player)) > 0 then
+	if tonumber(IsRank(player)) < 1 then
 		return AddPlayerChat(player, "Insufficient permission")
 	end
 
