@@ -70,7 +70,7 @@ function GetNearestShop()
         local dist = GetDistance3D(x, y, z, x2, y2, z2)
  
         if dist < 250.0 then
-            for k,i in pairs(ShopIds) do
+            for k2, i in pairs(ShopIds) do
                 if v == i then
                     return v
                 end
@@ -98,9 +98,9 @@ AddRemoteEvent("openShop", function(inventory, items, shopid)
             end
         end
     end
- 
+    
     for key, item in pairs(items) do
-        shopItems[key] = "[".._("price_in_currency", item.price).."]  ".._(item.name)
+        shopItems[tostring(key)] = "[".._("price_in_currency", item.price).."]  ".._(item.name)
     end
  
     lastItems = items

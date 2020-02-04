@@ -43,7 +43,6 @@ local cameraPaths = {
         }
     }
 }
-
 local function GetNearestNpc()
 	local x, y, z = GetPlayerLocation()
     for k,v in pairs(GetStreamedNPC()) do
