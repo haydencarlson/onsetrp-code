@@ -1,7 +1,7 @@
 local textscreen = {}
 
 AddCommand("vehdelete", function(player, vehicle) 
-if tonumber (PlayerData[player].admin) == 1 then
+if tonumber(IsRank(player)) > 0 then
      local vehicle = GetNearestCar(player)
 	DestroyVehicle(vehicle)
 		end
@@ -49,7 +49,7 @@ function FormatPlayTime(seconds)
 end
 
 function cmd_mute(player, otherplayer, seconds, reason)
-	if (PlayerData[player].admin < 0) then
+	if tonumber(IsRank(player)) > 0 then
 		return AddPlayerChat(player, "Insufficient permission")
 	end
 
@@ -78,8 +78,27 @@ function cmd_mute(player, otherplayer, seconds, reason)
 end
 AddCommand("mute", cmd_mute)
 
+function cmd_ban(player, otherplayer, ...)
+	if tonumber(IsRank(player)) > 1 then
+	local reason = table.concat({...}, " ")
+	local message = "You have been banned by ".. GetPlayerName(player) .." \n Reason: ".. reason .." \n Time: ".. os.date('%Y-%m-%d %H:%M:%S', os.time()) ..""
+	mariadb_query(sql, "INSERT INTO `bans` (`steamid`, `admin`, `ban_time`, `reason`) VALUES ('"..PlayerData[tonumber(otherplayer)].steamid.."', '"..GetPlayerName(player).."', '"..os.time(os.date('*t')).."', '"..reason.."');")
+	KickPlayer(tonumber(otherplayer), message)
+	end
+end
+AddCommand("ban", cmd_ban)
+
+function cmd_kick(player, otherplayer, ...)
+	local reason = table.concat({...}, " ")
+	local message = "You have been kicked by ".. GetPlayerName(player) .." \n Reason: ".. reason ..""
+	if tonumber(IsRank(player)) > 0 then
+		KickPlayer(tonumber(otherplayer), message)
+	end
+end
+AddCommand("kick", cmd_kick)
+
 function cmd_unmute(player, otherplayer)
-	if (PlayerData[player].admin < 0) then
+	if tonumber(IsRank(player)) > 0 then
 		return AddPlayerChat(player, "Insufficient permission")
 	end
 
@@ -109,12 +128,12 @@ end
 AddCommand("unmute", cmd_unmute)
 
 function cmd_get(player, otherplayer)
-	if (PlayerData[player].admin < 0) then
+	if tonumber(IsRank(player)) < 1 then
 		return AddPlayerChat(player, "Insufficient permission")
 	end
 
 	if (otherplayer == nil) then
-		return AddPlayerChat(player, "Usage: /get <player>")
+		return AddPlayerChat(player, "Usage: /bring <player>")
 	end
 
 	otherplayer = tonumber(otherplayer)
@@ -131,7 +150,7 @@ end
 AddCommand("bring", cmd_get)
 
 function cmd_go(player, otherplayer)
-	if (PlayerData[player].admin < 0) then
+	if (tonumber(IsRank(player)) < 2) then
 		return AddPlayerChat(player, "Insufficient permission")
 	end
 

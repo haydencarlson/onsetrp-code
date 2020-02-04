@@ -160,7 +160,7 @@ function unlockVehicle(player)
     local nearestCar = GetNearestCar(player)
     local vehicle = VehicleData[nearestCar] 
     if nearestCar ~= 0 then
-        if PlayerData[player].admin == 1 then
+        if tonumber(IsRank(player)) > 0 then
             if GetVehiclePropertyValue(nearestCar, "locked") then
                 CallRemoteEvent(player, 'KNotify:Send', _("car_unlocked"), "#0f0")
                 SetVehiclePropertyValue(nearestCar, "locked", false, true)

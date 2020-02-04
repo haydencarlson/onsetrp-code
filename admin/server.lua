@@ -87,7 +87,7 @@ local vehicleList = {
 AddRemoteEvent("ServerAdminMenu", function(player)
     local playersIds = GetAllPlayers()
 
-    if tonumber(PlayerData[player].admin) == 1 then
+    if tonumber(IsRank(player)) > 2 then
         playersNames = {}
         for k,v in pairs(playersIds) do
             if PlayerData[v] ~= nil and PlayerData[v].name ~= nil and PlayerData[v].steamname ~= nil then
@@ -99,20 +99,28 @@ AddRemoteEvent("ServerAdminMenu", function(player)
     end
 end)
 
+
+AddCommand("setrank", function(player, target, rankid)
+    if tonumber(IsRank(player)) > 2 then
+    PlayerData[tonumber(target)].rank = tonumber(rankid)
+    AddPlayerChat(target, '<span color="#ff0000">'.. GetPlayerName(player) ..' Has made you a '.. GetRankById(tonumber(rankid)) ..' </>')
+    end
+end)
+
 AddCommand("jail", function(player, target)
-    if PlayerData[player].admin == 1 then
+    if tonumber(IsRank(player)) > 0 then
         SetPlayerLocation(target, -175307.578125, 83121.9921875, 2000.1500244141)
     end
 end)
 
 AddCommand("unjail", function(player, target)
-    if PlayerData[player].admin == 1 then
+    if tonumber(IsRank(player)) > 0 then
         SetPlayerLocation(target, 212727.4375, 175845.5, 1500.1500244141)
     end
 end)
 
 AddRemoteEvent("AdminTeleportToPlace", function(player, place)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
+    if tonumber(IsRank(player)) > 1 then return end
     for k,v in pairs(teleportPlace) do
         if k == place then
             SetPlayerLocation(player, v[1], v[2], v[3] + 200)
@@ -126,7 +134,7 @@ AddRemoteEvent("AdminTeleportToPlayer", function(player, toPlayer)
 end)
 
 AddRemoteEvent("AdminTeleportPlayer", function(toPlayer, player)
-    if tonumber(PlayerData[toPlayer].admin) ~= 1 then return end
+    if tonumber(IsRank(player)) > 1 then return end
     local x, y, z  = GetPlayerLocation(tonumber(toPlayer))
     SetPlayerLocation(player, x, y, z + 200)
 end)
@@ -169,7 +177,7 @@ AddRemoteEvent("AdminKickBan", function(player, toPlayer, type, reason)
 end)
 
 AddCommand("delveh", function(player)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
+    if tonumber(IsRank(player)) > 0 then return end
     local vehicle = GetPlayerVehicle(player)
 
     if vehicle ~= nil then

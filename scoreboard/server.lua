@@ -15,12 +15,12 @@ function Scoreboard_RequestUpdate(player)
         ['id'] = v,
         ['job'] = PlayerData[v].job,
         ['sessiontime'] = GetPlayerTimes(v),
-        ['admin'] = PlayerData[v].admin == 1
+        ['rank'] = GetPlayerRank(v)
       }
     end
   end
-  local admin = PlayerData[player].admin == 1
+  local rank = GetPlayerRank(player)
   local session = GetPlayerTimes(player)
-  CallRemoteEvent(player, 'OnServerScoreboardUpdate', _send, GetServerName(), #GetAllPlayers(), GetMaxPlayers(), admin, session)
+  CallRemoteEvent(player, 'OnServerScoreboardUpdate', _send, GetServerName(), #GetAllPlayers(), GetMaxPlayers(), rank, session)
 end
 AddRemoteEvent('RequestScoreboardUpdate', Scoreboard_RequestUpdate)

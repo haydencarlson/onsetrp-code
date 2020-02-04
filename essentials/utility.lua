@@ -125,7 +125,7 @@ end
 AddEvent("OnPackageStart", OnPackageStart)
 
 AddCommand("freeze", function(player, instigator)
-	if tonumber(PlayerData[player].admin) == 1 and IsValidPlayer(instigator) then
+	if tonumber(IsRank(player)) > 1 and IsValidPlayer(instigator) then
 		local adminname = GetPlayerName(player)
 		local playername = GetPlayerName(instigator)
 		local afmsg = "You have frozen: "..playername..""	
@@ -143,7 +143,7 @@ AddCommand("freeze", function(player, instigator)
 end)
 
 AddCommand("unfreeze", function(player, instigator)
-	if tonumber(PlayerData[player].admin) == 1 and IsValidPlayer(instigator) then
+	if tonumber(IsRank(player)) > 1 and IsValidPlayer(instigator) then
 		local adminname = GetPlayerName(player)
 		local unfreezemsg = "You have been unfrozen by: "..adminname..""
 		local playername = GetPlayerName(instigator)

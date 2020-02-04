@@ -1,7 +1,7 @@
 local noclipers = {}
 
 function noclip(player)
-if tonumber(PlayerData[player].admin) ~= 1 then return end
+if tonumber(IsRank(player)) > 1 then return end
     if (noclipers[tostring(player)]==nil) then
         noclipers[tostring(player)] = true
    CallRemoteEvent(player, "Setnoclip" , true )
@@ -17,14 +17,14 @@ if tonumber(PlayerData[player].admin) ~= 1 then return end
 end
 
 AddRemoteEvent("Setnoclipserver", function(player,bool)
-if tonumber(PlayerData[player].admin) ~= 1 then return end
+if tonumber(IsRank(player)) > 1 then return end
     noclipers[tostring(player)] = bool
   end)
 
 AddCommand("noclip", noclip)
 
 function tp_noc(player,x,y,z)
-if tonumber(PlayerData[player].admin) ~= 1 then return end
+if tonumber(IsRank(player)) > 1 then return end
     SetPlayerLocation(player, x, y, z)
 end
 

@@ -22,7 +22,7 @@ AddEvent("startembed", function(link)
 AddCommand("play", function(player, link)
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
         if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
-            if link ~= nil then 
+            if link ~= nil and PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then 
                 CallEvent("startembed", link)
             else
                 AddPlayerChat(player, "Usage: /play [VideoID]")
@@ -49,7 +49,7 @@ end)
 AddCommand("play_fullscreen", function(player, link) 
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
         if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
-            if link ~= nil then
+            if link ~= nil and PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
                 CallEvent("startfullscreen", link)
             else
                 AddPlayerChat(player, "Usage: /play [VideoID]")
