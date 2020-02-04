@@ -87,7 +87,7 @@ local vehicleList = {
 AddRemoteEvent("ServerAdminMenu", function(player)
     local playersIds = GetAllPlayers()
 
-    if tonumber(IsRank(player)) > 2 then
+    if tonumber(IsRank(player)) > 1 then
         playersNames = {}
         for k,v in pairs(playersIds) do
             if PlayerData[v] ~= nil and PlayerData[v].name ~= nil and PlayerData[v].steamname ~= nil then
@@ -140,11 +140,14 @@ AddRemoteEvent("AdminTeleportPlayer", function(toPlayer, player)
 end)
 
 AddRemoteEvent("AdminGiveWeapon", function(player, weaponName)
+    if tonumber(IsRank(player)) > 3 then
     weapon = weaponName:gsub("weapon_", "")
     SetPlayerWeapon(player, tonumber(weapon), 1000, true, 1, true)
+    end
 end)
 
 AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
+    if tonumber(IsRank(player)) > 3 then
     vehicle = vehicleName:gsub("vehicle_", "")
 
     local x, y, z = GetPlayerLocation(player)
@@ -154,14 +157,17 @@ AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
 
     SetVehicleRespawnParams(spawnedVehicle, false)
     SetPlayerInVehicle(player, spawnedVehicle)
+    end
 end)
 
 AddRemoteEvent("AdminGiveMoney", function(player, toPlayer, account, amount)
-    if account == "Cash" then
-        AddBalanceToAccount(tonumber(toPlayer), 'cash', amount)
-    end
-    if account == "Bank" then
-        PlayerData[tonumber(toPlayer)].bank_balance = PlayerData[tonumber(toPlayer)].bank_balance + tonumber(amount)
+    if tonumber(IsRank(player)) > 3 then 
+        if account == "Cash" then
+            AddBalanceToAccount(tonumber(toPlayer), 'cash', amount)
+        end
+        if account == "Bank" then
+            PlayerData[tonumber(toPlayer)].bank_balance = PlayerData[tonumber(toPlayer)].bank_balance + tonumber(amount)
+        end
     end
 end)
 
