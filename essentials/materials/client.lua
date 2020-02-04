@@ -38,10 +38,10 @@ end
 AddEvent("OnPackageStart", OnPackageStart)
 
 function OnKeyPress(key)
-    if key == "B" then
+    if key == "H" then
         added2 = not added2
         if added2 then
-          local posted = AddPostProcessMaterial("pe", UMaterialInterface.LoadFromAsset("/posteffects/PostProcess/PPM_TS_InkAndPaper"))
+          local posted = AddPostProcessMaterial("pe", UMaterialInterface.LoadFromAsset("/posteffects/PostProcess/PPM_TS_Pixelize"))
           AddPlayerChat(tostring(posted))
         else
             RemovePostProcessMaterial("pe")
@@ -54,7 +54,7 @@ function OnKeyPress(key)
     if key == "N" then
         added3 = not added3
         if added3 then
-          local postedi = AddPostProcessMaterial("pei", UMaterialInstance.LoadFromAsset("/posteffects/PostProcess/Instances/PPM_TS_InkAndPaper_SciFi"))
+          local postedi = AddPostProcessMaterial("pei", UMaterialInterface.LoadFromAsset("/posteffects/PostProcess/Instances/PPM_TS_Pixelize_CrossStitch"))
           AddPlayerChat(tostring(postedi))
         else
             RemovePostProcessMaterial("pei")

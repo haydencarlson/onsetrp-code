@@ -75,6 +75,7 @@ function OnPackageStart(player)
 			local citizen = PlayerData[v].job == "citizen" or PlayerData[v].job == ""
 			local mechanic = PlayerData[v].job == "mechanic"
 			local cinema = PlayerData[v].job == "cinema"
+			local mayor = PlayerData[v].job == "mayor"
 			if police then
 				amount = 1000
 			elseif medic then
@@ -87,6 +88,8 @@ function OnPackageStart(player)
 				amount = 700
 			elseif cinema then
 				amount = 350
+			elseif mayor then
+				amount = 1200
 			end
 
 			AddBalanceToAccount(v, "cash", amount) 
