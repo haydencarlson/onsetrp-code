@@ -120,7 +120,7 @@ AddCommand("unjail", function(player, target)
 end)
 
 AddRemoteEvent("AdminTeleportToPlace", function(player, place)
-    if tonumber(IsRank(player)) > 1 then return end
+    if tonumber(IsRank(player)) < 1 then return end
     for k,v in pairs(teleportPlace) do
         if k == place then
             SetPlayerLocation(player, v[1], v[2], v[3] + 200)
@@ -140,14 +140,14 @@ AddRemoteEvent("AdminTeleportPlayer", function(toPlayer, player)
 end)
 
 AddRemoteEvent("AdminGiveWeapon", function(player, weaponName)
-    if tonumber(IsRank(player)) > 3 then
+    if tonumber(IsRank(player)) > 2 then
     weapon = weaponName:gsub("weapon_", "")
     SetPlayerWeapon(player, tonumber(weapon), 1000, true, 1, true)
     end
 end)
 
 AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
-    if tonumber(IsRank(player)) > 3 then
+    if tonumber(IsRank(player)) > 2 then
     vehicle = vehicleName:gsub("vehicle_", "")
 
     local x, y, z = GetPlayerLocation(player)
@@ -161,7 +161,7 @@ AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
 end)
 
 AddRemoteEvent("AdminGiveMoney", function(player, toPlayer, account, amount)
-    if tonumber(IsRank(player)) > 3 then 
+    if tonumber(IsRank(player)) > 2 then 
         if account == "Cash" then
             AddBalanceToAccount(tonumber(toPlayer), 'cash', amount)
         end
