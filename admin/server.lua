@@ -87,15 +87,17 @@ local vehicleList = {
 AddRemoteEvent("ServerAdminMenu", function(player)
     local playersIds = GetAllPlayers()
 
-    if tonumber(PlayerData[player].admin) == 1 then
-        playersNames = {}
-        for k,v in pairs(playersIds) do
-            if PlayerData[v] ~= nil and PlayerData[v].name ~= nil and PlayerData[v].steamname ~= nil then
-                playersNames[tostring(v)] = PlayerData[v].name.." ["..PlayerData[v].steamname.."]"
-                ::continue::
+    if PlayerData[player] ~= nil then
+        if tonumber(PlayerData[player].admin) == 1 then
+            playersNames = {}
+            for k,v in pairs(playersIds) do
+                if PlayerData[v] ~= nil and PlayerData[v].name ~= nil and PlayerData[v].steamname ~= nil then
+                    playersNames[tostring(v)] = PlayerData[v].name.." ["..PlayerData[v].steamname.."]"
+                    ::continue::
+                end
             end
+            CallRemoteEvent(player, "OpenAdminMenu", teleportPlace, playersNames, weaponList, vehicleList)
         end
-        CallRemoteEvent(player, "OpenAdminMenu", teleportPlace, playersNames, weaponList, vehicleList)
     end
 end)
 
