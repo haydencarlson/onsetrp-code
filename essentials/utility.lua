@@ -68,7 +68,7 @@ end
 function OnPackageStart(player)
 	CreateTimer(function(player)
 		for _, v in pairs(GetAllPlayers()) do
-			if PlayerData[player] ~= nil then
+			if PlayerData[v] ~= nil then
 				local police = PlayerData[v].job == "police" or PlayerData[v].police == "0"
 				local medic = PlayerData[v].job == "medic"
 				local delivery = PlayerData[v].job == "delivery"
