@@ -36,23 +36,25 @@ end
 AddRemoteEvent("addPlayeHunger", addPlayerHunger)
 
 function removePlayerHunger(player, hunger)
-    -- Check if the hunger is higher then 0
-    if  PlayerData[player].hunger ~= 0 then
-        PlayerData[player].hunger = PlayerData[player].hunger - hunger
-    end
+    if PlayerData[player] ~= nil then
+        -- Check if the hunger is higher then 0
+        if  PlayerData[player].hunger ~= 0 then
+            PlayerData[player].hunger = PlayerData[player].hunger - hunger
+        end
 
-    -- Set hunger to 0 if it's lower then 0
-    if PlayerData[player].hunger < 0 then
-        PlayerData[player].hunger = 0
-    end
+        -- Set hunger to 0 if it's lower then 0
+        if PlayerData[player].hunger < 0 then
+            PlayerData[player].hunger = 0
+        end
 
-    -- Remove health to player if hunger is 0
-    if  PlayerData[player].hunger == 0 then
-        health = GetPlayerHealth(player) - 5
-        SetPlayerHealth(player, health)
+        -- Remove health to player if hunger is 0
+        if  PlayerData[player].hunger == 0 then
+            health = GetPlayerHealth(player) - 5
+            SetPlayerHealth(player, health)
+        end
+        CallRemoteEvent(player, "RPNotify:HUDEvent", "hunger", PlayerData[player].hunger)
+        SetPlayerPropertyValue(player, "hunger", PlayerData[player].hunger, true)
     end
-    CallRemoteEvent(player, "RPNotify:HUDEvent", "hunger", PlayerData[player].hunger)
-    SetPlayerPropertyValue(player, "hunger", PlayerData[player].hunger, true)
 end
 AddRemoteEvent("removePlayerHunger", removePlayerHunger)
 
