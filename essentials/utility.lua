@@ -68,44 +68,28 @@ end
 function OnPackageStart(player)
 	CreateTimer(function(player)
 		for _, v in pairs(GetAllPlayers()) do
-			if PlayerData[player] ~= nil then
-				local police = PlayerData[v].job == "police" or PlayerData[v].police == "0"
-				local medic = PlayerData[v].job == "medic"
-				local delivery = PlayerData[v].job == "delivery"
-				local robber = PlayerData[v].job == "thief"
-				local citizen = PlayerData[v].job == "citizen" or PlayerData[v].job == ""
-				local mechanic = PlayerData[v].job == "mechanic"
-				local cinema = PlayerData[v].job == "cinema"
-				if police then
-					amount = 1000
-				elseif medic then
-					amount = 600
-				elseif citizen then
-					amount = 150
-				elseif delivery then
-					amount = 500
-				elseif mechanic then
-					amount = 700
-				elseif cinema then
-					amount = 350
-				end
-
-				AddBalanceToAccount(v, "cash", amount) 
-				balance = GetPlayerCash(v)
-				message = '<span color="#00B159">You received a paycheck of </>$' ..amount
-				welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount
-				newbal = '<span color="#00B159">Your new balance is</> $' ..balance
-				criminal = 'You did not get a paycheck because you are a criminal.'
-
-				if citizen then
-					AddPlayerChat(v, welfare)
-					AddPlayerChat(v, newbal)
-				elseif police or medic or delivery then
-					AddPlayerChat(v, message)
-					AddPlayerChat(v, newbal)
-				elseif thief then
-					AddPlayerChat(v, criminal)
-				end		
+			local police = PlayerData[v].job == "police" or PlayerData[v].police == "0"
+			local medic = PlayerData[v].job == "medic"
+			local delivery = PlayerData[v].job == "delivery"
+			local robber = PlayerData[v].job == "thief"
+			local citizen = PlayerData[v].job == "citizen" or PlayerData[v].job == ""
+			local mechanic = PlayerData[v].job == "mechanic"
+			local cinema = PlayerData[v].job == "cinema"
+			local mayor = PlayerData[v].job == "mayor"
+			if police then
+				amount = 1000
+			elseif medic then
+				amount = 600
+			elseif citizen then
+				amount = 150
+			elseif delivery then
+				amount = 500
+			elseif mechanic then
+				amount = 700
+			elseif cinema then
+				amount = 350
+			elseif mayor then
+				amount = 1200
 			end
 		end
 	end, 600000, v)
@@ -124,7 +108,7 @@ end
 AddEvent("OnPackageStart", OnPackageStart)
 
 AddCommand("freeze", function(player, instigator)
-	if tonumber(PlayerData[player].admin) == 1 and IsValidPlayer(instigator) then
+	if tonumber(IsRank(player)) > 1 and IsValidPlayer(instigator) then
 		local adminname = GetPlayerName(player)
 		local playername = GetPlayerName(instigator)
 		local afmsg = "You have frozen: "..playername..""	
@@ -142,7 +126,7 @@ AddCommand("freeze", function(player, instigator)
 end)
 
 AddCommand("unfreeze", function(player, instigator)
-	if tonumber(PlayerData[player].admin) == 1 and IsValidPlayer(instigator) then
+	if tonumber(IsRank(player)) > 1 and IsValidPlayer(instigator) then
 		local adminname = GetPlayerName(player)
 		local unfreezemsg = "You have been unfrozen by: "..adminname..""
 		local playername = GetPlayerName(instigator)

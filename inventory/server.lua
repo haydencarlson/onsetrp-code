@@ -290,6 +290,8 @@ function AddInventory(inventoryId, item, amount, player)
         end
         UpdateUIInventory(player, inventoryId, item, PlayerData[inventoryId].inventory[item])
         return true
+    elseif (item == "bitcoin") == nil then
+        return false
     else
         return false
     end

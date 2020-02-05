@@ -51,6 +51,12 @@ end
 AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
 function OnPlayerQuit(player)
+	for k, v in pairs(PlayerData[player].textscreens) do
+        if tonumber(tonumber(v['id'])) ~= nil then
+			DestroyText3D(tonumber(v['id']))
+			table.remove(PlayerData[player].textscreens, k)
+		end
+	end
     SavePlayerAccount(player)
     GatheringCleanPlayerActions(player)-- → Gathering
     DestroyPlayerData(player)
@@ -180,6 +186,8 @@ function OnAccountLoaded(player)
 	else
 		local result = mariadb_get_assoc(1)
 		PlayerData[player].admin = math.tointeger(result['admin'])
+		PlayerData[player].rank = math.tointeger(result['rank'])
+		PlayerData[player].supporter = math.tointeger(result['supporter'])
 		PlayerData[player].bank_balance = math.tointeger(result['bank_balance'])
 		PlayerData[player].name = tostring(result['name'])
 		PlayerData[player].clothing = json_decode(result['clothing'])
@@ -248,6 +256,8 @@ function CreatePlayerData(player)
 	PlayerData[player].helicopter_license = 0
 	PlayerData[player].logged_in = false
 	PlayerData[player].admin = 0
+	PlayerData[player].rank = 0
+	PlayerData[player].supporter = 0
 	PlayerData[player].created = 0
 	PlayerData[player].locale = GetPlayerLocale(player)
 	PlayerData[player].steamid = GetPlayerSteamId(player)
@@ -275,6 +285,7 @@ function CreatePlayerData(player)
 	PlayerData[player].company = nil
 	PlayerData[player].company_upgrades = {}
 	PlayerData[player].employee = nil
+	PlayerData[player].textscreens = {}
     print("Data created for : "..player)
 end
 
@@ -335,8 +346,10 @@ function SavePlayerAccount(player)
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank = ?, supporter = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
+		PlayerData[player].rank,
+		PlayerData[player].supporter,
 		PlayerData[player].bank_balance,
 		100,
 		PlayerData[player].health_state,
@@ -364,9 +377,64 @@ end
 function SetPlayerLoggedIn(player)
     PlayerData[player].logged_in = true
 end
+AddCommand("getrankname", function(player)
+	local RankName = GetPlayerRank(player)
+	local message = "Your Rank is: "..RankName
+	AddPlayerChat(player, message)
+end)
 
-function IsAdmin(player)
-    return PlayerData[player].admin
+function GetPlayerRank(player)
+	local RankName = "Player"
+
+	if tonumber(IsRank(player)) < 1 and tonumber(IsSupporter(player)) > 0 then
+		RankName = "Supporter"
+	elseif IsRank(player) == 1 then
+		RankName = "Moderator"
+	elseif IsRank(player) == 2 then
+		RankName = "Administrator"
+	elseif IsRank(player) == 3 then
+		RankName = "Community Manager"
+	elseif IsRank(player) == 4 then
+		RankName = "Owner" 
+	end
+
+	if RankName ~= nil then
+		return tostring(RankName)
+	end
+
+end
+
+function GetRankById(id)
+	local RankName = "Player"
+
+	if id == 0 then
+		RankName = "player"
+	elseif id == 1 then
+		RankName = "Moderator"
+	elseif id == 2 then
+		RankName = "Administrator"
+	elseif id == 3 then
+		RankName = "Community Manager"
+	elseif id == 4 then
+		RankName = "Owner" 
+	end
+
+	if RankName ~= nil then
+		return tostring(RankName)
+	end
+
+end
+
+function IsAdmin(player) -- old
+    return PlayerData[player].admin == 1
+end
+
+function IsSupporter(player)
+    return PlayerData[player].supporter
+end
+
+function IsRank(player)
+    return PlayerData[player].rank
 end
 
 function SetPlayerBusy(player)-- Shortcut to set a player in a busy state
@@ -387,7 +455,11 @@ function GetPlayerBusy(player)-- Shortcut to get the busy state of the player
 end
 
 -- Exports
-AddFunctionExport("isAdmin", IsAdmin)
+AddFunctionExport("isAdmin", IsAdmin) -- old
+AddFunctionExport("IsSupporter", IsSupporter)
+AddFunctionExport("IsRank", IsRank)
+AddFunctionExport("GetPlayerRank", GetPlayerRank)
+AddFunctionExport("GetRankById", GetRankById)
 AddFunctionExport("FindPlayerByAccountId", FindPlayerByAccountId)
 AddFunctionExport("AddBalanceToBankAccountSQL", AddBalanceToBankAccountSQL)
 AddFunctionExport("SetPlayerBusy", SetPlayerBusy)

@@ -2,12 +2,12 @@ function ResetScoreboard() {
     $('#server-table-tbody').empty();
 }
 
-function AddPlayer(name, job, sessiontime, admin, ping) {
+function AddPlayer(name, job, sessiontime, rank, ping) {
     $('#server-table-tbody').append(
     `<tr>
         <td>${name}</td>
         <td>${job.charAt(0).toUpperCase() + job.slice(1)}</td>
-        <td>${admin === 'true' ? "Admin" : "Player"}</td>
+        <td style="min-width:200px; max-width: 200px;">${rank}</td>
         <td>${SecondsToTime(sessiontime)}</td>
         <td>${ping}ms</td>
     </tr>`);

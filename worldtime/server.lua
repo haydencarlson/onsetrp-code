@@ -34,7 +34,7 @@ end
 AddEvent("OnPlayerSpawn", OnPlayerSpawn)
 
 AddCommand("time", function(player, time)
-	if PlayerData[player].admin == 1 and (tonumber(time) >= 0 and tonumber(time) <= 23)then
+	if tonumber(IsRank(player)) > 2 and (tonumber(time) >= 0 and tonumber(time) <= 23)then
 		worldTime = tonumber(time)
 	end
 end)

@@ -87,34 +87,40 @@ local vehicleList = {
 AddRemoteEvent("ServerAdminMenu", function(player)
     local playersIds = GetAllPlayers()
 
-    if PlayerData[player] ~= nil then
-        if tonumber(PlayerData[player].admin) == 1 then
-            playersNames = {}
-            for k,v in pairs(playersIds) do
-                if PlayerData[v] ~= nil and PlayerData[v].name ~= nil and PlayerData[v].steamname ~= nil then
-                    playersNames[tostring(v)] = PlayerData[v].name.." ["..PlayerData[v].steamname.."]"
-                    ::continue::
-                end
+    if tonumber(IsRank(player)) > 1 then
+        playersNames = {}
+        for k,v in pairs(playersIds) do
+            if PlayerData[v] ~= nil and PlayerData[v].name ~= nil and PlayerData[v].steamname ~= nil then
+                playersNames[tostring(v)] = PlayerData[v].name.." ["..PlayerData[v].steamname.."]"
+                ::continue::
             end
             CallRemoteEvent(player, "OpenAdminMenu", teleportPlace, playersNames, weaponList, vehicleList)
         end
     end
 end)
 
+
+AddCommand("setrank", function(player, target, rankid)
+    if tonumber(IsRank(player)) > 2 then
+    PlayerData[tonumber(target)].rank = tonumber(rankid)
+    AddPlayerChat(target, '<span color="#ff0000">'.. GetPlayerName(player) ..' Has made you a '.. GetRankById(tonumber(rankid)) ..' </>')
+    end
+end)
+
 AddCommand("jail", function(player, target)
-    if PlayerData[player].admin == 1 then
+    if tonumber(IsRank(player)) > 0 then
         SetPlayerLocation(target, -175307.578125, 83121.9921875, 2000.1500244141)
     end
 end)
 
 AddCommand("unjail", function(player, target)
-    if PlayerData[player].admin == 1 then
+    if tonumber(IsRank(player)) > 0 then
         SetPlayerLocation(target, 212727.4375, 175845.5, 1500.1500244141)
     end
 end)
 
 AddRemoteEvent("AdminTeleportToPlace", function(player, place)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
+    if tonumber(IsRank(player)) > 1 then return end
     for k,v in pairs(teleportPlace) do
         if k == place then
             SetPlayerLocation(player, v[1], v[2], v[3] + 200)
@@ -128,17 +134,20 @@ AddRemoteEvent("AdminTeleportToPlayer", function(player, toPlayer)
 end)
 
 AddRemoteEvent("AdminTeleportPlayer", function(toPlayer, player)
-    if tonumber(PlayerData[toPlayer].admin) ~= 1 then return end
+    if tonumber(IsRank(player)) > 1 then return end
     local x, y, z  = GetPlayerLocation(tonumber(toPlayer))
     SetPlayerLocation(player, x, y, z + 200)
 end)
 
 AddRemoteEvent("AdminGiveWeapon", function(player, weaponName)
+    if tonumber(IsRank(player)) > 3 then
     weapon = weaponName:gsub("weapon_", "")
     SetPlayerWeapon(player, tonumber(weapon), 1000, true, 1, true)
+    end
 end)
 
 AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
+    if tonumber(IsRank(player)) > 3 then
     vehicle = vehicleName:gsub("vehicle_", "")
 
     local x, y, z = GetPlayerLocation(player)
@@ -148,14 +157,17 @@ AddRemoteEvent("AdminSpawnVehicle", function(player, vehicleName)
 
     SetVehicleRespawnParams(spawnedVehicle, false)
     SetPlayerInVehicle(player, spawnedVehicle)
+    end
 end)
 
 AddRemoteEvent("AdminGiveMoney", function(player, toPlayer, account, amount)
-    if account == "Cash" then
-        AddBalanceToAccount(tonumber(toPlayer), 'cash', amount)
-    end
-    if account == "Bank" then
-        PlayerData[tonumber(toPlayer)].bank_balance = PlayerData[tonumber(toPlayer)].bank_balance + tonumber(amount)
+    if tonumber(IsRank(player)) > 3 then 
+        if account == "Cash" then
+            AddBalanceToAccount(tonumber(toPlayer), 'cash', amount)
+        end
+        if account == "Bank" then
+            PlayerData[tonumber(toPlayer)].bank_balance = PlayerData[tonumber(toPlayer)].bank_balance + tonumber(amount)
+        end
     end
 end)
 
@@ -171,7 +183,7 @@ AddRemoteEvent("AdminKickBan", function(player, toPlayer, type, reason)
 end)
 
 AddCommand("delveh", function(player)
-    if tonumber(PlayerData[player].admin) ~= 1 then return end
+    if tonumber(IsRank(player)) > 0 then return end
     local vehicle = GetPlayerVehicle(player)
 
     if vehicle ~= nil then

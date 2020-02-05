@@ -222,6 +222,8 @@
         "client/files/icons/repairkit.png",
         "client/files/icons/ziptie.png",
         "client/files/icons/cuffs.png",
+	"essentials/materials/newmat.pak",
+	"essentials/materials/posteffects.pak",
         "burdigalax/client/gui/vendors.burdigalax.js",
         "burdigalax/client/gui/commons.burdigalax.js",
         "burdigalax/client/gui/inventory.html",
