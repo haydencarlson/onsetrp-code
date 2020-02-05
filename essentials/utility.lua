@@ -68,6 +68,7 @@ end
 function OnPackageStart(player)
 	CreateTimer(function(player)
 		for _, v in pairs(GetAllPlayers()) do
+<<<<<<< HEAD
 			local police = PlayerData[v].job == "police" or PlayerData[v].police == "0"
 			local medic = PlayerData[v].job == "medic"
 			local delivery = PlayerData[v].job == "delivery"
@@ -90,24 +91,47 @@ function OnPackageStart(player)
 				amount = 350
 			elseif mayor then
 				amount = 1200
+=======
+			if PlayerData[player] ~= nil then
+				local police = PlayerData[v].job == "police" or PlayerData[v].police == "0"
+				local medic = PlayerData[v].job == "medic"
+				local delivery = PlayerData[v].job == "delivery"
+				local robber = PlayerData[v].job == "thief"
+				local citizen = PlayerData[v].job == "citizen" or PlayerData[v].job == ""
+				local mechanic = PlayerData[v].job == "mechanic"
+				local cinema = PlayerData[v].job == "cinema"
+				if police then
+					amount = 1000
+				elseif medic then
+					amount = 600
+				elseif citizen then
+					amount = 150
+				elseif delivery then
+					amount = 500
+				elseif mechanic then
+					amount = 700
+				elseif cinema then
+					amount = 350
+				end
+
+				AddBalanceToAccount(v, "cash", amount) 
+				balance = GetPlayerCash(v)
+				message = '<span color="#00B159">You received a paycheck of </>$' ..amount
+				welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount
+				newbal = '<span color="#00B159">Your new balance is</> $' ..balance
+				criminal = 'You did not get a paycheck because you are a criminal.'
+
+				if citizen then
+					AddPlayerChat(v, welfare)
+					AddPlayerChat(v, newbal)
+				elseif police or medic or delivery then
+					AddPlayerChat(v, message)
+					AddPlayerChat(v, newbal)
+				elseif thief then
+					AddPlayerChat(v, criminal)
+				end		
+>>>>>>> bd011f180b809a64e090285ae776c8335a9becbe
 			end
-
-			AddBalanceToAccount(v, "cash", amount) 
-			balance = GetPlayerCash(v)
-			message = '<span color="#00B159">You received a paycheck of </>$' ..amount
-			welfare = '<span color="#00B159">You received a welfare check of </>$' ..amount
-			newbal = '<span color="#00B159">Your new balance is</> $' ..balance
-			criminal = 'You did not get a paycheck because you are a criminal.'
-
-			if citizen then
-				AddPlayerChat(v, welfare)
-				AddPlayerChat(v, newbal)
-			elseif police or medic or delivery then
-				AddPlayerChat(v, message)
-				AddPlayerChat(v, newbal)
-			elseif thief then
-				AddPlayerChat(v, criminal)
-			end		
 		end
 	end, 600000, v)
 

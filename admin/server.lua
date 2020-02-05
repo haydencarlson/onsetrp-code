@@ -94,8 +94,8 @@ AddRemoteEvent("ServerAdminMenu", function(player)
                 playersNames[tostring(v)] = PlayerData[v].name.." ["..PlayerData[v].steamname.."]"
                 ::continue::
             end
+            CallRemoteEvent(player, "OpenAdminMenu", teleportPlace, playersNames, weaponList, vehicleList)
         end
-        CallRemoteEvent(player, "OpenAdminMenu", teleportPlace, playersNames, weaponList, vehicleList)
     end
 end)
 
