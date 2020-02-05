@@ -59,7 +59,6 @@ local function GetNearestNpc()
 	return 0
 end
 
-
 function SelectingJob(key)
     if key == "E" and not onCharacterCreation then
         local NearestNpc = GetNearestNpc()
