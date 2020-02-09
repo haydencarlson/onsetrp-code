@@ -128,7 +128,8 @@
         "burdigalax/client/inventory.lua",
         "burdigalax/client/gasStation.lua",
         "vehicle/ragP/client.lua",
-        "gathering/c_gathering.lua"
+        "gathering/c_gathering.lua",
+        "essentials/materials/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",

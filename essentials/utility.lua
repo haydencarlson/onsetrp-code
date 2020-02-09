@@ -160,7 +160,9 @@ function GetPlayerTime(player)
 	local playtime = math.tointeger(result['time']) -- total time played on the server
 	PlayerData[player].time = math.floor(PlayerData[player].time + (GetTimeSeconds() - PlayerData[player].play_time))
 	PlayerData[player].play_time = GetTimeSeconds()
-	return PlayerData[player].time + playtime -- returns current session play time + total play time on the server
+	local timeplayed = PlayerData[player].time + playtime
+	CallRemoteEvent("RPNotify:HUDEvent", "timeplayed", FormatUpTime(timeplayed))
+	return timeplayed -- returns current session play time + total play time on the server
 end
 
 function FormatUpTime(seconds)
