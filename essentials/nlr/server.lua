@@ -56,7 +56,7 @@ end
 AddEvent("OnPlayerDeath", SetDeathPosition)
 
 AddEvent("RemoveNlr", function(player)
-    Delay(30000, function(player)
+    Delay(120000, function(player)
         SetPlayerPropertyValue(player, "nlr", 0, true)
         PlayerData[player].death_pos = {}
         local query = mariadb_prepare(sql, "UPDATE accounts SET death_pos = '?' WHERE id = ?;", 

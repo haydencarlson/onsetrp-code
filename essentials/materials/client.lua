@@ -4,23 +4,20 @@ local added3 = false
 
 function OnPackageStart()
     local newmat = LoadPak("newmat", "/newmat/", "../../../OnsetModding/Plugins/newmat/Content/")
-    AddPlayerChat(tostring(onemat))
     local PakName = "newmat"
-    AddPlayerChat("Pak exists: ".. tostring(DoesPakExist(PakName)) and "True" or "False" .. ".")
-    for k, v in pairs(GetAllFilesInPak(PakName)) do
-    AddPlayerChat("Pak file: ".. tostring(v) .. "")
-    end
+   -- for k, v in pairs(GetAllFilesInPak(PakName)) do
+    --end
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
 function OnPackageStart()
     local posteffects = LoadPak("posteffects", "/posteffects/", "../../../OnsetModding/Plugins/posteffects/Content/")
-    AddPlayerChat(tostring(onemat))
+   -- AddPlayerChat(tostring(onemat))
     local PakName = "posteffects"
-    AddPlayerChat("Pak exists: ".. tostring(DoesPakExist(PakName)) and "True" or "False" .. ".")
-    for k, v in pairs(GetAllFilesInPak(PakName)) do
-    AddPlayerChat("Pak file: ".. tostring(v) .. "")
-    end
+  --  AddPlayerChat("Pak exists: ".. tostring(DoesPakExist(PakName)) and "True" or "False" .. ".")
+ --   for k, v in pairs(GetAllFilesInPak(PakName)) do
+ --   AddPlayerChat("Pak file: ".. tostring(v) .. "")
+ --  end
 end
 AddEvent("OnPackageStart", OnPackageStart)
 

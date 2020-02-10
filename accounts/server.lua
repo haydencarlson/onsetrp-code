@@ -163,6 +163,10 @@ function AddBalanceToAccount(player, account, amount)
 	action[account](amount_to_add, bank_bal)
 end
 
+function GetLoyaltyBalance(player)
+	return PlayerData[player].loyalty
+end
+
 function RemoveBalanceFromAccount(player, account, amount)
 	local bank_bal = PlayerData[player].bank_balance
 	local amount_to_remove = amount
@@ -179,6 +183,28 @@ function RemoveBalanceFromAccount(player, account, amount)
 	action[account](player, amount_to_remove, bank_bal)
 end
 
+function RemoveLoyaltyFromAccount(player, account, amount)
+	local loyalty_bal = PlayerData[player].loyalty
+	local amount_to_remove = amount
+	local action = {
+		loyalty = function(player, amount_to_remove, loyalty_bal)
+			PlayerData[player].loyalty = loyalty_bal - amount_to_remove
+		end,
+		}	
+action[account](player, amount_to_remove, loyalty_bal)
+end
+
+function AddLoyaltyFromAccount(player, account, amount)
+	local loyalty_bal = PlayerData[player].loyalty
+	local amount_to_remove = amount
+	local action = {
+		loyalty = function(player, amount_to_remove, loyalty_bal)
+			PlayerData[player].loyalty = loyalty_bal + amount_to_remove
+		end,
+		}	
+action[account](player, amount_to_remove, loyalty_bal)
+end
+
 function OnAccountLoaded(player)
 	if (mariadb_get_row_count() == 0) then
 		--This case should not happen but still handle it
@@ -189,6 +215,7 @@ function OnAccountLoaded(player)
 		PlayerData[player].rank = math.tointeger(result['rank'])
 		PlayerData[player].supporter = math.tointeger(result['supporter'])
 		PlayerData[player].bank_balance = math.tointeger(result['bank_balance'])
+		PlayerData[player].loyalty = math.tointeger(result['loyalty_points'])
 		PlayerData[player].name = tostring(result['name'])
 		PlayerData[player].clothing = json_decode(result['clothing'])
 		PlayerData[player].clothing_police = json_decode(result['clothing_police'])
@@ -265,6 +292,7 @@ function CreatePlayerData(player)
 	PlayerData[player].thirst = 100
 	PlayerData[player].hunger = 100
 	PlayerData[player].bank_balance = 900
+	PlayerData[player].loyalty = 0
 	PlayerData[player].job_vehicle = nil
 	PlayerData[player].job = ""
 	PlayerData[player].onAction = false
@@ -346,11 +374,12 @@ function SavePlayerAccount(player)
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank = ?, supporter = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank = ?, supporter = ?, bank_balance = ?, loyalty_points = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
 		PlayerData[player].rank,
 		PlayerData[player].supporter,
 		PlayerData[player].bank_balance,
+		PlayerData[player].loyalty,
 		100,
 		PlayerData[player].health_state,
 		json_encode(PlayerData[player].death_pos),
@@ -366,7 +395,7 @@ function SavePlayerAccount(player)
 		PlayerData[player].driver_license,
 		PlayerData[player].gun_license,
 		PlayerData[player].helicopter_license,
-		PlayerData[player].time,
+		GetPlayerTime(player),
 		PlayerData[player].kills,
 		PlayerData[player].deaths,
 		PlayerData[player].accountid

@@ -111,17 +111,6 @@ function OnPackageStart(player)
 			end
 		end
 	end, 600000, v)
-
-	CreateTimer(function(player)
-		for k, v in pairs (GetAllPlayers()) do
-			if PlayerData[v] ~= nil and PlayerData[v].accountid ~= nil then
-				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?';",
-				PlayerData[v].accountid)
-				mariadb_async_query(sql, query, GetPlayerTime, v)
-			end
-		end 
-	end, 1000, player)
-
 end
 AddEvent("OnPackageStart", OnPackageStart)
 
@@ -159,29 +148,6 @@ AddCommand("unfreeze", function(player, instigator)
 			return false
       	end
 end)
-
-function GetCurrentPlayTime(player)
-	CreateTimer(function(player)
-		for k, v in pairs (GetAllPlayers()) do
-			if GetAllPlayers() == true then
-				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?' LIMIT 1;",
-				PlayerData[v].accountid)
-				mariadb_async_query(sql, query, GetPlayerTime, v)
-			end
-		end 
-	end, 1000, player)
-end
-AddEvent("OnPackageStart", GetCurrentPlayTime)
-
-function GetPlayerTime(player)
-	local result = mariadb_get_assoc(1)
-	local playtime = math.tointeger(result['time']) -- total time played on the server
-	PlayerData[player].time = math.floor(PlayerData[player].time + (GetTimeSeconds() - PlayerData[player].play_time))
-	PlayerData[player].play_time = GetTimeSeconds()
-	local timeplayed = PlayerData[player].time + playtime
-	CallRemoteEvent("RPNotify:HUDEvent", "timeplayed", FormatUpTime(timeplayed))
-	return timeplayed -- returns current session play time + total play time on the server
-end
 
 function FormatUpTime(seconds)
 	local seconds = tonumber(seconds)
@@ -246,54 +212,47 @@ function cmd_pm(player, otherplayer, ...)
 end
 AddCommand("pm", cmd_pm)
 
-function cmd_richestplayer(player)
-	local arr = {}
-	for _, v in pairs(GetAllPlayers()) do
-		table.insert(arr, { PlayerData[v].cash, v })
-	end
-
-	table.sort(arr, function(a, b)
-		return a[1] > b[1]
-	end)
-
-	for k, v in pairs(arr) do
-		local cash = GetPlayerCash(v[2])
-		local bank = PlayerData[v[2]].bank_balance
-		local total = bank + cash
-		AddPlayerChat(v[2], ''..GetPlayerName(v[2])..' is the richest player and has $'..total..'')
-	end
-end
-AddCommand("richestplayer", cmd_richestplayer)
-
-function cmd_oldestplayer(player)
-	local arr = {}
-	for _, v in pairs(GetAllPlayers()) do
-		table.insert(arr, { PlayerData[v].time, v })
-	end
-
-	table.sort(arr, function(a, b)
-		return a[1] > b[1]
-	end)
-
-	for k, v in pairs(arr) do
-		local time = v[1]
-		if time > 3600 then
-			local message = ""..GetPlayerName(v[2]).." is the oldest player and has played "..FormatPlayTime(v[1]).." hours"
-			AddPlayerChat(v[2], message)
-		elseif time < 3600 then
-		local message = ""..GetPlayerName(v[2]).." is the oldest player and has played "..FormatPlayTime(v[1]).." minutes"
-		AddPlayerChat(v[2], message)
-		end
-	end
-end
-AddCommand("oldestplayer", cmd_oldestplayer)
-
-
 function cmd_kdr(player)
-	local message = "Your KDR is %"..GetPlayerKD(player)..""
+	local message = "Your KDR is "..GetPlayerKD(player).."%"
 	AddPlayerChat(player, message)
 end
 AddCommand("kdr", cmd_kdr)
+
+function GetCurrentPlayTime(player)
+	CreateTimer(function(player)
+		for k, v in pairs (GetAllPlayers()) do
+			if PlayerData[v] ~= nil and PlayerData[v].accountid ~= nil then
+				local query = mariadb_prepare(sql, "SELECT * FROM accounts WHERE id = '?';",
+				PlayerData[v].accountid)
+				mariadb_async_query(sql, query, GetPlayerTime, v)
+			end
+		end 
+	end, 1000, player)
+end
+AddEvent("OnPackageStart", GetCurrentPlayTime)
+
+function GetPlayerTime(player)
+	local result = mariadb_get_assoc(1)
+	PlayerData[player].time = math.floor(PlayerData[player].time + (GetTimeSeconds() - PlayerData[player].play_time))
+	PlayerData[player].play_time = GetTimeSeconds()
+	local timeplayed = PlayerData[player].time
+--	print(FormatUpTime(timeplayed))
+	for k, v in pairs(GetAllPlayers()) do
+			CallRemoteEvent(v, "RPNotify:HUDEvent", "timeplayed", FormatUpTime(PlayerData[v].time))
+	end
+	return PlayerData[player].time -- returns current session play time + total play time on the server
+end
+
+function GivePlayerLoyalty()
+	CreateTimer(function()
+		for k, v in pairs(GetAllPlayers()) do
+			local amount = Random(8, 17)
+			PlayerData[v].loyalty = PlayerData[v].loyalty + amount
+			CallRemoteEvent(v, 'KNotify:Send', "You received ".. amount .." loyalty points for playing. ", "#0f0")
+		end
+	end, 900000)
+end
+AddEvent("OnPackageStart", GivePlayerLoyalty)
 
 --[[
 function SetPlayerOnline(player)
