@@ -184,7 +184,7 @@ AddCommand("addtext", function(player, size, height, ...)
 	end  
 end)
 
-local function DeleteTextscreen(player, id) 
+function DeleteTextscreen(player, id) 
     for k, v in pairs(PlayerData[player].textscreens) do
         if tonumber(v['id']) == tonumber(id) then
 			DestroyText3D(tonumber(v['id']))
@@ -210,7 +210,7 @@ AddCommand("removetext", function(player, id)
 	end
 end)
 
-AddCommand("loyalty", function(player, instigator)
+AddCommand("checkloyalty", function(player, instigator)
 	if tonumber(IsRank(player)) > 2 then
 		local balance = GetLoyaltyBalance(tonumber(instigator))
 		AddPlayerChat(player, "".. GetPlayerName(tonumber(instigator)) .." has ".. balance .." loyalty points.")
@@ -224,7 +224,7 @@ AddCommand("buysupporter", function(player, instigator)
 	if instigator ~= nil then
 		if tonumber(IsSupporter(tonumber(instigator))) == 0 then
 			if GetLoyaltyBalance(tonumber(player)) > 500 then
-				PlayerData[player].loyalty = PlayerData[player].loyalty - 500
+				RemoveLoyaltyFromAccount(player, 'loyalty', 500)
 				if tonumber(player) == tonumber(instigator) then
 					CallRemoteEvent(player, 'KNotify:Send', "You have bought supporter status.", "#0f0")
 					AddPlayerChatAll('<span color="#800000">'.. GetPlayerName(player) ..' is now a supporter!</>')
@@ -250,10 +250,10 @@ local name = table.concat({...}, " ")
 	if name ~= nil and string.len(name) < 21 then
 		if name ~= PlayerData[player].name then	
 			if GetLoyaltyBalance(tonumber(player)) > 150 then
-				PlayerData[player].loyalty = PlayerData[player].loyalty - 150
+				RemoveLoyaltyFromAccount(player, 'loyalty', 150)
 				PlayerData[player].name = name
 				AddPlayerChat(player, '<span color="#800000">Your name is now '.. PlayerData[player].name ..'!</>')
-				AddPlayerChat(player, '<span color="#600000">You make need to reconnect to see the changes.</>')
+				AddPlayerChat(player, '<span color="#600000">You may need to reconnect to see the changes.</>')
 				CallRemoteEvent(player, "RPNotify:HUDEvent", "name", PlayerData[player].name)
 				--CallRemoteEvent(player, "RequestScoreboardUpdate")
 			else
