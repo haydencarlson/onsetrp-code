@@ -102,8 +102,8 @@ end)
 
 AddCommand("setrank", function(player, target, rankid)
     if tonumber(IsRank(player)) > 2 then
-    PlayerData[tonumber(target)].rank = tonumber(rankid)
-    AddPlayerChat(target, '<span color="#ff0000">'.. GetPlayerName(player) ..' Has made you a '.. GetRankById(tonumber(rankid)) ..' </>')
+        PlayerData[tonumber(target)].rank_level = tonumber(rankid)
+        AddPlayerChat(target, '<span color="#ff0000">'.. GetPlayerName(player) ..' Has made you a '.. GetRankById(tonumber(rankid)) ..' </>')
     end
 end)
 
