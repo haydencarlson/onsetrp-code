@@ -71,7 +71,7 @@ AddRemoteEvent("StartMedicJob", function(player)
     end
 end)
 
-AddRemoteEvent("StopMedicJob", function(player,spawncar)
+AddRemoteEvent("StopMedicJob", function(player, spawncar)
     if PlayerData[player].job == "medic" then
 		if PlayerData[player].job_vehicle ~= nil then
 			DestroyVehicle(PlayerData[player].job_vehicle)

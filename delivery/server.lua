@@ -118,7 +118,7 @@ AddRemoteEvent("StartDelivery", function(player)
     end
 end)
 
-AddRemoteEvent("StopDelivery", function()
+AddRemoteEvent("StopDelivery", function(player)
     if PlayerData[player].job_vehicle ~= nil then
         DestroyVehicle(PlayerData[player].job_vehicle)
         DestroyVehicleData(PlayerData[player].job_vehicle)

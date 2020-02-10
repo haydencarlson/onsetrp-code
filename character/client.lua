@@ -166,6 +166,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
                 CallRemoteEvent("ServerChangeClothes", playerName, playerHairs, playerHairsColor, playerShirt, playerPants, playerShoes)
                 isCreated = true
                 StartTutorial()
+                CallRemoteEvent("JobGuyInteract")
                 CallRemoteEvent("account:setplayernotbusy", GetPlayerId())
             end
         end
@@ -175,7 +176,6 @@ end)
 function StartTutorial()
     SetIgnoreMoveInput(true)
     SetInputMode(INPUT_UI)
-    CallRemoteEvent("ShowSelectJob")
 end
 
 AddRemoteEvent("ClientChangeClothing", function(player, part, piece, r, g, b, a)
