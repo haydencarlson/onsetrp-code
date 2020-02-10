@@ -186,7 +186,7 @@ function OnAccountLoaded(player)
 	else
 		local result = mariadb_get_assoc(1)
 		PlayerData[player].admin = math.tointeger(result['admin'])
-		PlayerData[player].rank = math.tointeger(result['rank'])
+		PlayerData[player].rank_level = math.tointeger(result['rank_level'])
 		PlayerData[player].supporter = math.tointeger(result['supporter'])
 		PlayerData[player].bank_balance = math.tointeger(result['bank_balance'])
 		PlayerData[player].name = tostring(result['name'])
@@ -256,7 +256,7 @@ function CreatePlayerData(player)
 	PlayerData[player].helicopter_license = 0
 	PlayerData[player].logged_in = false
 	PlayerData[player].admin = 0
-	PlayerData[player].rank = 0
+	PlayerData[player].rank_level = 0
 	PlayerData[player].supporter = 0
 	PlayerData[player].created = 0
 	PlayerData[player].locale = GetPlayerLocale(player)
@@ -346,9 +346,9 @@ function SavePlayerAccount(player)
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank = ?, supporter = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank_level = ?, supporter = ?, bank_balance = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
-		PlayerData[player].rank,
+		PlayerData[player].rank_level,
 		PlayerData[player].supporter,
 		PlayerData[player].bank_balance,
 		100,
@@ -371,12 +371,14 @@ function SavePlayerAccount(player)
 		PlayerData[player].deaths,
 		PlayerData[player].accountid
 	) 
+	print(query)
 	mariadb_query(sql, query)
 end
 
 function SetPlayerLoggedIn(player)
     PlayerData[player].logged_in = true
 end
+
 AddCommand("getrankname", function(player)
 	local RankName = GetPlayerRank(player)
 	local message = "Your Rank is: "..RankName
@@ -385,7 +387,6 @@ end)
 
 function GetPlayerRank(player)
 	local RankName = "Player"
-
 	if tonumber(IsRank(player)) < 1 and tonumber(IsSupporter(player)) > 0 then
 		RankName = "Supporter"
 	elseif IsRank(player) == 1 then
@@ -434,7 +435,7 @@ function IsSupporter(player)
 end
 
 function IsRank(player)
-    return PlayerData[player].rank
+    return PlayerData[player].rank_level
 end
 
 function SetPlayerBusy(player)-- Shortcut to set a player in a busy state
