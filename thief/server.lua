@@ -72,6 +72,7 @@ end)
 
 AddRemoteEvent("StopThiefJob", function(player)
     PlayerData[player].job = ""
+    UpdateClothes(player)
 end)
 
 AddRemoteEvent("PickOpenDoor", function(player)

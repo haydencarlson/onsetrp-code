@@ -103,6 +103,7 @@ end)
 AddRemoteEvent("StopMayorJob", function(player)
     if PlayerData[player].job == 'mayor' then
         PlayerData[player].job = 'citizen'
+        UpdateClothes(player)
         IsMayor = false
         CallEvent("default_laws")
     end
