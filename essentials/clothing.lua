@@ -5,24 +5,19 @@ function cmd_hat(player, hatobject)
 	end
 
 	local hatModel = 0
-
+    if tonumber(IsSupporter(player)) == 1 or tonumber(IsRank(player)) > 0 then
 	if hatobject == nil then
-		local startHats = 398
-		local endHats = 477
-
-		hatModel = Random(startHats, endHats)
-    else
+        return AddPlayerChat(player, "Usage: /hat [ID] \nExample: /hat 398")
+    end
         if tonumber(hatobject) > 397 and tonumber(hatobject) < 478 then 
         hatModel = math.tointeger(hatobject)
         else
            return AddPlayerChat(player, "Hat ID must be between 398 and 477.")
-        end
-	end
+	    end
 
     local x, y, z = GetPlayerLocation(player)
     PlayerData[player].hatmodel = tonumber(hatModel)
     PlayerData[player].hat = CreateObject(hatModel, x, y, z)
-    if tonumber(IsSupporter(player)) == 1 or tonumber(IsRank(player)) > 0 then
         if hatobject ~= nil then
             if tonumber(hatobject) == 398 then
                 SetObjectAttached(PlayerData[player].hat, ATTACH_PLAYER, player, 15.5, 1.0, 1.0, 4.0, 90.0, -90.0, "head")
