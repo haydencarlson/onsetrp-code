@@ -256,7 +256,7 @@ function OnAccountLoaded(player)
             playershirtcolor = PlayerData[player].clothing[7]
             playerpantscolor = PlayerData[player].clothing[8]
             CallRemoteEvent(player, "ClientChangeClothing", player, 0, PlayerData[player].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])
-            CallRemoteEvent(player, "ClientChangeClothing", player, 1, PlayerData[player].clothing[3], playershirtcolor[1], playershirtcolor[3], playershirtcolor[3], playershirtcolor[4])
+            CallRemoteEvent(player, "ClientChangeClothing", player, 1, PlayerData[player].clothing[3], playershirtcolor[1], playershirtcolor[2], playershirtcolor[3], playershirtcolor[4])
             CallRemoteEvent(player, "ClientChangeClothing", player, 4, PlayerData[player].clothing[4], playerpantscolor[1], playerpantscolor[2], playerpantscolor[3], playerpantscolor[4])
             CallRemoteEvent(player, "ClientChangeClothing", player, 5, PlayerData[player].clothing[5], 0, 0, 0, 0)
             CallRemoteEvent(player, "ClientChangeClothing", player, 6, PlayerData[player].clothing[6])
