@@ -46,6 +46,10 @@ AddEvent("OnKeyPress", function(key)
     end
 end)
 
+AddEvent("OnPlayerStreamIn", function(player, otherplayer)
+    CallRemoteEvent("UpdateClothingStreamIn", otherplayer)
+end)
+
 AddRemoteEvent("characterize:ClientSubmit", function(isCreating)
     if isCreating then
         isCreated = true

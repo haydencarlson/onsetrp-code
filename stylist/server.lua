@@ -18,7 +18,6 @@ AddEvent("OnPackageStart", function()
 	end
 end)
 
-
 AddEvent("OnPlayerJoin", function(player)
 	CallRemoteEvent(player, "stylistSetup", StylistNPCObjectsCached)
 end)
@@ -29,39 +28,6 @@ AddRemoteEvent("stylistInteract", function(player, stylistobject)
 		CallRemoteEvent(player, "characterize:ShowPanel", false)
 	end
 end)
-
-AddRemoteEvent("startModify", function(player)
-	CallRemoteEvent(player, "openModify", hairsModel, shirtsModel, pantsModel, shoesModel, hairsColor)
-end)
-
-AddRemoteEvent("ModifyEvent", function(player, hairsChoice, shirtsChoice, pantsChoice, shoesChoice, colorChoice)
-local clothesRequest = "[\""..hairsModel[hairsChoice].."\",\""..colorChoice.."\",\""..shirtsModel[shirtsChoice].."\",\""..pantsModel[pantsChoice].."\",\""..shoesModel[shoesChoice].."\"]"
-	if GetPlayerCash(player) < 200 then
-		return CallRemoteEvent(player, 'KNotify:Send', _("not_enought_cash"), "#f00")
-	else
-		RemovePlayerCash(player, 200)
-		CallRemoteEvent(player, 'KNotify:Send', _("clothes_changed"), "#0f0")
-	end
-
-	local query = mariadb_prepare(sql, "UPDATE accounts SET clothing = '?' WHERE id = ? LIMIT 1;",
-	clothesRequest,
-	player
-	)
-        
-	mariadb_query(sql, query)
-	
-	PlayerData[player].clothing = {}
-	table.insert(PlayerData[player].clothing, hairsModel[hairsChoice])
-    table.insert(PlayerData[player].clothing, colorChoice)
-    table.insert(PlayerData[player].clothing, shirtsModel[shirtsChoice])
-    table.insert(PlayerData[player].clothing, pantsModel[pantsChoice])
-    table.insert(PlayerData[player].clothing, shoesModel[shoesChoice])
-
-	UpdateClothes(player)
-	SavePlayerAccount(player)
-end)
-
--- Function ----------------------------------------------------
 
 function GetStylistByObject(stylistobject)
 	for k,v in pairs(StylistNPCObjectsCached) do

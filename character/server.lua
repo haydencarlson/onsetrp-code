@@ -39,6 +39,29 @@ AddRemoteEvent("characterize:Submit", function(player, params, isCreating)
     UpdateClothes(player)
 end)
 
+AddRemoteEvent("UpdateClothingStreamIn", function(player, otherplayer)
+    if PlayerData[otherplayer].job == "medic" then
+        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 17)
+    elseif PlayerData[otherplayer].job == "police" then
+        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 13)
+    elseif PlayerData[otherplayer].job == "thief" then
+        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 10)
+    elseif PlayerData[otherplayer].job == "mayor" then
+        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 18)
+    elseif PlayerData[otherplayer].job == "cinema" then
+        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 15)
+    else
+        playerhairscolor = PlayerData[otherplayer].clothing[2]
+        playershirtcolor = PlayerData[otherplayer].clothing[7]
+        playerpantscolor = PlayerData[otherplayer].clothing[8]
+        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 0, PlayerData[otherplayer].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])
+        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 1, PlayerData[otherplayer].clothing[3], playershirtcolor[1], playershirtcolor[2], playershirtcolor[3], playershirtcolor[4])
+        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 4, PlayerData[otherplayer].clothing[4], playerpantscolor[1], playerpantscolor[2], playerpantscolor[3], playerpantscolor[4])
+        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 5, PlayerData[otherplayer].clothing[5], 0, 0, 0, 0)
+        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 6, PlayerData[otherplayer].clothing[6])
+    end
+end)
+
 function UpdateClothes(player)
     if PlayerData[player].job == "medic" then
         CallRemoteEvent(player, "SetPlayerClothingToPreset", player, 17)
