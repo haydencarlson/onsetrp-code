@@ -57,6 +57,11 @@ function OnPlayerQuit(player)
 			table.remove(PlayerData[player].textscreens, k)
 		end
 	end
+	for k, v in pairs(GetAllPlayers()) do
+        if  tonumber(PlayerData[v].hat) ~= 0 then
+            DestroyObject(PlayerData[v].hat)
+        end
+    end
     SavePlayerAccount(player)
     GatheringCleanPlayerActions(player)-- → Gathering
     DestroyPlayerData(player)
@@ -229,6 +234,7 @@ function OnAccountLoaded(player)
 		PlayerData[player].time = math.tointeger(result['time'])
 		PlayerData[player].kills = math.tointeger(result['kills'])
 		PlayerData[player].deaths = math.tointeger(result['deaths'])
+		PlayerData[player].hatmodel = math.tointeger(result['hats'])
 		if GetPlayerBag(player) == 1 then
 			local x, y, z = GetPlayerLocation(player)
             PlayerData[player].backpack = CreateObject(820, x, y, z)
@@ -241,7 +247,6 @@ function OnAccountLoaded(player)
 		setPlayerHunger(player, tonumber(result['hunger']))
 		setPositionAndSpawn(player, PlayerData[player].position)
 		SetPlayerLoggedIn(player)
-
 		if math.tointeger(result['created']) == 0 then
 			CallRemoteEvent(player, "askClientCreation")
 		else
@@ -314,6 +319,8 @@ function CreatePlayerData(player)
 	PlayerData[player].company_upgrades = {}
 	PlayerData[player].employee = nil
 	PlayerData[player].textscreens = {}
+	PlayerData[player].hat = 0
+	PlayerData[player].hatmodel = 0
     print("Data created for : "..player)
 end
 
@@ -374,7 +381,7 @@ function SavePlayerAccount(player)
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank_level = ?, supporter = ?, bank_balance = ?, loyalty_points = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank_level = ?, supporter = ?, bank_balance = ?, loyalty_points = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', hats = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
 		PlayerData[player].rank_level,
 		PlayerData[player].supporter,
@@ -389,6 +396,7 @@ function SavePlayerAccount(player)
 		PlayerData[player].name,
 		json_encode(PlayerData[player].clothing),
 		json_encode(PlayerData[player].clothing_police),
+		tonumber(PlayerData[player].hatmodel),
 		json_encode(PlayerData[player].inventory),
 		PlayerData[player].created,
 		json_encode(PlayerData[player].position),

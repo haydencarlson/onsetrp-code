@@ -58,6 +58,7 @@
         "essentials/nlr/server.lua",
         "essentials/s_drop_and_pick.lua",
         "essentials/server_pc_data.lua",
+        "essentials/clothing.lua",
         "bitcoinminer/server.lua",
         "companies/server.lua",
         "drugs/basic/config.lua",
