@@ -24,10 +24,9 @@ AddEvent("OnPlayerJoin", function(player)
 end)
 
 AddRemoteEvent("stylistInteract", function(player, stylistobject)
-	-- CallRemoteEvent(player, "characterize:ShowPanel")
     local stylist = GetStylistByObject(stylistobject)
 	if stylist then
-		CallRemoteEvent(player, "openStylist")
+		CallRemoteEvent(player, "characterize:ShowPanel", false)
 	end
 end)
 

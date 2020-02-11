@@ -68,8 +68,6 @@ AddEvent("OnKeyPress", OnKeyPress)
 
 function StartRobbery()
 	if currentRobbery ~= 0 and not Robbing then
-		AddPlayerChat("calling this")
-		
 		CallRemoteEvent("Kuzkay:RobberiesLaunch", currentRobbery)
 	end
 end

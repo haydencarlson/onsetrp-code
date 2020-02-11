@@ -267,6 +267,8 @@ function cmd_hat(player, hatobject)
 end
 AddCommand("hat", cmd_hat)
 
+AddEvent("cmd_hat", cmd_hat)
+
 function cmd_remove_hat(player)
     if tonumber(IsSupporter(player)) == 1 or tonumber(IsRank(player)) > 0 then
         DestroyObject(PlayerData[player].hat)
@@ -279,7 +281,11 @@ AddEvent("OnPlayerDeath", function(player)
 end)
 
 AddEvent("OnPlayerSpawn", function(player) 
-    Delay(5000, function(player)
-        cmd_hat(player, PlayerData[player].hatmodel)
-    end, player)
+    if PlayerData[player] ~= nil then
+        if tonumber(IsSupporter(player)) == 1 or tonumber(IsRank(player)) > 0 then
+            if PlayerData[player].hatmodel ~= 0 then
+                cmd_hat(player, PlayerData[player].hatmodel)
+            end
+        end
+    end
 end)
