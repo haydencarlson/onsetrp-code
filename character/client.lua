@@ -46,7 +46,7 @@ AddEvent("OnKeyPress", function(key)
     end
 end)
 
-AddEvent("OnPlayerStreamIn", function(player, otherplayer)
+AddEvent("OnPlayerStreamIn", function(otherplayer)
     CallRemoteEvent("UpdateClothingStreamIn", otherplayer)
 end)
 

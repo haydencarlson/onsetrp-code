@@ -40,25 +40,27 @@ AddRemoteEvent("characterize:Submit", function(player, params, isCreating)
 end)
 
 AddRemoteEvent("UpdateClothingStreamIn", function(player, otherplayer)
-    if PlayerData[otherplayer].job == "medic" then
-        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 17)
-    elseif PlayerData[otherplayer].job == "police" then
-        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 13)
-    elseif PlayerData[otherplayer].job == "thief" then
-        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 10)
-    elseif PlayerData[otherplayer].job == "mayor" then
-        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 18)
-    elseif PlayerData[otherplayer].job == "cinema" then
-        CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 15)
-    else
-        playerhairscolor = PlayerData[otherplayer].clothing[2]
-        playershirtcolor = PlayerData[otherplayer].clothing[7]
-        playerpantscolor = PlayerData[otherplayer].clothing[8]
-        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 0, PlayerData[otherplayer].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])
-        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 1, PlayerData[otherplayer].clothing[3], playershirtcolor[1], playershirtcolor[2], playershirtcolor[3], playershirtcolor[4])
-        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 4, PlayerData[otherplayer].clothing[4], playerpantscolor[1], playerpantscolor[2], playerpantscolor[3], playerpantscolor[4])
-        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 5, PlayerData[otherplayer].clothing[5], 0, 0, 0, 0)
-        CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 6, PlayerData[otherplayer].clothing[6])
+    if PlayerData[otherplayer] ~= nil then
+        if PlayerData[otherplayer].job == "medic" then
+            CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 17)
+        elseif PlayerData[otherplayer].job == "police" then
+            CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 13)
+        elseif PlayerData[otherplayer].job == "thief" then
+            CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 10)
+        elseif PlayerData[otherplayer].job == "mayor" then
+            CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 18)
+        elseif PlayerData[otherplayer].job == "cinema" then
+            CallRemoteEvent(player, "SetPlayerClothingToPreset", otherplayer, 15)
+        else
+            playerhairscolor = PlayerData[otherplayer].clothing[2]
+            playershirtcolor = PlayerData[otherplayer].clothing[7]
+            playerpantscolor = PlayerData[otherplayer].clothing[8]
+            CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 0, PlayerData[otherplayer].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])
+            CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 1, PlayerData[otherplayer].clothing[3], playershirtcolor[1], playershirtcolor[2], playershirtcolor[3], playershirtcolor[4])
+            CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 4, PlayerData[otherplayer].clothing[4], playerpantscolor[1], playerpantscolor[2], playerpantscolor[3], playerpantscolor[4])
+            CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 5, PlayerData[otherplayer].clothing[5], 0, 0, 0, 0)
+            CallRemoteEvent(player, "ClientChangeClothing", otherplayer, 6, PlayerData[otherplayer].clothing[6])
+        end
     end
 end)
 
@@ -89,10 +91,15 @@ function UpdateClothes(player)
             CallRemoteEvent(v, "SetPlayerClothingToPreset", player, 15)
         end
     else
+        playerhairscolor = PlayerData[player].clothing[2]
+        playershirtcolor = PlayerData[player].clothing[7]
+        playerpantscolor = PlayerData[player].clothing[8]
+        CallRemoteEvent(player, "ClientChangeClothing", player, 0, PlayerData[player].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])
+        CallRemoteEvent(player, "ClientChangeClothing", player, 1, PlayerData[player].clothing[3], playershirtcolor[1], playershirtcolor[2], playershirtcolor[3], playershirtcolor[4])
+        CallRemoteEvent(player, "ClientChangeClothing", player, 4, PlayerData[player].clothing[4], playerpantscolor[1], playerpantscolor[2], playerpantscolor[3], playerpantscolor[4])
+        CallRemoteEvent(player, "ClientChangeClothing", player, 5, PlayerData[player].clothing[5], 0, 0, 0, 0)
+        CallRemoteEvent(player, "ClientChangeClothing", player, 6, PlayerData[player].clothing[6])
         for k, v in pairs(GetStreamedPlayersForPlayer(player)) do
-            playerhairscolor = PlayerData[player].clothing[2]
-            playershirtcolor = PlayerData[player].clothing[7]
-            playerpantscolor = PlayerData[player].clothing[8]
             CallRemoteEvent(v, "ClientChangeClothing", player, 0, PlayerData[player].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])
             CallRemoteEvent(v, "ClientChangeClothing", player, 1, PlayerData[player].clothing[3], playershirtcolor[1], playershirtcolor[2], playershirtcolor[3], playershirtcolor[4])
             CallRemoteEvent(v, "ClientChangeClothing", player, 4, PlayerData[player].clothing[4], playerpantscolor[1], playerpantscolor[2], playerpantscolor[3], playerpantscolor[4])
