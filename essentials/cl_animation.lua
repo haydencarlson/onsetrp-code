@@ -58,3 +58,9 @@ function OnKeyPress(key)
 	end
 end
 AddEvent("OnKeyPress", OnKeyPress)
+
+
+AddEvent("OnPackageStart", function()
+	LoadPak("cigar", "/cigar/", "../../../OnsetModding/Plugins/cigar/Content")
+    ReplaceObjectModelMesh(111, "/cigar/cigar_cuban_cigar_cuban")
+end)

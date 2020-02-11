@@ -18,7 +18,7 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
     if dialog == lottomenu then
 		local args = { ... }
         if button == 1 then
-            if args[1] == ""  or math.floor(args[1]) < 1 or math.floor(args[1]) > 150 then
+            if args[1] == ""  or math.floor(args[1]) < 1 or math.floor(args[1]) > 50 then
                 CallEvent('KNotify:Send', _("lotto_amount"), "#f00")
             else
                 CallRemoteEvent("joinLotto", math.floor(args[1]))

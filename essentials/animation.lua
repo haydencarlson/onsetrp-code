@@ -1,3 +1,5 @@
+IsSmoking = false
+
 AddCommand("workout", function(playerid)
     if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
     local x, y, z = GetPlayerLocation(playerid)
@@ -67,11 +69,25 @@ end)
     end)
     
     AddCommand("smoking", function(playerid)
-          if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
-        SetPlayerAnimation(playerid, "SMOKING")
+          if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') and IsSmoking == false then 
+            IsSmoking = true
+            local x, y, z = GetPlayerLocation(playerid)
+            cigarobject = CreateObject(111, x, y, z)
+            SetObjectAttached(cigarobject, ATTACH_PLAYER, playerid, 1.0, 13.0, 0.0, 0.0, 90.0, -90.0, "head")
+          else
+            AddPlayerChat(playerid, "You are already smoking.")
           end
     end)
-    
+
+    AddCommand("stopsmoking", function(playerid)
+      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') and isSmoking ~= false then
+            DestroyObject(cigarobject)
+            IsSmoking = false
+      else
+            AddPlayerChat(playerid, "You are not smoking.")
+      end
+            
+end)
     AddCommand("clap", function(playerid)
           if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
         SetPlayerAnimation(playerid, "CLAP")

@@ -35,7 +35,6 @@ function Playerdmg(player)
     StartCameraFade(0.1, 0, 4.5, RGB(255, 0, 0))
    rapefct = CreateTimer(function(player)
     rapeon = true
-        print(rapefct)
         StartCameraFade(0, 0.1, 2.5, RGB(255, 0, 0))
        Delay(2000, function(player)
         if rapeon == true then

@@ -40,7 +40,7 @@ function Scoreboard_OnServerScoreboardUpdate(data, name, players, maxplayers, ra
     if v['job'] == "" then
       v['job'] = "Citizen"
     end
-    if rank > 0 then
+    if rank ~= nil then
       ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] ..  ' (' .. v['id'] .. ')' .. '", "' .. v['job'] .. '", "' .. v['sessiontime'] .. '", "'.. tostring(v['rank']) .. '", ' .. v['ping'] .. ')')
     else
       ExecuteWebJS(ScoreboardUI, 'AddPlayer("' .. v['name'] .. '", "' .. v['job'] .. '", "' .. v['sessiontime'] .. '", "'.. tostring(v['rank']) .. '", ' .. v['ping'] .. ')')

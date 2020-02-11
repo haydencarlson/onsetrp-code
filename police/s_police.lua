@@ -393,7 +393,6 @@ end
 AddRemoteEvent("police:removeplayerincar", RemovePlayerInCar)
 
 function FriskPlayer(player)
-    print('frisk')
     if PlayerData[player].police ~= 1 then return end
     if PlayerData[player].job ~= "police" then return end
     

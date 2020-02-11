@@ -52,7 +52,7 @@ function SingleStockDataLoaded(player, quantity, side)
     if side == "buy" then
         local price = stock['price']
         local stockid = stock['id']
-        if GetPlayerCash(player) >= tonumber(price) * tonumber(quantity) then
+        if tonumber(GetPlayerCash(player)) >= tonumber(price) * tonumber(quantity) then
             local existingstock = mariadb_prepare(sql, "SELECT * FROM player_stocks WHERE stock_id = '?' AND player_id = '?';", stockid, PlayerData[player].accountid)
             mariadb_async_query(sql, existingstock, LookForExistingStockLoaded, player, stockid, price, quantity, stock['name'])
         else

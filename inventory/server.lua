@@ -312,7 +312,6 @@ end)
 
 function RemoveInventory(inventoryId, item, amount, drop, player)
     local player = player or inventoryId
-
     if PlayerData[inventoryId].inventory[item] == nil then
         return false
     else
@@ -370,7 +369,7 @@ end
 
 function RemovePlayerCash(player, amount)
     --UpdateUIInventory(player, 'cash', math.tointeger(amount)) -- on le fait déjà dans RemoveInventory
-    return RemoveInventory(player, 'cash', math.tointeger(amount))
+    return RemoveInventory(player, 'cash', tonumber(amount))
 end
 
 function GetPlayerBag(player)    

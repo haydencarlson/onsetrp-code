@@ -112,8 +112,6 @@ AddEvent("OnDialogSubmit", function(dialog, button, ...)
         if button == 1 then
             if args[1] ~= "" then
                 if tonumber(args[1]) > 0 then
-                    print(args[1])
-                    print(args[2])
                     CallRemoteEvent("police:fine", args[1], args[2])
                 else
                     CallEvent("KNotify:Send", _("enter_higher_number"), "#f00")

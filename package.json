@@ -58,6 +58,7 @@
         "essentials/nlr/server.lua",
         "essentials/s_drop_and_pick.lua",
         "essentials/server_pc_data.lua",
+        "essentials/clothing.lua",
         "bitcoinminer/server.lua",
         "companies/server.lua",
         "drugs/basic/config.lua",
@@ -128,7 +129,8 @@
         "burdigalax/client/inventory.lua",
         "burdigalax/client/gasStation.lua",
         "vehicle/ragP/client.lua",
-        "gathering/c_gathering.lua"
+        "gathering/c_gathering.lua",
+        "essentials/materials/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
@@ -223,7 +225,8 @@
         "client/files/icons/ziptie.png",
         "client/files/icons/cuffs.png",
 	"essentials/materials/newmat.pak",
-	"essentials/materials/posteffects.pak",
+    "essentials/materials/posteffects.pak",
+    "essentials/cigar.pak",
         "burdigalax/client/gui/vendors.burdigalax.js",
         "burdigalax/client/gui/commons.burdigalax.js",
         "burdigalax/client/gui/inventory.html",

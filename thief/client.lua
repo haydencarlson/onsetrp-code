@@ -10,11 +10,6 @@ AddRemoteEvent("ShowThiefMenu", function()
     Dialog.show(thiefMenu)
 end)
 
-
-AddEvent("OnPlayerStreamIn", function(player, otherplayer)
-    CallRemoteEvent("SetupThiefUniformOnStreamIn", player, otherplayer)
-end)
-
 AddEvent("OnDialogSubmit", function(dialog, button, ...)
     local args = { ... }
     if dialog == thiefMenu then

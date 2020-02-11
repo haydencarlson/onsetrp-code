@@ -11,7 +11,8 @@ AddRemoteEvent("GetInitialHud", function(player)
     local bank = PlayerData[player].bank_balance
     local job = PlayerData[player].job
     local time = GetServerTimeString()
-    CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job, time)
+    local timeplayed = GetPlayerTime(player)
+    CallRemoteEvent(player, "hud:update", playername, hunger, thirst, cash, bank, job, time, FormatUpTime(timeplayed))
     CallRemoteEvent(player, "pc:update", time)
 end)
 
