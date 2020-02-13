@@ -39,6 +39,7 @@ AddRemoteEvent("characterize:Submit", function(player, params, isCreating)
     UpdateClothes(player)
 end)
 
+
 AddRemoteEvent("UpdateClothingStreamIn", function(player, otherplayer)
     if PlayerData[otherplayer] ~= nil then
         if PlayerData[otherplayer].job == "medic" then
