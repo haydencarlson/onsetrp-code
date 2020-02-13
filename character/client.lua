@@ -18,8 +18,25 @@ AddRemoteEvent("SetUIOpenStatusClient", function(isOpen)
     UIOpen = isOpen
 end) 
 
+function RemoveAllClothes(player)
+	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Body")
+	SkeletalMeshComponent:SetSkeletalMesh(nil)
+	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Clothing0")
+	SkeletalMeshComponent:SetSkeletalMesh(nil)
+	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Clothing1")
+	SkeletalMeshComponent:SetSkeletalMesh(nil)
+	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Clothing2")
+	SkeletalMeshComponent:SetSkeletalMesh(nil)
+	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Clothing3")
+	SkeletalMeshComponent:SetSkeletalMesh(nil)
+	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Clothing4")
+	SkeletalMeshComponent:SetSkeletalMesh(nil)
+	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Clothing5")
+	SkeletalMeshComponent:SetSkeletalMesh(nil)
+end
 
 AddRemoteEvent("SetPlayerClothingToPreset", function(playerToChange, preset)
+    RemoveAllClothes(playerToChange)
     SetPlayerClothingPreset(playerToChange, preset)
 end)
 
@@ -87,7 +104,7 @@ AddRemoteEvent("ClientChangeClothing", function(player, part, piece, r, g, b, a)
         pieceName = piece
     elseif part == 6 then
         SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Body")
-        SkeletalMeshComponent:SetMaterial(3, UMaterialInterface.LoadFromAsset(BodyMaterial[piece]))
+        SkeletalMeshComponent:SetSkeletalMesh(USkeletalMesh.LoadFromAsset(piece))
     end
     if pieceName ~= nil then
         SkeletalMeshComponent:SetSkeletalMesh(USkeletalMesh.LoadFromAsset(pieceName))
@@ -97,8 +114,6 @@ AddRemoteEvent("ClientChangeClothing", function(player, part, piece, r, g, b, a)
         DynamicMaterialInstance:SetColorParameter("Hair Color", FLinearColor(r or 0, g or 0, b or 0, a or 0))
     end
     if part == 1 then
-        SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(GetPlayerId(), "Clothing2")
-        SkeletalMeshComponent:SetSkeletalMesh(nil)
 		local SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(player, "Clothing1")
 		SkeletalMeshComponent:SetColorParameterOnMaterials("Clothing Color", FLinearColor(r, g, b, a))
     end
