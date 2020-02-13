@@ -356,8 +356,7 @@ AddRemoteEvent("ToggleEngine", function(player, vehicle)
 end)
 
 AddRemoteEvent("ToggleTrunk", function(player)
-    if IsPlayerInVehicle(player) then
-        print("here")
+    if GetPlayerVehicle(player) ~= 0 then
         if GetPlayerVehicleSeat(player) == 1 then
             vehicle = GetPlayerVehicle(player)
             if GetVehicleTrunkRatio(vehicle) > 0.0 and GetVehicleTrunkRatio(vehicle) < 60.0 then
@@ -382,9 +381,8 @@ AddRemoteEvent("ToggleTrunk", function(player)
 end)
 
 AddRemoteEvent("ToggleHood", function(player)
-    if IsPlayerInVehicle(player) then
+    if GetPlayerVehicle(player) ~= 0 then
         if GetPlayerVehicleSeat(player) == 1 then
-            vehicle = GetPlayerVehicle(player)
             if GetVehicleHoodRatio(vehicle) > 0.0 and GetVehicleHoodRatio(vehicle) < 60.0 then
                 -- Animation was already running
             elseif GetVehicleHoodRatio(vehicle) == 60.0 then

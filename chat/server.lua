@@ -4,7 +4,12 @@ function OnPlayerChat(player, message)
     -- Region message
     local player_who_sent = player
     local streamedPlayers = GetStreamedPlayersForPlayer(player_who_sent)
-
+    if GetPlayerVehicle(player) ~= 0 then
+        message = '<span color="#f00000">[Global] </><span>'..GetPlayerName(player)..':</> '..message
+        AddPlayerChatAll(message)
+        return
+    end
+    
     local c = string.sub(message, 1, 1)
 	if (c == '@') then
         return AddAdminChat(GetPlayerName(player).."("..player.."): "..string.sub(message, 2))
