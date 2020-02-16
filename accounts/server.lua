@@ -113,6 +113,7 @@ function OnAccountCheckIpBan(player)
 			CreatePlayerAccount(player)
 		else
 			LoadPlayerAccount(player)
+			LoadPlayerAchievements(player)
 		end
 	else
 		print("Kicking "..GetPlayerName(player).." in the butt! IP banned.")
@@ -126,7 +127,6 @@ end
 function CreatePlayerAccount(player)
 	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, death_pos, inventory, position, police) VALUES (NULL, '?', '[]' , '[]' , '[]', '[]' , '[]', '1');",
 		tostring(GetPlayerSteamId(player)))
-
 	mariadb_query(sql, query, OnAccountCreated, player)
 end
 
@@ -138,7 +138,7 @@ function OnAccountCreated(player)
 
 	SetPlayerLoggedIn(player)
 	setPositionAndSpawn(player, nil)
-
+	CreatePlayerdbAchievements(player)
 	print("Account ID "..PlayerData[player].accountid.." created for "..player)
 
 	AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="15">Welcome '..GetPlayerName(player)..'</>')
@@ -151,6 +151,14 @@ function LoadPlayerAccount(player)
     
     mariadb_async_query(sql, query, OnAccountLoaded, player)
 end
+
+function LoadPlayerAchievments(player)
+    local query = mariadb_prepare(sql, "SELECT * FROM achievements WHERE id = ?;",
+        PlayerData[player].accountid)
+    
+    mariadb_async_query(sql, query, OnAccountLoaded, player)
+end
+
 
 function AddBalanceToAccount(player, account, amount)
 	local bank_bal = math.tointeger(PlayerData[player].bank_balance)
@@ -408,7 +416,6 @@ function SavePlayerAccount(player)
 		PlayerData[player].deaths,
 		PlayerData[player].accountid
 	) 
-	print(query)
 	mariadb_query(sql, query)
 end
 

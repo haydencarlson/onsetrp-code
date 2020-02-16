@@ -279,7 +279,9 @@ AddEvent("OnPlayerDeath", function(player)
 end)
 
 AddEvent("OnPlayerSpawn", function(player) 
-    Delay(5000, function(player)
-        cmd_hat(player, PlayerData[player].hatmodel)
-    end, player)
+    if tonumber(IsSupporter(player)) == 1 or tonumber(IsRank(player)) > 0 then
+        Delay(5000, function(player)
+            cmd_hat(player, PlayerData[player].hatmodel)
+        end, player)
+    end
 end)

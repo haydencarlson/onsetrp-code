@@ -71,7 +71,8 @@
         "vehicle_radio/server.lua",
         "vehicle/ragP/server.lua",
         "vehicle/ragP/settings.lua",
-        "gathering/s_gathering.lua"
+        "gathering/s_gathering.lua",
+	"essentials/achievements.lua"
     ],
     "client_scripts": [
         "keys/c_config.lua",

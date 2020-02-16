@@ -231,7 +231,7 @@ AddCommand("buysupporter", function(player, instigator)
 					PlayerData[player].supporter = 1
 				else
 					CallRemoteEvent(player, 'KNotify:Send', "You have bought supporter status for ".. GetPlayerName(instigator) ..". \nYou have ".. GetLoyaltyBalance(tonumber(player)) .." loyalty points left.", "#0f0")
-					PlayerData[instigator].supporter = 1
+					PlayerData[tonumber(instigator)].supporter = 1
 					AddPlayerChatAll('<span color="#800000">'.. GetPlayerName(player) ..' has bought supporter rank for '.. GetPlayerName(instigator) ..'!</>')
 				end
 			else
