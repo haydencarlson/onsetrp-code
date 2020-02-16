@@ -9,30 +9,6 @@ local VehicleHealthHud
 local WantedHud
 local minimap
 
-function OnPackageStart()
-    HealthHud = CreateWebUI(0, 0, 0, 0, 0, 28)
-	SetWebAlignment(HealthHud, 1.0, 0.0)
-	SetWebAnchors(HealthHud, 0.0, 0.0, 1.0, 1.0) 
-	LoadWebFile(HealthHud, "http://asset/onsetrp/hud/health/health.html")
-    SetWebVisibility(HealthHud, WEB_HIDDEN)
-    
-    VehicleSpeedHud = CreateTextBox(-15, 260, "", "right" )
-    SetTextBoxAnchors(VehicleSpeedHud, 1.0, 0.0, 1.0, 0.0)
-    SetTextBoxAlignment(VehicleSpeedHud, 1.0, 0.0)
-    
-    VehicleHealthHud = CreateTextBox(-15, 280, "", "right" )
-    SetTextBoxAnchors(VehicleHealthHud, 1.0, 0.0, 1.0, 0.0)
-    SetTextBoxAlignment(VehicleHealthHud, 1.0, 0.0)
-
-    VehicleFuelHud = CreateTextBox(-15, 300, "", "right" )
-    SetTextBoxAnchors(VehicleFuelHud, 1.0, 0.0, 1.0, 0.0)
-    SetTextBoxAlignment(VehicleFuelHud, 1.0, 0.0)
-
-	ShowHealthHUD(true)
-    ShowWeaponHUD(true)
-end
-AddEvent("OnPackageStart", OnPackageStart)
-
 function updateHud(vehiclefuel)
     if GetPlayerVehicle() ~= 0 and IsPlayerInVehicle() then
         SetTextBoxText(VehicleFuelHud, _("fuel")..vehiclefuel)

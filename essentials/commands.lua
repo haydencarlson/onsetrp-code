@@ -8,11 +8,31 @@ AddCommand("vehdelete", function(player, vehicle)
 	end
 end)
 
+AddCommand("impound", function(player, vehicle)
+	local vehicle = GetNearestCar(player)
+	if PlayerData[player].job == "mechanic" then
+		if (vehicle ~= 0) then
+			local query = mariadb_prepare(sql, "UPDATE `player_garage` SET `garage`=1 WHERE `id` = ?;",
+			tostring(VehicleData[vehicle].garageid)
+			)
+			mariadb_async_query(sql, query)
+			DestroyVehicle(vehicle)
+			AddBalanceToAccount(player, "cash", 150)
+			DestroyVehicleData(vehicle)
+			CallRemoteEvent(player, 'KNotify:Send',"vehicle impounded", "#0f0")
+		else
+			CallRemoteEvent(player, 'KNotify:Send',"No vehicle around.", "#f00")
+		end
+	else
+		CallRemoteEvent(player, 'KNotify:Send',"You must be a mechanic to do this.", "#f00")
+	end
+end)
+
 AddCommand("gp", function(player)
 	if tonumber(IsRank(player)) > 0 then
     local x, y, z = GetPlayerLocation(player)
     AddPlayerChat(player, ""..x..", "..y..", "..z)
-	print(player, ""..x..", "..y..", "..z)
+	print(""..x..", "..y..", "..z)
 	end
 end)
 

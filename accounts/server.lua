@@ -152,14 +152,6 @@ function LoadPlayerAccount(player)
     mariadb_async_query(sql, query, OnAccountLoaded, player)
 end
 
-function LoadPlayerAchievments(player)
-    local query = mariadb_prepare(sql, "SELECT * FROM achievements WHERE id = ?;",
-        PlayerData[player].accountid)
-    
-    mariadb_async_query(sql, query, OnAccountLoaded, player)
-end
-
-
 function AddBalanceToAccount(player, account, amount)
 	local bank_bal = math.tointeger(PlayerData[player].bank_balance)
 	local amount_to_add = amount
@@ -255,6 +247,7 @@ function OnAccountLoaded(player)
 		setPlayerHunger(player, tonumber(result['hunger']))
 		setPositionAndSpawn(player, PlayerData[player].position)
 		SetPlayerLoggedIn(player)
+		AchievementSearch(player)
 		if math.tointeger(result['created']) == 0 then
 			CallRemoteEvent(player, "askClientCreation")
 		else
@@ -336,6 +329,14 @@ end
 function AddBalanceToBankAccountSQL(accountid, amount)
 	if accountid ~= nil and amount ~= nil then
 		local update_query = mariadb_prepare(sql, "UPDATE accounts set bank_balance = bank_balance + '?' where id = '?';", amount, accountid)
+		print("updating bank balance")
+		mariadb_query(sql, update_query)
+	end
+end
+
+function RemoveBalanceToBankAccountSQL(accountid, amount)
+	if accountid ~= nil and amount ~= nil then
+		local update_query = mariadb_prepare(sql, "UPDATE accounts set bank_balance = bank_balance - '?' where id = '?';", amount, accountid)
 		print("updating bank balance")
 		mariadb_query(sql, update_query)
 	end

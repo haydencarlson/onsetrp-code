@@ -1,22 +1,23 @@
 AchData = {}
 
 function CreatePlayerdbAchievements(player)
-	local query = mariadb_prepare(sql, "INSERT INTO achievements (id, workday, clothing, fullday, millionaire, bitcoin, secret) VALUES ('?', 'false' , 'false' , 'false', 'false' , 'false');",
+	local query = mariadb_prepare(sql, "INSERT INTO achievements (id, workday, fullday, millionaire, bitcoin, secret) VALUES ('?', 0, 0, 0, 0, 0);",
 		PlayerData[player].accountid)
-    print(query)
-	mariadb_query(sql, query)
+    mariadb_query(sql, query)
+    print("achievements data created for : "..GetPlayerName(player))
 end
 
 function CreateAchievementData(player)
     AchData[player] = {}
     
-    AchData[player].workday = false
-    AchData[player].fullday = false
-    AchData[player].millionaire = false
-    AchData[player].bitcoin = false
-    AchData[player].secret = false
+    AchData[player].workday = 0
+    AchData[player].fullday = 0
+    AchData[player].millionaire = 0
+    AchData[player].bitcoin = 0
+    AchData[player].secret = 0
+    AchData[player].timer = 0
 
-    print("Achievement Data created for : "..GetPlayerName(player))
+    print("achievements default data created for : "..GetPlayerName(player))
 end
 
 function LoadPlayerAchievements(player)
@@ -34,7 +35,7 @@ function OnAchievementsLoaded(player)
         AchData[player].millionaire = math.tointeger(result['millionaire'])
         AchData[player].bitcoin = math.tointeger(result['bitcoin'])
         AchData[player].secret = math.tointeger(result['secret'])
-        print("Loaded achievemnents for ID: "..PlayerData[player].accountid)
+        print("Loaded achievemnents for : "..GetPlayerName(player))
 end
 
 function SaveAchievements(player)
@@ -52,8 +53,7 @@ function SaveAchievements(player)
     AchData[player].bitcoin,
     AchData[player].secret,
     PlayerData[player].accountid
-    ) 
-    print(query)
+    )
     mariadb_query(sql, query)
     
 end
@@ -63,7 +63,7 @@ function OnPackageStart()
 		for k, v in pairs(GetAllPlayers()) do
 			SaveAchievements(v)
 		end
-		print("Achievements have been saved")
+		print("All achievements have been saved !")
 	end, 30000)
 end
 AddEvent("OnPackageStart", OnPackageStart)
@@ -87,29 +87,24 @@ AddEvent("OnPlayerSteamAuth", OnPlayerSteamAuth)
 
 --[[
 local achievements = {
-    1 = {
+    oneday = {
         name = "One work day",
         desc = "8 hours of play time.",
-        achieved = false
     },
-    2 = {
+    workday = {
         name = "One full day",
-        desc = "24 hours of play time.",
-        achieved = false
+        desc = "24 hours of play time."
     },
-    3 = {
+    millionaire = {
         name = "Millionaire",
-        desc = "Obtain 1 million dollars.",
-        achieved = false
+        desc = "Obtain 1 million dollars."
     },
-    4 = {
+    bitcoin = {
         name = "Crypto is the way to go.",
-        desc = "Buy the bitcoin company upgrade.",
-        achieved = false
+        desc = "Buy the bitcoin company upgrade."
     },
-    5 = {
+    secret = {
         name = "Its a secret...",
-        desc = "has said the secret phrase.",
-        achieved = false
+        desc = "has said the secret phrase."
     }
 }]]

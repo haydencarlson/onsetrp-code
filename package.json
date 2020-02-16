@@ -72,7 +72,8 @@
         "vehicle/ragP/server.lua",
         "vehicle/ragP/settings.lua",
         "gathering/s_gathering.lua",
-	"essentials/achievements.lua"
+	"achievements/server.lua",
+	"achievements/achievements.lua"
     ],
     "client_scripts": [
         "keys/c_config.lua",
@@ -131,7 +132,8 @@
         "burdigalax/client/gasStation.lua",
         "vehicle/ragP/client.lua",
         "gathering/c_gathering.lua",
-        "essentials/materials/client.lua"
+        "essentials/materials/client.lua",
+        "achievements/client.lua"
     ],
     "files": [
         "hud/speaking/speaking.png",
