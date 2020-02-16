@@ -64,9 +64,3 @@ AddEvent("OnPackageStart", function()
 	LoadPak("cigar", "/cigar/", "../../../OnsetModding/Plugins/cigar/Content")
     ReplaceObjectModelMesh(111, "/cigar/cigar_cuban_cigar_cuban")
 end)
-
-AddRemoteEvent("GetPlayerIdFromAccountId", function(playerid)
-	local id = GetPlayerId(playerid)
-	AddPlayerChat("Hello "..id)
-	return id
-end)
