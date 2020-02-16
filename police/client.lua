@@ -151,11 +151,7 @@ AddRemoteEvent("ChangeUniformClient", function(playerToChange, pieceName, part)
 		SkeletalMeshComponent:SetSkeletalMesh(USkeletalMesh.LoadFromAsset(pieceName))
 		local body = GetPlayerSkeletalMeshComponent(playerToChange, "Body")
 		body:SetSkeletalMesh(USkeletalMesh.LoadFromAsset("/Game/CharacterModels/SkeletalMesh/BodyMerged/HZN_CH3D_Pimp_LPR"))
-end
-end)
-
-AddEvent("OnPlayerStreamIn", function(player, otherplayer)
-    CallRemoteEvent("ChangeUniformOtherPlayerServer", player, otherplayer)
+	end
 end)
 
 AddEvent("OnKeyPress", function(key)

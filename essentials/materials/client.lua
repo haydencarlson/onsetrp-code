@@ -26,7 +26,6 @@ function OnKeyPress(key)
         added = not added
         if added then
           local poste = AddPostProcessMaterial("pmats", UMaterialInterface.LoadFromAsset("/posteffects/PostProcess/Instances/PPM_TS_InkAndPaper_SciFi"))
-          AddPlayerChat(tostring(poste))
         else
             RemovePostProcessMaterial("pmats")
         end
@@ -39,7 +38,6 @@ function OnKeyPress(key)
         added2 = not added2
         if added2 then
           local posted = AddPostProcessMaterial("pe", UMaterialInterface.LoadFromAsset("/posteffects/PostProcess/Instances/PPM_TS_ToonShader_CustomDepth_Inst2"))
-          AddPlayerChat(tostring(posted))
         else
             RemovePostProcessMaterial("pe")
         end

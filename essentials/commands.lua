@@ -223,7 +223,7 @@ end)
 AddCommand("buysupporter", function(player, instigator)
 	if instigator ~= nil then
 		if tonumber(IsSupporter(tonumber(instigator))) == 0 then
-			if GetLoyaltyBalance(tonumber(player)) > 500 then
+			if GetLoyaltyBalance(tonumber(player)) >= 500 then
 				RemoveLoyaltyFromAccount(player, 'loyalty', 500)
 				if tonumber(player) == tonumber(instigator) then
 					CallRemoteEvent(player, 'KNotify:Send', "You have bought supporter status.", "#0f0")

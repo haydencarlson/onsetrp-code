@@ -259,13 +259,13 @@ function OnAccountLoaded(player)
 			CallRemoteEvent(player, "askClientCreation")
 		else
 			SetPlayerName(player, PlayerData[player].name)
-		
-			playerhairscolor = getHairsColor(PlayerData[player].clothing[2])
-			CallRemoteEvent(player, "ClientChangeClothing", player, 0, PlayerData[player].clothing[1], playerhairscolor[1], playerhairscolor[2], playerhairscolor[3], playerhairscolor[4])
-			CallRemoteEvent(player, "ClientChangeClothing", player, 1, PlayerData[player].clothing[3], 0, 0, 0, 0)
-			CallRemoteEvent(player, "ClientChangeClothing", player, 4, PlayerData[player].clothing[4], 0, 0, 0, 0)
-			CallRemoteEvent(player, "ClientChangeClothing", player, 5, PlayerData[player].clothing[5], 0, 0, 0, 0)
+			UpdateClothes(player)
 			-- CallRemoteEvent(player, "AskSpawnMenu")
+		end
+		if tonumber(IsSupporter(player)) == 1 or tonumber(IsRank(player)) > 0 then
+			if tonumber(PlayerData[player].hatmodel) ~= 0 then
+				CallEvent("cmd_hat", player, PlayerData[player].hatmodel)
+			end
 		end
 		CallEvent("PlayerDataLoaded", player)
 		print("Account ID "..PlayerData[player].accountid.." loaded for "..GetPlayerIP(player))
@@ -278,6 +278,7 @@ function setPositionAndSpawn(player, position)
 		SetPlayerLocation(player, PlayerData[player].position.x, PlayerData[player].position.y, PlayerData[player].position.z + 150) -- Pour empêcher de se retrouver sous la map
 	else
 		SetPlayerLocation(player, 212727.4375, 175845.5, 1309.1500244141)
+		SetPlayerHeading(player, 270)
 	end
 end
 
