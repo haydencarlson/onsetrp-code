@@ -19,75 +19,70 @@ AddCommand("workout", function(playerid)
     end
 end)
 
-    AddCommand("stop", function(playerid)
-        if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
-        SetPlayerAnimation(playerid, "STOP")
-        end
-    end)
-    
-    AddRemoteEvent("handsup", function(player, up, type)
-        if up then
-            if type == 1 and not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
-                SetPlayerAnimation(player, 'HANDSUP_STAND')
-            else
-                SetPlayerAnimation(player, 'HANDSHEAD_KNEEL')
-            end
-        else
-            SetPlayerAnimation(player, 'STOP')
-        end
-    
-    end)
-
-    AddCommand("puke", function(playerid)
-        if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
-        SetPlayerAnimation(playerid, "VOMIT")
-        end
-    end)
-    
-    AddCommand("salute", function(playerid)
-          if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
-        SetPlayerAnimation(playerid, "SALUTE")
-          end
-    end)
-    
-    AddCommand("thumbsup", function(playerid)
-          if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
-        SetPlayerAnimation(playerid, "THUMBSUP")
-          end
-    end)
-    
-    AddCommand("crazy", function(playerid)
-          if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
-        SetPlayerAnimation(playerid, "CRAZYMAN")
-          end
-    end)
-    
-    AddCommand("yikes", function(playerid)
-          if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
-        SetPlayerAnimation(playerid, "DARKSOULS")
-          end
-    end)
-    
-    AddCommand("smoking", function(playerid)
-          if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') and IsSmoking == false then 
-            IsSmoking = true
-            local x, y, z = GetPlayerLocation(playerid)
-            cigarobject = CreateObject(111, x, y, z)
-            SetObjectAttached(cigarobject, ATTACH_PLAYER, playerid, 1.0, 13.0, 0.0, 0.0, 90.0, -90.0, "head")
-          else
-            AddPlayerChat(playerid, "You are already smoking.")
-          end
-    end)
-
-    AddCommand("stopsmoking", function(playerid)
-      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') and isSmoking ~= false then
-            DestroyObject(cigarobject)
-            IsSmoking = false
-      else
-            AddPlayerChat(playerid, "You are not smoking.")
+AddCommand("stop", function(playerid)
+      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
+      SetPlayerAnimation(playerid, "STOP")
       end
-            
 end)
+
+AddRemoteEvent("handsup", function(player, up, type)
+      if up then
+      if type == 1 and not GetPlayerPropertyValue(player, 'dead') and not GetPlayerPropertyValue(player, 'cuffed') then
+            SetPlayerAnimation(player, 'HANDSUP_STAND')
+      else
+            SetPlayerAnimation(player, 'HANDSHEAD_KNEEL')
+      end
+      else
+      SetPlayerAnimation(player, 'STOP')
+      end
+
+end)
+
+AddCommand("puke", function(playerid)
+      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
+      SetPlayerAnimation(playerid, "VOMIT")
+      end
+end)
+
+AddCommand("salute", function(playerid)
+      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
+      SetPlayerAnimation(playerid, "SALUTE")
+      end
+end)
+
+AddCommand("thumbsup", function(playerid)
+      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
+      SetPlayerAnimation(playerid, "THUMBSUP")
+      end
+end)
+
+AddCommand("crazy", function(playerid)
+      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
+      SetPlayerAnimation(playerid, "CRAZYMAN")
+      end
+end)
+
+AddCommand("yikes", function(playerid)
+      if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
+      SetPlayerAnimation(playerid, "DARKSOULS")
+      end
+end)
+    
+AddCommand("smoke", function(playerid)
+      local hasCigar = PlayerData[playerid].cigar
+      if hasCigar ~= nil then
+            DestroyObject(PlayerData[playerid].cigar)
+            PlayerData[playerid].cigar = nil
+            SetPlayerAnimation(playerid, "STOP")
+      elseif not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
+            local x, y, z = GetPlayerLocation(playerid)
+            cigarid = CreateObject(111, x, y, z)
+            PlayerData[playerid].cigar = cigarid
+            SetPlayerAnimation(playerid, "SMOKING01")
+            SetObjectAttached(cigarid, ATTACH_PLAYER, playerid, 1.0, 13.0, 0.0, 0.0, 90.0, -90.0, "head")
+      end
+end)
+
     AddCommand("clap", function(playerid)
           if not IsPlayerDead(playerid) and not GetPlayerPropertyValue(playerid, 'cuffed') then
         SetPlayerAnimation(playerid, "CLAP")
