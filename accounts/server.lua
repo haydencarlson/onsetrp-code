@@ -63,7 +63,8 @@ function OnPlayerQuit(player)
 	if PlayerData[player].cigar ~= nil then
 		DestroyObject(PlayerData[player].cigar)
 	end
-    SavePlayerAccount(player)
+	PlayerData[player].logged_in = 0
+	SavePlayerAccount(player)
     GatheringCleanPlayerActions(player)-- → Gathering
     DestroyPlayerData(player)
 end
@@ -393,7 +394,7 @@ function SavePlayerAccount(player)
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank_level = ?, supporter = ?, bank_balance = ?, loyalty_points = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', hats = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank_level = ?, supporter = ?, bank_balance = ?, loyalty_points = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', hats = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ?, online = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
 		PlayerData[player].rank_level,
 		PlayerData[player].supporter,
@@ -418,6 +419,7 @@ function SavePlayerAccount(player)
 		GetPlayerTime(player),
 		PlayerData[player].kills,
 		PlayerData[player].deaths,
+		PlayerData[player].logged_in,
 		PlayerData[player].accountid
 	) 
 	mariadb_query(sql, query)

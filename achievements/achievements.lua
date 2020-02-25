@@ -41,6 +41,6 @@ function AchievementSearch(player)
         end
     end
     AddEvent("OnPlayerChat", OnPlayerChat)
-
+    
 end
 AddEvent("AchievementSearch", AchievementSearch)
