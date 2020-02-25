@@ -57,11 +57,12 @@ function OnPlayerQuit(player)
 			table.remove(PlayerData[player].textscreens, k)
 		end
 	end
-	for k, v in pairs(GetAllPlayers()) do
-        if  tonumber(PlayerData[v].hat) ~= 0 then
-            DestroyObject(PlayerData[v].hat)
-        end
-    end
+	if tonumber(PlayerData[player].hat) ~= 0 then
+		DestroyObject(PlayerData[player].hat)
+	end
+	if PlayerData[player].cigar ~= nil then
+		DestroyObject(PlayerData[player].cigar)
+	end
     SavePlayerAccount(player)
     GatheringCleanPlayerActions(player)-- → Gathering
     DestroyPlayerData(player)
@@ -235,6 +236,7 @@ function OnAccountLoaded(player)
 		PlayerData[player].kills = math.tointeger(result['kills'])
 		PlayerData[player].deaths = math.tointeger(result['deaths'])
 		PlayerData[player].hatmodel = math.tointeger(result['hats'])
+		PlayerData[player].cigar = nil
 		if GetPlayerBag(player) == 1 then
 			local x, y, z = GetPlayerLocation(player)
             PlayerData[player].backpack = CreateObject(820, x, y, z)
