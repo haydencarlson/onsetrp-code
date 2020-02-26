@@ -69,7 +69,3 @@ AddRemoteEvent("StopHitmanJob", function(player)
     PlayerData[player].job = ""
     UpdateClothes(player)
 end)
-
-AddCommand("hitman", function(player)
-    PlayerData[player].job = "hitman"
-end)
