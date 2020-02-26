@@ -68,6 +68,7 @@
         "burdigalax/server/inventory.lua",
         "vehicle_radio/server.lua",
         "vehicle/ragP/server.lua",
+        "hitman/server.lua",
         "vehicle/ragP/settings.lua",
         "gathering/s_gathering.lua"
     ],
@@ -128,6 +129,7 @@
         "burdigalax/client/gasStation.lua",
         "vehicle/ragP/client.lua",
         "gathering/c_gathering.lua",
+        "hitman/client.lua",
         "essentials/materials/client.lua"
     ],
     "files": [

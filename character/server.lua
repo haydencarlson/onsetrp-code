@@ -91,6 +91,11 @@ function UpdateClothes(player)
         for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
             CallRemoteEvent(v, "SetPlayerClothingToPreset", player, 15)
         end
+    elseif PlayerData[player].job == "hitman" then
+        CallRemoteEvent(player, "SetPlayerClothingToPreset", player, 25)
+        for k,v in pairs(GetStreamedPlayersForPlayer(player)) do
+            CallRemoteEvent(v, "SetPlayerClothingToPreset", player, 25)
+        end
     else
         playerhairscolor = PlayerData[player].clothing[2]
         playershirtcolor = PlayerData[player].clothing[7]
