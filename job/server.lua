@@ -64,6 +64,14 @@ text = {
         commands = {"/sawlaw [LawID 1-12] [Penalty (arrest, fine100, fine200, fine300, fine400, fine500)] [The Law]"},
         jobLimit = 1,
         jobCurrentPlayers = 0
+    },
+    {
+        jobName = "hitman",
+        short_desc = "Get hired to kill people",
+        jobDescription = "As a Hitman people can request you to kill people. Kill people when you are requested not randomly.",
+        commands = {"Players can hire you with /requesthit amount player_id"},
+        jobLimit = 1,
+        jobCurrentPlayers = 0
     }
 }
 
