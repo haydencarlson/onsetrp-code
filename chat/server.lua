@@ -13,11 +13,11 @@ function OnPlayerChat(player, message)
 	if (c == '@') then
         return AddAdminChat(GetPlayerName(player).."("..player.."): "..string.sub(message, 2))
     end
+    local message = '<span>'..GetPlayerName(player)..':</> '..message
     for k,v in pairs(streamedPlayers) do
-        local message = '<span>'..GetPlayerName(player)..':</> '..message
         AddPlayerChat(v, message)
     end
-    AddPlayerChat(v, message)
+    AddPlayerChat(player, message)
 end
 AddEvent("OnPlayerChat", OnPlayerChat)
 -- Global chat
