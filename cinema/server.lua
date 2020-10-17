@@ -20,6 +20,7 @@ AddEvent("startembed", function(link)
  end)
  
 AddCommand("play", function(player, link)
+if PlayerData[player].job == 'cinema' then
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
         if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
             if link ~= nil and PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then 
@@ -29,24 +30,25 @@ AddCommand("play", function(player, link)
             end
         end
     end
-    if PlayerData[player].job ~= 'cinema' then
+elseif PlayerData[player].job ~= 'cinema' then
         AddPlayerChat(player, "You must be a cinema manager to do this.")
     end 
 end)
  
 AddCommand("stopvideo", function(player)
+if PlayerData[player].job == 'cinema' then
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
         if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
             webuistreamer.SetWebUI3DUrl(cinemascreen, "http://www.gstatic.com/hostedimg/81360443f9dd01d2_large")
         end
     end
-
-    if PlayerData[player].job ~= 'cinema' then
+elseif PlayerData[player].job ~= 'cinema' then
         AddPlayerChat(player, "You must be a cinema manager to do this.")
     end 
 end)
 
 AddCommand("play_fullscreen", function(player, link) 
+if PlayerData[player].job == 'cinema' then
     for k, v in pairs(GetPlayersInRange3D(173430.34375, 198950.296875, 2900.1923828125, 2200)) do
         if PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
             if link ~= nil and PlayerData[v].job == 'cinema' and not PlayerData[v].job ~= 'cinema' then
@@ -56,7 +58,7 @@ AddCommand("play_fullscreen", function(player, link)
             end
         end
     end
-    if PlayerData[player].job ~= 'cinema' then
+elseif PlayerData[player].job ~= 'cinema' then
         AddPlayerChat(player, "You must be a cinema manager to do this.")
     end
 end)

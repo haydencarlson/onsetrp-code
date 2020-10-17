@@ -63,7 +63,8 @@ function OnPlayerQuit(player)
 	if PlayerData[player].cigar ~= nil then
 		DestroyObject(PlayerData[player].cigar)
 	end
-    SavePlayerAccount(player)
+	PlayerData[player].logged_in = 0
+	SavePlayerAccount(player)
     GatheringCleanPlayerActions(player)-- → Gathering
     DestroyPlayerData(player)
 end
@@ -114,6 +115,7 @@ function OnAccountCheckIpBan(player)
 			CreatePlayerAccount(player)
 		else
 			LoadPlayerAccount(player)
+			LoadPlayerAchievements(player)
 		end
 	else
 		print("Kicking "..GetPlayerName(player).." in the butt! IP banned.")
@@ -127,7 +129,6 @@ end
 function CreatePlayerAccount(player)
 	local query = mariadb_prepare(sql, "INSERT INTO accounts (id, steamid, clothing, clothing_police, death_pos, inventory, position, police) VALUES (NULL, '?', '[]' , '[]' , '[]', '[]' , '[]', '1');",
 		tostring(GetPlayerSteamId(player)))
-
 	mariadb_query(sql, query, OnAccountCreated, player)
 end
 
@@ -139,7 +140,7 @@ function OnAccountCreated(player)
 
 	SetPlayerLoggedIn(player)
 	setPositionAndSpawn(player, nil)
-
+	CreatePlayerdbAchievements(player)
 	print("Account ID "..PlayerData[player].accountid.." created for "..player)
 
 	AddPlayerChat(player, '<span color="#ffff00aa" style="bold italic" size="15">Welcome '..GetPlayerName(player)..'</>')
@@ -249,6 +250,7 @@ function OnAccountLoaded(player)
 		setPlayerHunger(player, tonumber(result['hunger']))
 		setPositionAndSpawn(player, PlayerData[player].position)
 		SetPlayerLoggedIn(player)
+		AchievementSearch(player)
 		if math.tointeger(result['created']) == 0 then
 			CallRemoteEvent(player, "askClientCreation")
 		else
@@ -335,6 +337,14 @@ function AddBalanceToBankAccountSQL(accountid, amount)
 	end
 end
 
+function RemoveBalanceToBankAccountSQL(accountid, amount)
+	if accountid ~= nil and amount ~= nil then
+		local update_query = mariadb_prepare(sql, "UPDATE accounts set bank_balance = bank_balance - '?' where id = '?';", amount, accountid)
+		print("updating bank balance")
+		mariadb_query(sql, update_query)
+	end
+end
+
 function GetServerTimeString()
 	hours = string.format("%02.f", math.floor(serverTimeSeconds/3600));
 	mins = string.format("%02.f", math.floor(serverTimeSeconds/60 - (hours*60)));
@@ -384,7 +394,7 @@ function SavePlayerAccount(player)
 	-- Sauvegarde de la position du joueur
 	local x, y, z = GetPlayerLocation(player)
 	PlayerData[player].position = {x= x, y= y, z= z}
-	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank_level = ?, supporter = ?, bank_balance = ?, loyalty_points = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', hats = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ? WHERE id = ? LIMIT 1;",
+	local query = mariadb_prepare(sql, "UPDATE accounts SET admin = ?, rank_level = ?, supporter = ?, bank_balance = ?, loyalty_points = ?, health = ?, health_state = '?', death_pos = '?', armor = ?, hunger = ?, thirst = ?, name = '?', clothing = '?', clothing_police = '?', hats = '?', inventory = '?', created = '?', position = '?', driver_license = ?, gun_license = ?, helicopter_license = ?, time = ?, kills = ?, deaths = ?, online = ? WHERE id = ? LIMIT 1;",
 		PlayerData[player].admin,
 		PlayerData[player].rank_level,
 		PlayerData[player].supporter,
@@ -409,9 +419,9 @@ function SavePlayerAccount(player)
 		GetPlayerTime(player),
 		PlayerData[player].kills,
 		PlayerData[player].deaths,
+		PlayerData[player].logged_in,
 		PlayerData[player].accountid
 	) 
-	print(query)
 	mariadb_query(sql, query)
 end
 
