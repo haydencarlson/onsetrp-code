@@ -96,6 +96,9 @@ function SelectedJob(selection, playerjob)
             end,
             mayor = function() 
                 CallRemoteEvent("StopMayorJob")
+            end,
+            hitman = function()
+                CallRemoteEvent("StopHitmanJob")
             end
         }
         stopaction[playerjob]()
@@ -122,6 +125,9 @@ function SelectedJob(selection, playerjob)
         end,
         mayor = function() 
             CallRemoteEvent("StartMayorJob")
+        end,
+        hitman = function()
+            CallRemoteEvent("StartHitmanJob")
         end
     }   
     action[selection]()       

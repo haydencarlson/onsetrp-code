@@ -34,8 +34,6 @@ AddEvent("OnGameTick", function()
     end
 end)
 
-AddRemoteEvent("SetHUDMarker", SetHUDMarker)
-
 function hideRPHud()
     SetWebVisibility(HungerFoodHud, WEB_HIDDEN)
     SetWebVisibility(ThirstHud, WEB_HIDDEN)

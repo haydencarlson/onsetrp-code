@@ -1,8 +1,4 @@
 
-function SetHUDMarker(player, name, heading, r, g, b)
-    CallRemoteEvent(player, "SetHUDMarker", name, heading, r, g, b)
-end
-
 AddRemoteEvent("GetInitialHud", function(player)
     local playername = GetPlayerName(player)
     local hunger = math.ceil(PlayerData[player].hunger)
